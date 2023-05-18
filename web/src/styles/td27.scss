@@ -1,0 +1,79 @@
+// 组件通用样式
+
+.toolbar-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.table-wrapper {
+  margin-bottom: 20px;
+}
+
+.pager-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+// --- kop ---
+
+.detail-operation {
+  position: fixed;
+  top: 118px;
+  right: 70px;
+  z-index: 5 !important;
+}
+
+.kop-collapse {
+  .el-collapse {
+    --el-collapse-header-font-size: 15px;
+    .el-collapse-item {
+      background-color: #ffffff;
+      padding-left: 20px;
+    }
+    .el-collapse-item:not(:last-child) {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+@mixin shadow {
+  background-color: rgba(128, 128, 128, 0.183);
+  font-size: 13px;
+  border-radius: 8px;
+  padding: 1px 3px 1px 3px;
+}
+
+// 详情页
+.info-box {
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    .item {
+      p {
+        font-size: 13px;
+      }
+      .content {
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 16px;
+        .shadow {
+          @include shadow;
+        }
+        >span:not(:last-child) {
+          margin-right: 10px;
+        }
+      }
+    }
+    .item:not(:last-child) {
+      margin-right: 100px;
+    }
+  }
+  .row:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
+
+.info-table {
+  margin-right: 20px;
+}

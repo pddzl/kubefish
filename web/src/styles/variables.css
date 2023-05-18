@@ -1,0 +1,35 @@
+/** 全局 CSS 变量，这种变量不仅可以在 CSS 和 SCSS 中使用，还可以导入到 JS 中使用 */
+
+:root {
+  /** 全局背景色 */
+  --base-body-bg-color: #f2f3f5;
+  /** Header 区域 = NavigationBar 组件 + TagsView 组件 */
+  --base-header-height: calc(var(--base-navigationbar-height) + var(--base-tagsview-height));
+  /** NavigationBar 组件 */
+  --base-navigationbar-height: 50px;
+  /** Sidebar 组件 */
+  --base-sidebar-width: 220px;
+  --base-sidebar-hide-width: 58px;
+  --base-sidebar-menu-item-height: 60px;
+  --base-sidebar-menu-tip-line-bg-color: var(--el-color-primary);
+  --base-sidebar-menu-bg-color: #001428;
+  --base-sidebar-menu-hover-bg-color: #ffffff10;
+  --base-sidebar-menu-text-color: #c0c4cc;
+  --base-sidebar-menu-active-text-color: #ffffff;
+  /** SidebarLogo 组件 */
+  --base-sidebarlogo-bg-color: #001428;
+  /** TagsView 组件 */
+  --base-tagsview-height: 34px;
+  --base-tagsview-tag-text-color: #495060;
+  --base-tagsview-tag-active-text-color: #ffffff;
+  --base-tagsview-tag-bg-color: #ffffff;
+  --base-tagsview-tag-active-bg-color: var(--el-color-primary);
+  --base-tagsview-tag-border-radius: 2px;
+  --base-tagsview-tag-border-color: #d8dce5;
+  --base-tagsview-tag-active-border-color: var(--el-color-primary);
+  --base-tagsview-tag-active-before-color: #ffffff;
+  --base-tagsview-tag-icon-hover-bg-color: #00000030;
+  --base-tagsview-tag-icon-hover-color: #ffffff;
+  /** RightPanel 组件  */
+  --base-rightpanel-button-bg-color: #001428;
+}
