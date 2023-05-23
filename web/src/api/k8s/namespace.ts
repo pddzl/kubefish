@@ -6,7 +6,7 @@ interface namespacePageInfo extends PageInfo {
 }
 
 export function getNamespacesApi(data: PageInfo) {
-  return request<IApiResponseData<namespacePageInfo>>({
+  return request<ApiResponseData<namespacePageInfo>>({
     url: "/k8s/namespace/getNamespaces",
     method: "post",
     data
@@ -15,7 +15,7 @@ export function getNamespacesApi(data: PageInfo) {
 
 // 获取某个命名空间详情
 export function getNamespaceDetailApi(params: { name: string }) {
-  return request<IApiResponseData<any>>({
+  return request<ApiResponseData<any>>({
     url: "/k8s/namespace/getNamespaceDetail",
     method: "get",
     params
@@ -24,7 +24,7 @@ export function getNamespaceDetailApi(params: { name: string }) {
 
 // 删除命名空间
 export function deleteNamespaceApi(data: { name: string }) {
-  return request<IApiResponseData<null>>({
+  return request<ApiResponseData<null>>({
     url: "/k8s/namespace/deleteNamespace",
     method: "post",
     data
@@ -33,7 +33,7 @@ export function deleteNamespaceApi(data: { name: string }) {
 
 // 获取全部命名空间名称
 export function getNamespaceNameApi() {
-  return request<IApiResponseData<string[]>>({
+  return request<ApiResponseData<string[]>>({
     url: "/k8s/namespace/getNamespaceName",
     method: "get"
   })

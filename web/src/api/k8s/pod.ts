@@ -19,7 +19,7 @@ interface reqData extends PageInfo {
 
 // 获取所有pod（分页）
 export function getPodsApi(data: reqData) {
-  return request<IApiResponseData<PodListData>>({
+  return request<ApiResponseData<PodListData>>({
     url: "/k8s/pod/getPods",
     method: "post",
     data
@@ -33,7 +33,7 @@ interface reqPod {
 
 // 获取pod详情
 export function getPodDetailApi(data: reqPod) {
-  return request<IApiResponseData<any>>({
+  return request<ApiResponseData<any>>({
     url: "/k8s/pod/getPodDetail",
     method: "post",
     data
@@ -48,7 +48,7 @@ interface reqPodLog extends reqPod {
 
 // 获取pod日志
 export function getPodLogApi(data: reqPodLog) {
-  return request<IApiResponseData<string>>({
+  return request<ApiResponseData<string>>({
     url: "/k8s/pod/getPodLog",
     method: "post",
     data
@@ -57,7 +57,7 @@ export function getPodLogApi(data: reqPodLog) {
 
 // 删除
 export function deletePodApi(data: reqPod) {
-  return request<IApiResponseData<null>>({
+  return request<ApiResponseData<null>>({
     url: "/k8s/pod/deletePod",
     method: "post",
     data

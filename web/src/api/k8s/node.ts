@@ -21,7 +21,7 @@ export interface NodeDataPageInfo {
 
 // 获取所有节点（分页）
 export function getNodesApi(data: PageInfo) {
-  return request<IApiResponseData<NodeDataPageInfo>>({
+  return request<ApiResponseData<NodeDataPageInfo>>({
     url: "/k8s/node/getNodes",
     method: "post",
     data
@@ -55,7 +55,7 @@ export function getNodesApi(data: PageInfo) {
 
 // 获取某个节点详情
 export function getNodeDetail(params: { name: string }) {
-  return request<IApiResponseData<any>>({
+  return request<ApiResponseData<any>>({
     url: "/k8s/node/getNodeDetail",
     method: "get",
     params
@@ -84,7 +84,7 @@ interface nodePodsData extends PageInfo {
 }
 
 export function getNodePods(data: nodePodsData) {
-  return request<IApiResponseData<NodePodsPageInfo>>({
+  return request<ApiResponseData<NodePodsPageInfo>>({
     url: "/k8s/node/getNodePods",
     method: "post",
     data
