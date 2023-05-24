@@ -99,7 +99,7 @@ import { getNamespaceDetailApi, deleteNamespaceApi } from "@/api/k8s/namespace"
 import MetaData from "@/components/k8s/metadata.vue"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { useOrch } from "@/hooks/useOrch"
+import { viewOrch } from "@/utils/k8s/orch"
 
 defineOptions({
   name: "NamespaceDetail"
@@ -134,10 +134,9 @@ getData()
 
 // 编辑
 const dialogFormVisible = ref(false)
-let formatData: string
+const formatData = ref<string>("")
 const viewOrchFunc = async () => {
-  const { viewOrch } = useOrch()
-  formatData = await viewOrch(namespace, "namespaces", "")
+  formatData.value = await viewOrch(namespace, "namespaces", "")
   dialogFormVisible.value = true
 }
 
