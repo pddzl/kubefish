@@ -132,11 +132,11 @@ const getData = async () => {
 }
 getData()
 
-// 编辑
+// 查看编排
 const dialogFormVisible = ref(false)
 const formatData = ref<string>("")
 const viewOrchFunc = async () => {
-  formatData.value = await viewOrch(namespace, "namespaces", "")
+  formatData.value = await viewOrch(namespace, "namespaces")
   dialogFormVisible.value = true
 }
 

@@ -115,7 +115,7 @@ import { type PodData, getPodsApi } from "@/api/k8s/pod"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { ElMessageBox } from "element-plus"
 import { usePagination } from "@/hooks/usePagination"
-import { useOrch } from "@/hooks/useOrch"
+import { viewOrch } from "@/utils/k8s/orch"
 
 defineOptions({
   name: "PodList"
@@ -191,10 +191,9 @@ const onReset = () => {
 
 // 查看编排
 const dialogFormVisible = ref(false)
-let formatData: string
+const formatData = ref<string>("")
 const viewOrchFunc = async (name: string, namespace: string) => {
-  const { viewOrch } = useOrch()
-  formatData = await viewOrch(name, "pods", namespace)
+  formatData.value = await viewOrch(name, "pods", namespace)
   dialogFormVisible.value = true
 }
 

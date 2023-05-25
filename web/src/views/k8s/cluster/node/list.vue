@@ -76,7 +76,7 @@ import { nodeStatusTypeFilter, nodeStatusFilter } from "@/hooks/filter"
 import { usePagination } from "@/hooks/usePagination"
 import { type NodeData, getNodesApi } from "@/api/k8s/node"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
-import { useOrch } from "@/hooks/useOrch"
+import { viewOrch } from "@/utils/k8s/orch"
 
 defineOptions({
   name: "NodeList"
@@ -119,10 +119,9 @@ const handleCurrentChange = (value: number) => {
 
 // 查看编排
 const dialogFormVisible = ref(false)
-let formatData: string
+const formatData = ref<string>("")
 const viewOrchFunc = async (name: string) => {
-  const { viewOrch } = useOrch()
-  formatData = await viewOrch(name, "nodes")
+  formatData.value = await viewOrch(name, "nodes")
   dialogFormVisible.value = true
 }
 </script>

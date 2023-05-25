@@ -178,7 +178,7 @@ import { formatDateTime } from "@/utils/index"
 import Container from "./components/container.vue"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { useOrch } from "@/hooks/useOrch"
+import { viewOrch } from "@/utils/k8s/orch"
 
 // 折叠面板
 const activeNames = ref(["metadata", "resource", "conditions", "controller", "container", "initContainers"])
@@ -208,10 +208,9 @@ getData()
 
 // 查看编排
 const dialogFormVisible = ref(false)
-let formatData: string
+const formatData = ref<string>("")
 const viewOrchFunc = async (name: string, namespace: string) => {
-  const { viewOrch } = useOrch()
-  formatData = await viewOrch(name, "pods", namespace)
+  formatData.value = await viewOrch(name, "pods", namespace)
   dialogFormVisible.value = true
 }
 

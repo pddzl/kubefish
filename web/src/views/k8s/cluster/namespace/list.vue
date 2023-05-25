@@ -67,7 +67,7 @@ import { usePagination } from "@/hooks/usePagination"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { formatDateTime } from "@/utils/index"
-import { useOrch } from "@/hooks/useOrch"
+import { viewOrch } from "@/utils/k8s/orch"
 
 defineOptions({
   name: "NamespaceList"
@@ -108,10 +108,9 @@ const handleCurrentChange = (value: number) => {
 
 // 查看编排
 const dialogFormVisible = ref(false)
-let formatData: string
+const formatData = ref<string>("")
 const viewOrchFunc = async (name: string) => {
-  const { viewOrch } = useOrch()
-  formatData = await viewOrch(name, "namespaces", "")
+  formatData.value = await viewOrch(name, "namespaces", "")
   dialogFormVisible.value = true
 }
 
