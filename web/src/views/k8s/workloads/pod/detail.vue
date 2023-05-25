@@ -140,45 +140,21 @@
     <el-dialog v-model="dialogFormVisible" title="查看资源" width="55%">
       <vue-code-mirror v-model:modelValue="formatData" :readOnly="true" />
     </el-dialog>
-    <el-dialog v-model="dialogLogVisible" title="查看日志" width="90%">
-      <div>
-        <el-form ref="searchForm" :inline="true" :model="searchInfo">
-          <el-form-item label="容器">
-            <el-select v-model="searchInfo.container" clearable placeholder="请选择">
-              <el-option v-for="item in containers" :key="item" :label="item" :value="item" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="行数">
-            <el-select v-model="searchInfo.lines" clearable placeholder="请选择">
-              <el-option v-for="item in lines" :key="item" :label="item" :value="item" />
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
-            <el-button icon="refresh" @click="onReset">重置</el-button>
-            <el-button type="primary" plain icon="download" @click="donwloadLog">下载日志</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div class="log">
-        <p v-for="(log, key) in podLogList" :key="key" style="color: #b7c4d1">
-          {{ log }}
-        </p>
-      </div>
-    </el-dialog>
+    <PodLog ref="podLogRef" :namespace="namespace" :pod="pod" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { ref } from "vue"
+import { useRoute } from "vue-router"
 import { PodStatusFilter } from "@/hooks/filter.js"
-import { getPodDetailApi, getPodLogApi, deletePodApi } from "@/api/k8s/pod"
+import { getPodDetailApi, deletePodApi } from "@/api/k8s/pod"
 import { formatDateTime } from "@/utils/index"
 import Container from "./components/container.vue"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { viewOrch } from "@/utils/k8s/orch"
+import PodLog from "./components/log.vue"
 
 // 折叠面板
 const activeNames = ref(["metadata", "resource", "conditions", "controller", "container", "initContainers"])
@@ -187,8 +163,6 @@ const activeNames = ref(["metadata", "resource", "conditions", "controller", "co
 const route = useRoute()
 const pod = route.query.pod as string
 const namespace = route.query.namespace as string
-
-const router = useRouter()
 
 // 加载pod详情
 const podDetail = ref<any>({})
@@ -214,47 +188,9 @@ const viewOrchFunc = async (name: string, namespace: string) => {
   dialogFormVisible.value = true
 }
 
-// 查看日志
-const dialogLogVisible = ref(false)
-const podLogList = ref<string[]>([])
-let podLogRaw: string
-const lines = ref([20, 50, 100, 200, 500])
-const searchInfo = reactive({ namespace: namespace, pod: pod, container: "", lines: 50 })
-
+const podLogRef = ref(null)
 const viewLog = async () => {
-  await getPodLogData()
-  searchInfo.container = containers.value[0]
-  dialogLogVisible.value = true
-}
-
-const getPodLogData = async () => {
-  const podData = await getPodLogApi({ ...searchInfo })
-  if (podData.code === 0) {
-    podLogRaw = podData.data
-    podLogList.value = podData.data.split("\n")
-  }
-}
-
-const onSubmit = () => {
-  getPodLogData()
-}
-
-const onReset = () => {
-  searchInfo.container = ""
-  searchInfo.lines = 50
-}
-
-// 下载pod日志
-const donwloadLog = () => {
-  const url = window.URL.createObjectURL(new Blob([podLogRaw]))
-  const a = document.createElement("a")
-  a.style.display = "none"
-  a.href = url
-  a.setAttribute("download", `${pod}.txt`)
-  document.body.appendChild(a)
-  a.click()
-  window.URL.revokeObjectURL(a.href)
-  document.body.removeChild(a)
+  podLogRef.value.dialogLogVisible = true
 }
 
 // 删除pod
@@ -293,12 +229,3 @@ const routerPod = () => {
 }
 </script>
 
-<style lang="scss" scoped>
-.log {
-  padding-left: 15px;
-  background-color: #242e42;
-  border-radius: 4px;
-  height: calc(100vh - 200px);
-  overflow-y: auto;
-}
-</style>
