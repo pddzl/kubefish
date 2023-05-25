@@ -57,12 +57,12 @@
           </el-table-column> -->
           <el-table-column fixed="right" label="操作">
             <template #default="scope">
-              <el-popover placement="bottom" trigger="click">
+              <el-popover placement="bottom" trigger="click" :popper-style="pWidth">
                 <template #reference>
                   <el-button icon="more" type="primary" link size="small" />
                 </template>
                 <div style="disply: flex; flex-direction: column; justify-content: center; align-items: center">
-                  <div style="width: 120px; padding: 5px">
+                  <div style="width: 75px; padding: 5px; border-bottom: solid; border-width: 1px; border-color: rgba(128, 128, 128, 0.157);">
                     <el-button
                       icon="view"
                       type="primary"
@@ -71,13 +71,13 @@
                       >查 看</el-button
                     >
                   </div>
-                  <div style="width: 120px; padding: 5px">
+                  <div style="width: 75px; padding: 5px; border-bottom: solid; border-width: 1px; border-color: rgba(128, 128, 128, 0.157);">
                     <el-button icon="tickets" type="primary" link>日 志</el-button>
                   </div>
-                  <div style="width: 120px; padding: 5px">
+                  <div style="width: 75px; padding: 5px; border-bottom: solid; border-width: 1px; border-color: rgba(128, 128, 128, 0.157);">
                     <el-button icon="ArrowRight" type="primary" link>终 端</el-button>
                   </div>
-                  <div style="width: 120px; padding: 5px">
+                  <div style="width: 75px; padding: 5px;">
                     <el-button icon="delete" type="primary" link>删 除</el-button>
                   </div>
                 </div>
@@ -224,6 +224,8 @@ const deleteFunc = async (row) => {
     // }
   })
 }
+
+const pWidth = reactive({"min-width": "100px", width:"100px"})
 </script>
 
 <style lang="scss" scoped>
