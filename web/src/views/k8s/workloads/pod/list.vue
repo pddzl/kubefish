@@ -72,7 +72,7 @@
                     >
                   </div>
                   <div style="width: 75px; padding: 5px; border-bottom: solid; border-width: 1px; border-color: rgba(128, 128, 128, 0.157);">
-                    <el-button icon="tickets" type="primary" link>日 志</el-button>
+                    <el-button icon="tickets" type="primary" link @click="viewLog(scope.row.namespace, scope.row.name)">日 志</el-button>
                   </div>
                   <div style="width: 75px; padding: 5px; border-bottom: solid; border-width: 1px; border-color: rgba(128, 128, 128, 0.157);">
                     <el-button icon="ArrowRight" type="primary" link>终 端</el-button>
@@ -102,12 +102,12 @@
     <el-dialog v-model="dialogFormVisible" title="查看资源" width="55%" :destroy-on-close="true">
       <vue-code-mirror v-model:modelValue="formatData" :readOnly="true" />
     </el-dialog>
+    <PodLog ref="podLogRef" v-model:namespace="namespace" v-model:pod="pod" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive } from "vue"
-import { useRouter } from "vue-router"
 import { formatDateTime } from "@/utils/index"
 import { PodStatusFilter } from "@/hooks/filter"
 import { getNamespaceNameApi } from "@/api/k8s/namespace"
@@ -116,6 +116,7 @@ import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { ElMessageBox } from "element-plus"
 import { usePagination } from "@/hooks/usePagination"
 import { viewOrch } from "@/utils/k8s/orch"
+import PodLog from "./components/log.vue"
 
 defineOptions({
   name: "PodList"
@@ -129,9 +130,6 @@ const searchInfo = reactive({
 })
 
 const loading = ref(false)
-
-// 路由
-const router = useRouter()
 
 // 加载namespace数据
 const namespaceList = ref<string[]>()
@@ -197,13 +195,14 @@ const viewOrchFunc = async (name: string, namespace: string) => {
   dialogFormVisible.value = true
 }
 
-// 跳转日志/webssh页面
-const routerPod = async (row, dest) => {
-  if (dest === "log") {
-    router.push({ name: "pod_log", query: { pod: row.name, namespace: row.namespace } })
-  } else if (dest === "terminal") {
-    router.push({ name: "pod_terminal", query: { pod: row.name, namespace: row.namespace } })
-  }
+// 查看日志
+const namespace = ref<string>("")
+const pod = ref<string>("")
+const podLogRef = ref({dialogLogVisible: false})
+const viewLog = async (namespaceS: string, podS: string) => {
+  namespace.value = namespaceS
+  pod.value = podS
+  podLogRef.value.dialogLogVisible = true
 }
 
 // 删除

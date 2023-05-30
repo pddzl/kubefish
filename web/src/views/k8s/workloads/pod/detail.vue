@@ -188,7 +188,7 @@ const viewOrchFunc = async (name: string, namespace: string) => {
   dialogFormVisible.value = true
 }
 
-const podLogRef = ref(null)
+const podLogRef = ref({ dialogLogVisible: false })
 const viewLog = async () => {
   podLogRef.value.dialogLogVisible = true
 }

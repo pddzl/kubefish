@@ -4,7 +4,7 @@
     <el-form ref="searchForm" :inline="true" :model="searchInfo">
       <el-form-item label="容器">
         <el-select v-model="searchInfo.container" clearable placeholder="请选择">
-          <el-option v-for="item in props.containers" :key="item" :label="item" :value="item" />
+          <el-option v-for="item in containers" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
       <el-form-item label="行数">
@@ -28,8 +28,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from "vue"
-import { getPodLogApi } from "@/api/k8s/pod"
+import { ref, reactive, watch, toRefs } from "vue"
+import { getPodLogApi, getPodDetailApi } from "@/api/k8s/pod"
 
 defineOptions({
   name: "PodLog"
@@ -43,12 +43,10 @@ const props = defineProps({
   pod: {
     type: String,
     default: ""
-  },
-  containers: {
-    type: Array<string>,
-    default: []
   }
 })
+
+const {namespace, pod} = toRefs(props)
 
 // 查看日志
 const dialogLogVisible = ref(false)
@@ -58,18 +56,33 @@ const lines = ref([20, 50, 100, 200, 500])
 const searchInfo = reactive({ container: "", lines: 50 })
 
 const getPodLogData = async () => {
-  const podData = await getPodLogApi({ namespace: props.namespace, pod: props.pod, ...searchInfo })
+  const podData = await getPodLogApi({ namespace: namespace.value, pod: pod.value, ...searchInfo })
   if (podData.code === 0) {
     podLogRaw = podData.data
     podLogList.value = podData.data.split("\n")
   }
 }
 
+const containers = ref<Array<string>>([])
+const getPodContainer = async () => {
+  const res = await getPodDetailApi({ namespace: namespace.value, pod: pod.value })
+  if (res.code === 0) {
+    res.data.spec.containers.forEach((element: { name: string }) => {
+      containers.value.push(element.name)
+    })
+  }
+}
+
 const viewLog = async () => {
   await getPodLogData()
-  searchInfo.container = props.containers[0]
+  searchInfo.container = searchInfo.container
 }
-viewLog()
+// viewLog()
+
+watch([namespace, pod], () => {
+  getPodContainer()
+  viewLog()
+})
 
 const onSubmit = () => {
   getPodLogData()
@@ -94,7 +107,7 @@ const donwloadLog = () => {
 }
 
 defineExpose({
-  dialogLogVisible
+  dialogLogVisible,
 })
 
 </script>
