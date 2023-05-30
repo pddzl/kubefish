@@ -140,7 +140,7 @@
     <el-dialog v-model="dialogFormVisible" title="查看资源" width="55%">
       <vue-code-mirror v-model:modelValue="formatData" :readOnly="true" />
     </el-dialog>
-    <PodLog ref="podLogRef" :namespace="namespace" :pod="pod" />
+    <PodLog ref="podLogRef" v-model:namespace="namespace" v-model:pod="pod" />
   </div>
 </template>
 
@@ -188,6 +188,7 @@ const viewOrchFunc = async (name: string, namespace: string) => {
   dialogFormVisible.value = true
 }
 
+// 查看日志
 const podLogRef = ref({ dialogLogVisible: false })
 const viewLog = async () => {
   podLogRef.value.dialogLogVisible = true

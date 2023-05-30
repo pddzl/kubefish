@@ -74,13 +74,15 @@ const getPodContainer = async () => {
 }
 
 const viewLog = async () => {
-  await getPodLogData()
-  searchInfo.container = searchInfo.container
+  if (namespace.value && pod.value) {
+    getPodContainer()
+    searchInfo.container = searchInfo.container
+    await getPodLogData()
+  }
 }
-// viewLog()
+viewLog()
 
 watch([namespace, pod], () => {
-  getPodContainer()
   viewLog()
 })
 
