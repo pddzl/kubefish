@@ -8,7 +8,7 @@ import (
 type ReplicaSetRouter struct{}
 
 func (rs *ReplicaSetRouter) InitReplicaSetRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
-	replicaSetRouter := Router.Group("replicaSet").Use()
+	replicaSetRouter := Router.Group("replicaSet")
 	ReplicaSetApi := api.ApiGroupApp.K8sApiGroup.ReplicaSetApi
 	{
 		replicaSetRouter.POST("getReplicaSets", ReplicaSetApi.GetReplicaSets)               // 获取所有replicaSet
