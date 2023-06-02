@@ -36,25 +36,6 @@
           <el-table-column label="创建时间" width="180">
             <template #default="scope">{{ formatDateTime(scope.row.creationTimestamp) }}</template>
           </el-table-column>
-          <!-- <el-table-column fixed="right" label="操作" min-width="200">
-            <template #default="scope">
-              <el-button
-                icon="view"
-                type="primary"
-                link
-                size="small"
-                @click="viewOrch(scope.row.name, scope.row.namespace)"
-                >查看</el-button
-              >
-              <el-button icon="tickets" type="primary" link size="small" @click="routerPod(scope.row, 'log')"
-                >日志</el-button
-              >
-              <el-button icon="ArrowRight" type="primary" link size="small" @click="routerPod(scope.row, 'terminal')"
-                >终端</el-button
-              >
-              <el-button icon="delete" type="primary" link size="small" @click="deleteFunc(scope.row)">删除</el-button>
-            </template>
-          </el-table-column> -->
           <el-table-column fixed="right" label="操作">
             <template #default="scope">
               <el-popover placement="bottom" trigger="click" :popper-style="pWidth">
@@ -75,10 +56,10 @@
                     <el-button icon="tickets" type="primary" link @click="viewLog(scope.row.namespace, scope.row.name)">日 志</el-button>
                   </div>
                   <div style="width: 75px; padding: 5px; border-bottom: solid; border-width: 1px; border-color: rgba(128, 128, 128, 0.157);">
-                    <el-button icon="ArrowRight" type="primary" link>终 端</el-button>
+                    <el-button icon="ArrowRight" type="primary" link @click="sshPod(scope.row.name, scope.row.namespace)">终 端</el-button>
                   </div>
                   <div style="width: 75px; padding: 5px;">
-                    <el-button icon="delete" type="primary" link>删 除</el-button>
+                    <el-button icon="delete" type="primary" link @click="deleteFunc(scope.row)">删 除</el-button>
                   </div>
                 </div>
               </el-popover>
@@ -111,12 +92,13 @@ import { ref, reactive } from "vue"
 import { formatDateTime } from "@/utils/index"
 import { PodStatusFilter } from "@/hooks/filter"
 import { getNamespaceNameApi } from "@/api/k8s/namespace"
-import { type PodData, getPodsApi } from "@/api/k8s/pod"
+import { type PodData, getPodsApi, deletePodApi } from "@/api/k8s/pod"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
-import { ElMessageBox } from "element-plus"
+import { ElMessageBox, ElMessage } from "element-plus"
 import { usePagination } from "@/hooks/usePagination"
 import { viewOrch } from "@/utils/k8s/orch"
 import PodLog from "./components/log.vue"
+import { sshPod } from "./util"
 
 defineOptions({
   name: "PodList"
@@ -198,29 +180,27 @@ const viewOrchFunc = async (name: string, namespace: string) => {
 // 查看日志
 const namespace = ref<string>("")
 const pod = ref<string>("")
-const podLogRef = ref({dialogLogVisible: false})
+const podLogRef = ref()
 const viewLog = async (namespaceS: string, podS: string) => {
   namespace.value = namespaceS
   pod.value = podS
   podLogRef.value.dialogLogVisible = true
 }
 
-// 删除
-const deleteFunc = async (row) => {
+// 删除pod
+const deleteFunc = async (row: PodData) => {
   ElMessageBox.confirm("此操作将永久删除该Pod, 是否继续?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
   }).then(async () => {
-    // const res = await deletePod({ namespace: row.namespace, pod: row.name })
-    // if (res.code === 0) {
-    //   ElMessage({
-    //     type: "success",
-    //     message: "删除成功!"
-    //   })
-    //   const index = tableData.value.indexOf(row)
-    //   tableData.value.splice(index, 1)
-    // }
+    const res = await deletePodApi({ namespace: row.namespace, pod: row.name })
+    if (res.code === 0) {
+      ElMessage({
+        type: "success",
+        message: "删除成功!"
+      })
+    }
   })
 }
 

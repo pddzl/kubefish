@@ -3,7 +3,7 @@
     <div class="detail-operation">
       <el-button icon="view" type="primary" plain @click="viewOrchFunc(pod, namespace)">查看</el-button>
       <el-button icon="expand" type="primary" plain @click="viewLog">日志</el-button>
-      <el-button icon="expand" type="primary" plain @click="routerPod()">终端</el-button>
+      <el-button icon="expand" type="primary" plain @click="sshPod(pod, namespace)">终端</el-button>
       <el-button icon="delete" type="danger" plain @click="deleteFunc">删除</el-button>
     </div>
     <div class="kop-collapse">
@@ -155,6 +155,7 @@ import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { viewOrch } from "@/utils/k8s/orch"
 import PodLog from "./components/log.vue"
+import { sshPod } from "./util"
 
 // 折叠面板
 const activeNames = ref(["metadata", "resource", "conditions", "controller", "container", "initContainers"])
@@ -210,23 +211,4 @@ const deleteFunc = async () => {
     }
   })
 }
-
-// 跳转日志、webssh页面
-const routerPod = () => {
-  const url = `http://${window.location.host}/#/k8s/pod/webssh?pod=${pod}&namespace=${namespace}`
-  const width = 1300
-  const height = 800
-  // 获取屏幕的宽度和高度
-  const screenWidth = window.screen.width
-  const screenHeight = window.screen.height
-
-  // 计算新窗口的左上角位置
-  const left = (screenWidth - width) / 2
-  const top = (screenHeight - height) / 2
-  // 构建 features 参数，包括宽度、高度和位置信息
-  const features = `width=${width},height=${height},left=${left},top=${top}`
-  // window.open(url, "_blank", features)
-  window.open(url, "_blank", features)
-}
 </script>
-
