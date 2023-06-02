@@ -5,4 +5,5 @@ type RouterGroup struct {
 	ResourceRouter
 	NamespaceRouter
 	PodRouter
+	ReplicaSetRouter
 }

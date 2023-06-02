@@ -5,4 +5,5 @@ type ServiceGroup struct {
 	ResourceService
 	NamespaceService
 	PodService
+	ReplicaSetService
 }
