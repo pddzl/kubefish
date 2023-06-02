@@ -38,7 +38,7 @@ mysql:
   config: 'charset=utf8&parseTime=true'
   db-name: 'kop'
   username: 'root'
-  password: 'huayun2021'
+  password: 'bank2023'
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: false

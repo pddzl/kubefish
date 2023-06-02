@@ -200,6 +200,9 @@ const deleteFunc = async (row: PodData) => {
         type: "success",
         message: "删除成功!"
       })
+      // table里去掉被删除的数据
+      const index = tableData.value.indexOf(row)
+      tableData.value.splice(index, 1)
     }
   })
 }
