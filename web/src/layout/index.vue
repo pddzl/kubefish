@@ -1,3 +1,40 @@
+<script lang="ts" setup>
+import { computed } from "vue"
+import { useAppStore } from "@/store/modules/app"
+import { useSettingsStore } from "@/store/modules/settings"
+import { AppMain, NavigationBar, Settings, Sidebar, TagsView, RightPanel } from "./components"
+import useResize from "./hooks/useResize"
+import { DeviceEnum } from "@/constants/app-key"
+
+const appStore = useAppStore()
+const settingsStore = useSettingsStore()
+
+/** Layout 布局响应式 */
+useResize()
+
+const classObj = computed(() => {
+  return {
+    hideSidebar: !appStore.sidebar.opened,
+    openSidebar: appStore.sidebar.opened,
+    withoutAnimation: appStore.sidebar.withoutAnimation,
+    mobile: appStore.device === DeviceEnum.Mobile,
+  }
+})
+
+const showSettings = computed(() => {
+  return settingsStore.showSettings
+})
+const showTagsView = computed(() => {
+  return settingsStore.showTagsView
+})
+const fixedHeader = computed(() => {
+  return settingsStore.fixedHeader
+})
+const handleClickOutside = () => {
+  appStore.closeSidebar(false)
+}
+</script>
+
 <template>
   <div :class="classObj" class="app-wrapper">
     <div v-if="classObj.mobile && classObj.openSidebar" class="drawer-bg" @click="handleClickOutside" />
@@ -15,45 +52,6 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { computed } from "vue"
-import { useAppStore, DeviceEnum } from "@/store/modules/app"
-import { useSettingsStore } from "@/store/modules/settings"
-import { AppMain, NavigationBar, Settings, Sidebar, TagsView, RightPanel } from "./components"
-import useResize from "./hooks/useResize"
-
-const appStore = useAppStore()
-const settingsStore = useSettingsStore()
-
-/** Layout 布局响应式 */
-useResize()
-
-const classObj = computed(() => {
-  return {
-    hideSidebar: !appStore.sidebar.opened,
-    openSidebar: appStore.sidebar.opened,
-    withoutAnimation: appStore.sidebar.withoutAnimation,
-    mobile: appStore.device === DeviceEnum.Mobile
-  }
-})
-
-const showSettings = computed(() => {
-  return settingsStore.showSettings
-})
-
-const showTagsView = computed(() => {
-  return settingsStore.showTagsView
-})
-
-const fixedHeader = computed(() => {
-  return settingsStore.fixedHeader
-})
-
-const handleClickOutside = () => {
-  appStore.closeSidebar(false)
-}
-</script>
-
 <style lang="scss" scoped>
 @import "@/styles/mixins.scss";
 
@@ -61,6 +59,14 @@ const handleClickOutside = () => {
   @include clearfix;
   position: relative;
   width: 100%;
+}
+
+.showGreyMode {
+  filter: grayscale(1);
+}
+
+.showColorWeakness {
+  filter: invert(0.8);
 }
 
 .drawer-bg {
@@ -76,13 +82,13 @@ const handleClickOutside = () => {
 .main-container {
   min-height: 100%;
   transition: margin-left 0.28s;
-  margin-left: var(--base-sidebar-width);
+  margin-left: var(--v3-sidebar-width);
   position: relative;
 }
 
 .sidebar-container {
   transition: width 0.28s;
-  width: var(--base-sidebar-width) !important;
+  width: var(--v3-sidebar-width) !important;
   height: 100%;
   position: fixed;
   font-size: 0px;
@@ -98,19 +104,19 @@ const handleClickOutside = () => {
   top: 0;
   right: 0;
   z-index: 9;
-  width: calc(100% - var(--base-sidebar-width));
+  width: calc(100% - var(--v3-sidebar-width));
   transition: width 0.28s;
 }
 
 .hideSidebar {
   .main-container {
-    margin-left: var(--base-sidebar-hide-width);
+    margin-left: var(--v3-sidebar-hide-width);
   }
   .sidebar-container {
-    width: var(--base-sidebar-hide-width) !important;
+    width: var(--v3-sidebar-hide-width) !important;
   }
   .fixed-header {
-    width: calc(100% - var(--base-sidebar-hide-width));
+    width: calc(100% - var(--v3-sidebar-hide-width));
   }
 }
 
@@ -121,7 +127,7 @@ const handleClickOutside = () => {
   }
   .sidebar-container {
     transition: transform 0.28s;
-    width: var(--base-sidebar-width) !important;
+    width: var(--v3-sidebar-width) !important;
   }
   &.openSidebar {
     position: fixed;
@@ -131,7 +137,7 @@ const handleClickOutside = () => {
     .sidebar-container {
       pointer-events: none;
       transition-duration: 0.3s;
-      transform: translate3d(calc(0px - var(--base-sidebar-width)), 0, 0);
+      transform: translate3d(calc(0px - var(--v3-sidebar-width)), 0, 0);
     }
   }
 
