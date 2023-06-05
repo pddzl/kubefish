@@ -2,12 +2,13 @@ package k8s
 
 import (
 	"context"
-	appsV1 "k8s.io/api/apps/v1"
-	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
+	"fmt"
 	"github.com/pddzl/kubefish/server/global"
 	"github.com/pddzl/kubefish/server/model/common/request"
 	modelK8s "github.com/pddzl/kubefish/server/model/k8s"
+	appsV1 "k8s.io/api/apps/v1"
+	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 )
 
 type ReplicaSetService struct{}
@@ -83,4 +84,70 @@ func (rs *ReplicaSetService) GetReplicaSetDetail(namespace string, replicaSetNam
 	}
 
 	return &replicaSetDetail, nil
+}
+
+// GetReplicaSetPods 获取replicaSet关联的pods
+func (rs *ReplicaSetService) GetReplicaSetPods(namespace string, replicaSet string, info request.PageInfo) ([]modelK8s.RelatedPod, int, error) {
+	// 获取replicaSet原始数据
+	rSet, err := global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).Get(context.TODO(), replicaSet, metaV1.GetOptions{})
+	if err != nil {
+		return nil, 0, err
+	}
+
+	// 获取replicaSet的selector
+	//selector := labels.SelectorFromSet(rSet.Spec.Selector.MatchLabels)
+	//options := metaV1.ListOptions{LabelSelector: selector.String()}
+	options := metaV1.ListOptions{LabelSelector: labels.Set(rSet.Spec.Selector.MatchLabels).String()}
+
+	// 获取pods
+	podList, err := global.KF_K8S_Client.CoreV1().Pods(namespace).List(context.TODO(), options)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	// 处理related pod
+	var relatedPodList []modelK8s.RelatedPod
+	for _, pod := range podList.Items {
+		var relatedPod modelK8s.RelatedPod
+		relatedPod.ObjectMeta = modelK8s.NewObjectMeta(pod.ObjectMeta)
+		relatedPod.NodeName = pod.Spec.NodeName
+		relatedPod.Status = string(pod.Status.Phase)
+		// append
+		relatedPodList = append(relatedPodList, relatedPod)
+	}
+
+	// 分页
+	end := info.PageSize * info.Page
+	offset := info.PageSize * (info.Page - 1)
+	total := len(podList.Items)
+	if total <= offset {
+		return nil, total, nil
+	}
+	if total < end {
+		return relatedPodList[offset:], total, nil
+	} else {
+		return relatedPodList[offset:end], total, nil
+	}
+}
+
+// GetReplicaSetServices 获取replicaSet关联的services
+func (rs *ReplicaSetService) GetReplicaSetServices(namespace string, replicaSet string) (interface{}, error) {
+	// 获取replicaSet原始数据
+	rSet, err := global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).Get(context.TODO(), replicaSet, metaV1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	// 获取replicaSet的selector
+	//selector := labels.SelectorFromSet(rSet.Spec.Selector.MatchLabels)
+	//lb := make(map[string]string)
+	//lb["k8s-app"] = "kube-dns"
+	options := metaV1.ListOptions{LabelSelector: labels.Set(rSet.Spec.Selector.MatchLabels).String()}
+
+	fmt.Println("option", options, namespace, labels.Set(rSet.Spec.Selector.MatchLabels).String())
+
+	// 获取ReplicaSet关联的Service列表
+	serviceList, err := global.KF_K8S_Client.CoreV1().Services(namespace).List(context.TODO(), options)
+
+	return serviceList.Items, err
 }

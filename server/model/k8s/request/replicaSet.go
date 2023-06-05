@@ -12,3 +12,9 @@ type ReplicaSetCommon struct {
 	NameSpace  string `json:"namespace" validate:"required"`
 	ReplicaSet string `json:"replicaSet" validate:"required"`
 }
+
+// RsPods 获取rs关联的pod
+type RsPods struct {
+	ReplicaSetCommon
+	request.PageInfo
+}

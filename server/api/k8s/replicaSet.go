@@ -14,15 +14,15 @@ type ReplicaSetApi struct{}
 
 // GetReplicaSets 获取replicaSet列表
 func (rs *ReplicaSetApi) GetReplicaSets(c *gin.Context) {
-	var pageInfo k8sRequest.RsListReq
-	_ = c.ShouldBindJSON(&pageInfo)
+	var rsList k8sRequest.RsListReq
+	_ = c.ShouldBindJSON(&rsList)
 	// 校验字段
 	validate := validator.New()
-	if err := validate.Struct(&pageInfo.PageInfo); err != nil {
+	if err := validate.Struct(&rsList.PageInfo); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := replicaSetService.GetReplicaSets(pageInfo.Namespace, pageInfo.PageInfo)
+	list, total, err := replicaSetService.GetReplicaSets(rsList.Namespace, rsList.PageInfo)
 	if err != nil {
 		response.FailWithMessage("获取失败", c)
 		global.KF_LOG.Error("获取失败", zap.Error(err))
@@ -31,8 +31,8 @@ func (rs *ReplicaSetApi) GetReplicaSets(c *gin.Context) {
 	response.OkWithDetailed(response.PageResult{
 		List:     list,
 		Total:    int64(total),
-		Page:     pageInfo.Page,
-		PageSize: pageInfo.PageSize,
+		Page:     rsList.Page,
+		PageSize: rsList.PageSize,
 	}, "获取成功", c)
 }
 
@@ -57,10 +57,49 @@ func (rs *ReplicaSetApi) GetReplicaSetDetail(c *gin.Context) {
 }
 
 // GetReplicaSetPods 获取replicaSet关联的pods
-func (rs *ReplicaSetApi) GetReplicaSetPods(c *gin.Context) {}
+func (rs *ReplicaSetApi) GetReplicaSetPods(c *gin.Context) {
+	var rsPods k8sRequest.RsPods
+	_ = c.ShouldBindJSON(&rsPods)
+	// 校验字段
+	validate := validator.New()
+	if err := validate.Struct(&rsPods); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	pods, total, err := replicaSetService.GetReplicaSetPods(rsPods.NameSpace, rsPods.ReplicaSet, rsPods.PageInfo)
+	if err != nil {
+		response.FailWithMessage("获取失败", c)
+		global.KF_LOG.Error("获取失败", zap.Error(err))
+		return
+	}
+	response.OkWithDetailed(response.PageResult{
+		List:     pods,
+		Total:    int64(total),
+		Page:     rsPods.Page,
+		PageSize: rsPods.PageSize,
+	}, "获取成功", c)
+}
 
 // GetReplicaSetServices 获取replicaSet关联的services
-func (rs *ReplicaSetApi) GetReplicaSetServices(c *gin.Context) {}
+func (rs *ReplicaSetApi) GetReplicaSetServices(c *gin.Context) {
+	var replicaSetServices k8sRequest.ReplicaSetCommon
+	_ = c.ShouldBindJSON(&replicaSetServices)
+	// 校验
+	validate := validator.New()
+	if err := validate.Struct(&replicaSetServices); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	services, err := replicaSetService.GetReplicaSetServices(replicaSetServices.NameSpace, replicaSetServices.ReplicaSet)
+	if err != nil {
+		response.FailWithMessage("获取失败", c)
+		global.KF_LOG.Error("获取失败", zap.Error(err))
+		return
+	}
+	response.OkWithDetailed(services, "获取成功", c)
+}
 
 // DeleteReplicaSet 删除replicaSet
 func (rs *ReplicaSetApi) DeleteReplicaSet(c *gin.Context) {}

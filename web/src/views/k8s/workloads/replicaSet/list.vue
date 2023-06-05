@@ -8,8 +8,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button size="small" icon="refresh" @click="onReset">重置</el-button>
+          <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
+          <el-button icon="refresh" @click="onReset">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -17,13 +17,13 @@
       <div class="table-wrapper">
         <el-table :data="tableData">
           <el-table-column label="名称" min-width="220">
-            <!-- <template #default="scope">
+            <template #default="scope">
             <router-link
-              :to="{ name: 'replicaSet_detail', query: { replicaSet: scope.row.name, namespace: scope.row.namespace } }"
+              :to="{ name: 'ReplicaSetDetail', query: { replicaSet: scope.row.name, namespace: scope.row.namespace } }"
             >
               <el-link type="primary" :underline="false">{{ scope.row.name }}</el-link>
             </router-link>
-          </template> -->
+          </template>
           </el-table-column>
           <el-table-column label="命名空间" prop="namespace" min-width="120" />
           <el-table-column label="Pods" prop="pods" min-width="80">
@@ -32,13 +32,50 @@
           <el-table-column label="创建时间" width="200">
             <template #default="scope">{{ formatDateTime(scope.row.creationTimestamp) }}</template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="240">
+          <el-table-column fixed="right" label="操作">
             <template #default="scope">
-              <el-button icon="view" type="text" size="small" @click="viewOrchFunc(scope.row.name, scope.row.namespace)"
-                >查 看</el-button
-              >
-              <el-button icon="expand" type="text" size="small" @click="openScaleDialog(scope.row)">伸缩</el-button>
-              <el-button icon="delete" type="text" size="small" @click="deleteFunc(scope.row)">删除</el-button>
+              <!-- <el-button icon="expand" type="text" size="small" @click="openScaleDialog(scope.row)">伸缩</el-button> -->
+              <!-- <el-button icon="delete" type="text" size="small" @click="deleteFunc(scope.row)">删除</el-button> -->
+              <el-popover placement="bottom" trigger="click" :popper-style="pWidth">
+                <template #reference>
+                  <el-button icon="more" type="primary" link size="small" />
+                </template>
+                <div style="disply: flex; flex-direction: column; justify-content: center; align-items: center">
+                  <div
+                    style="
+                      width: 75px;
+                      padding: 5px;
+                      border-bottom: solid;
+                      border-width: 1px;
+                      border-color: rgba(128, 128, 128, 0.157);
+                    "
+                  >
+                    <el-button
+                      icon="view"
+                      type="primary"
+                      link
+                      @click="viewOrchFunc(scope.row.name, scope.row.namespace)"
+                      >查 看</el-button
+                    >
+                  </div>
+                  <div
+                    style="
+                      width: 75px;
+                      padding: 5px;
+                      border-bottom: solid;
+                      border-width: 1px;
+                      border-color: rgba(128, 128, 128, 0.157);
+                    "
+                  >
+                    <el-button icon="expand" type="primary" link @click="sshPod(scope.row.name, scope.row.namespace)"
+                      >伸 缩</el-button
+                    >
+                  </div>
+                  <div style="width: 75px; padding: 5px">
+                    <el-button icon="delete" type="primary" link @click="deleteFunc(scope.row)">删 除</el-button>
+                  </div>
+                </div>
+              </el-popover>
             </template>
           </el-table-column>
         </el-table>
@@ -163,7 +200,7 @@ const onReset = () => {
 const dialogFormVisible = ref(false)
 const formatData = ref<string>("")
 const viewOrchFunc = async (name: string, namespace: string) => {
-  formatData.value = await viewOrch(name, "pods", namespace)
+  formatData.value = await viewOrch(name, "replicasets", namespace)
   dialogFormVisible.value = true
 }
 
@@ -233,6 +270,8 @@ const deleteFunc = async (row) => {
     }
   })
 }
+
+const pWidth = reactive({ "min-width": "100px", width: "100px" })
 </script>
 
 <style lang="scss" scoped>

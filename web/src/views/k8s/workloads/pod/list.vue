@@ -43,7 +43,15 @@
                   <el-button icon="more" type="primary" link size="small" />
                 </template>
                 <div style="disply: flex; flex-direction: column; justify-content: center; align-items: center">
-                  <div style="width: 75px; padding: 5px; border-bottom: solid; border-width: 1px; border-color: rgba(128, 128, 128, 0.157);">
+                  <div
+                    style="
+                      width: 75px;
+                      padding: 5px;
+                      border-bottom: solid;
+                      border-width: 1px;
+                      border-color: rgba(128, 128, 128, 0.157);
+                    "
+                  >
                     <el-button
                       icon="view"
                       type="primary"
@@ -52,13 +60,37 @@
                       >查 看</el-button
                     >
                   </div>
-                  <div style="width: 75px; padding: 5px; border-bottom: solid; border-width: 1px; border-color: rgba(128, 128, 128, 0.157);">
-                    <el-button icon="tickets" type="primary" link @click="viewLog(scope.row.namespace, scope.row.name)">日 志</el-button>
+                  <div
+                    style="
+                      width: 75px;
+                      padding: 5px;
+                      border-bottom: solid;
+                      border-width: 1px;
+                      border-color: rgba(128, 128, 128, 0.157);
+                    "
+                  >
+                    <el-button icon="tickets" type="primary" link @click="viewLog(scope.row.namespace, scope.row.name)"
+                      >日 志</el-button
+                    >
                   </div>
-                  <div style="width: 75px; padding: 5px; border-bottom: solid; border-width: 1px; border-color: rgba(128, 128, 128, 0.157);">
-                    <el-button icon="ArrowRight" type="primary" link @click="sshPod(scope.row.name, scope.row.namespace)">终 端</el-button>
+                  <div
+                    style="
+                      width: 75px;
+                      padding: 5px;
+                      border-bottom: solid;
+                      border-width: 1px;
+                      border-color: rgba(128, 128, 128, 0.157);
+                    "
+                  >
+                    <el-button
+                      icon="ArrowRight"
+                      type="primary"
+                      link
+                      @click="sshPod(scope.row.name, scope.row.namespace)"
+                      >终 端</el-button
+                    >
                   </div>
-                  <div style="width: 75px; padding: 5px;">
+                  <div style="width: 75px; padding: 5px">
                     <el-button icon="delete" type="primary" link @click="deleteFunc(scope.row)">删 除</el-button>
                   </div>
                 </div>
@@ -207,7 +239,7 @@ const deleteFunc = async (row: PodData) => {
   })
 }
 
-const pWidth = reactive({"min-width": "100px", width:"100px"})
+const pWidth = reactive({ "min-width": "100px", width: "100px" })
 </script>
 
 <style lang="scss" scoped>

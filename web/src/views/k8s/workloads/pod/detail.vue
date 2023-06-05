@@ -169,7 +169,7 @@ const namespace = route.query.namespace as string
 const podDetail = ref<any>({})
 const containers = ref<string[]>([])
 
-const getData = async () => {
+const getTableData = async () => {
   await getPodDetailApi({ pod: pod, namespace: namespace }).then((res) => {
     if (res.code === 0) {
       podDetail.value = res.data
@@ -179,7 +179,7 @@ const getData = async () => {
     }
   })
 }
-getData()
+getTableData()
 
 // 查看编排
 const dialogFormVisible = ref(false)
