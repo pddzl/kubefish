@@ -18,12 +18,15 @@
         <el-table :data="tableData">
           <el-table-column label="名称" min-width="220">
             <template #default="scope">
-            <router-link
-              :to="{ name: 'ReplicaSetDetail', query: { replicaSet: scope.row.name, namespace: scope.row.namespace } }"
-            >
-              <el-link type="primary" :underline="false">{{ scope.row.name }}</el-link>
-            </router-link>
-          </template>
+              <router-link
+                :to="{
+                  name: 'ReplicaSetDetail',
+                  query: { replicaSet: scope.row.name, namespace: scope.row.namespace }
+                }"
+              >
+                <el-link type="primary" :underline="false">{{ scope.row.name }}</el-link>
+              </router-link>
+            </template>
           </el-table-column>
           <el-table-column label="命名空间" prop="namespace" min-width="120" />
           <el-table-column label="Pods" prop="pods" min-width="80">
@@ -132,6 +135,7 @@ defineOptions({
   name: "ReplicaSetList"
 })
 
+// 分页
 const { paginationData, changeCurrentPage, changePageSize } = usePagination()
 
 // 获取所有namespace
@@ -144,9 +148,6 @@ const getNamespace = async () => {
   }
 }
 getNamespace()
-
-// 加载replicaSet数据
-// const { paginationData, changeCurrentPage, changePageSize } = usePagination()
 
 const searchInfo = reactive({
   namespace: ""
@@ -253,7 +254,7 @@ const closeScaleDialog = () => {
 // }
 
 // 删除
-const deleteFunc = async (row) => {
+const deleteFunc = async (row: replicaSetData) => {
   ElMessageBox.confirm("此操作将永久删除该ReplicaSet, 是否继续?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",

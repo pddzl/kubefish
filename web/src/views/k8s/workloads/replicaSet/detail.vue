@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="detail-operation">
-      <el-button icon="view" type="primary" plain @click="viewReplicaSet">查看</el-button>
+      <el-button icon="view" type="primary" plain @click="viewOrchFunc(replicaSet, namespace)">查看</el-button>
       <el-button icon="expand" type="warning" plain @click="openScaleDialog">伸缩 </el-button>
       <el-button icon="delete" type="danger" plain @click="deleteFunc">删除 </el-button>
     </div>
@@ -113,33 +113,11 @@
             </div>
           </div>
         </el-collapse-item>
-        <el-collapse-item title="Services" name="services">
-          <div style="margin-right: 25px">
-            <el-table :data="replicaSetServices">
-              <el-table-column label="名称" prop="metadata.name" min-width="120">
-                <!-- <template #default="scope">
-                  <router-link
-                    :to="{ name: 'services_detail', query: { service: scope.row.metadata.name, namespace: namespace } }"
-                  >
-                    <el-link type="primary" :underline="false">{{ scope.row.metadata.name }}</el-link>
-                  </router-link>
-                </template> -->
-              </el-table-column>
-              <el-table-column label="命名空间" prop="metadata.namespace" />
-              <el-table-column label="类型" prop="spec.type" />
-              <el-table-column label="集群IP" prop="spec.clusterIP" />
-              <el-table-column label="创建时间">
-                <template #default="scope">{{ formatDateTime(scope.row.metadata.creationTimestamp) }}</template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </el-collapse-item>
       </el-collapse>
     </div>
     <!-- 查看编排对话框 -->
     <el-dialog v-model="dialogViewVisible" title="查看资源" width="55%">
-      <!-- eslint-disable-next-line vue/attribute-hyphenation -->
-      <vue-code-mirror v-model:modelValue="replicaSetFormat" :readOnly="true" />
+      <vue-code-mirror v-model:modelValue="formatData" :readOnly="true" />
     </el-dialog>
     <!-- 伸缩对话框 -->
     <el-dialog v-model="dialogScaleVisible" title="伸缩" width="55%" center>
@@ -168,7 +146,6 @@ import {
   type ReplicaSetDetail,
   getReplicaSetDetailApi,
   getReplicaSetPodsApi,
-  getReplicaSetServicesApi,
   deleteReplicaSetApi
 } from "@/api/k8s/replicaSet"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
@@ -179,6 +156,7 @@ import MetaData from "@/components/k8s/metadata.vue"
 // import warningBar from "@/components/warningBar/warningBar.vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { usePagination } from "@/hooks/usePagination"
+import { viewOrch } from "@/utils/k8s/orch"
 
 // 分页
 const { paginationData, changeCurrentPage, changePageSize } = usePagination()
@@ -244,26 +222,11 @@ const handleCurrentChange = (value: number) => {
   getTableData()
 }
 
-// 加载replicaSet关联services
-const replicaSetServices = ref([])
-
-const getReplicaSetServicesFunc = async () => {
-  const res = await getReplicaSetServicesApi({ namespace: namespace, replicaSet: replicaSet })
-  if (res.code === 0) {
-    replicaSetServices.value = res.data
-  }
-}
-getReplicaSetServicesFunc()
-
 // 查看编排
 const dialogViewVisible = ref(false)
-const replicaSetFormat = ref({})
-
-const viewReplicaSet = async () => {
-  const result = await getReplicaSetRaw({ replicaSet: replicaSet, namespace: namespace })
-  if (result.code === 0) {
-    replicaSetFormat.value = JSON.stringify(result.data)
-  }
+const formatData = ref<string>("")
+const viewOrchFunc = async (name: string, namespace: string) => {
+  formatData.value = await viewOrch(name, "replicasets", namespace)
   dialogViewVisible.value = true
 }
 
@@ -308,6 +271,22 @@ const scaleFunc = async () => {
 }
 
 // 删除
+// const deleteFunc = async () => {
+//   ElMessageBox.confirm("此操作将永久删除该ReplicaSet, 是否继续?", "提示", {
+//     confirmButtonText: "确定",
+//     cancelButtonText: "取消",
+//     type: "warning"
+//   }).then(async () => {
+//     const res = await deleteReplicaSetApi({ namespace: namespace, replicaSet: replicaSet })
+//     if (res.code === 0) {
+//       ElMessage({
+//         type: "success",
+//         message: "删除成功!"
+//       })
+//     }
+//   })
+// }
+
 const deleteFunc = async () => {
   ElMessageBox.confirm("此操作将永久删除该ReplicaSet, 是否继续?", "提示", {
     confirmButtonText: "确定",

@@ -2,13 +2,13 @@ package k8s
 
 import (
 	"context"
-	"fmt"
-	"github.com/pddzl/kubefish/server/global"
-	"github.com/pddzl/kubefish/server/model/common/request"
-	modelK8s "github.com/pddzl/kubefish/server/model/k8s"
 	appsV1 "k8s.io/api/apps/v1"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+
+	"github.com/pddzl/kubefish/server/global"
+	"github.com/pddzl/kubefish/server/model/common/request"
+	modelK8s "github.com/pddzl/kubefish/server/model/k8s"
 )
 
 type ReplicaSetService struct{}
@@ -138,16 +138,15 @@ func (rs *ReplicaSetService) GetReplicaSetServices(namespace string, replicaSet 
 		return nil, err
 	}
 
-	// 获取replicaSet的selector
-	//selector := labels.SelectorFromSet(rSet.Spec.Selector.MatchLabels)
-	//lb := make(map[string]string)
-	//lb["k8s-app"] = "kube-dns"
 	options := metaV1.ListOptions{LabelSelector: labels.Set(rSet.Spec.Selector.MatchLabels).String()}
-
-	fmt.Println("option", options, namespace, labels.Set(rSet.Spec.Selector.MatchLabels).String())
 
 	// 获取ReplicaSet关联的Service列表
 	serviceList, err := global.KF_K8S_Client.CoreV1().Services(namespace).List(context.TODO(), options)
 
 	return serviceList.Items, err
+}
+
+// DeleteReplicaSet 删除replicaSet
+func (rs *ReplicaSetService) DeleteReplicaSet(namespace string, name string) error {
+	return global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).Delete(context.TODO(), name, metaV1.DeleteOptions{})
 }

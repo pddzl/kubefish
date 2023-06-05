@@ -9,7 +9,7 @@ type RsListReq struct {
 }
 
 type ReplicaSetCommon struct {
-	NameSpace  string `json:"namespace" validate:"required"`
+	Namespace  string `json:"namespace" validate:"required"`
 	ReplicaSet string `json:"replicaSet" validate:"required"`
 }
 

@@ -47,7 +47,7 @@ func (rs *ReplicaSetApi) GetReplicaSetDetail(c *gin.Context) {
 		return
 	}
 
-	detail, err := replicaSetService.GetReplicaSetDetail(replicaSetCommon.NameSpace, replicaSetCommon.ReplicaSet)
+	detail, err := replicaSetService.GetReplicaSetDetail(replicaSetCommon.Namespace, replicaSetCommon.ReplicaSet)
 	if err != nil {
 		response.FailWithMessage("获取失败", c)
 		global.KF_LOG.Error("获取失败", zap.Error(err))
@@ -67,7 +67,7 @@ func (rs *ReplicaSetApi) GetReplicaSetPods(c *gin.Context) {
 		return
 	}
 
-	pods, total, err := replicaSetService.GetReplicaSetPods(rsPods.NameSpace, rsPods.ReplicaSet, rsPods.PageInfo)
+	pods, total, err := replicaSetService.GetReplicaSetPods(rsPods.Namespace, rsPods.ReplicaSet, rsPods.PageInfo)
 	if err != nil {
 		response.FailWithMessage("获取失败", c)
 		global.KF_LOG.Error("获取失败", zap.Error(err))
@@ -92,7 +92,7 @@ func (rs *ReplicaSetApi) GetReplicaSetServices(c *gin.Context) {
 		return
 	}
 
-	services, err := replicaSetService.GetReplicaSetServices(replicaSetServices.NameSpace, replicaSetServices.ReplicaSet)
+	services, err := replicaSetService.GetReplicaSetServices(replicaSetServices.Namespace, replicaSetServices.ReplicaSet)
 	if err != nil {
 		response.FailWithMessage("获取失败", c)
 		global.KF_LOG.Error("获取失败", zap.Error(err))
@@ -102,4 +102,20 @@ func (rs *ReplicaSetApi) GetReplicaSetServices(c *gin.Context) {
 }
 
 // DeleteReplicaSet 删除replicaSet
-func (rs *ReplicaSetApi) DeleteReplicaSet(c *gin.Context) {}
+func (rs *ReplicaSetApi) DeleteReplicaSet(c *gin.Context) {
+	var replicaSet k8sRequest.ReplicaSetCommon
+	_ = c.ShouldBindJSON(&replicaSet)
+	// 校验
+	validate := validator.New()
+	if err := validate.Struct(&replicaSet); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	if err := replicaSetService.DeleteReplicaSet(replicaSet.Namespace, replicaSet.ReplicaSet); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		global.KF_LOG.Error("删除失败", zap.Error(err))
+	} else {
+		response.OkWithMessage("删除成功", c)
+	}
+}

@@ -23,9 +23,14 @@ export const getReplicaSetsApi = (data: reqNamespace) => {
   })
 }
 
+interface rsReq {
+  namespace: string
+  replicaSet: string
+}
+
 // 删除replicaSet
-export const deleteReplicaSetApi = (data: {namespace: string, replicaSet: string}) => {
-  return request({
+export const deleteReplicaSetApi = (data: rsReq) => {
+  return request<ApiResponseData<null>>({
     url: '/k8s/replicaSet/deleteReplicaSet',
     method: 'post',
     data
@@ -45,11 +50,6 @@ export interface ReplicaSetDetail {
     availableReplicas: number,
     conditions: []
   }
-}
-
-interface rsReq {
-  namespace: string
-  replicaSet: string
 }
 
 // 获取replicaSet详情
