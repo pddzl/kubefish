@@ -102,7 +102,7 @@ func (rs *ReplicaSetService) GetReplicaSetPods(namespace string, replicaSet stri
 
 	labelSelector := labels.Set(rSet.Spec.Selector.MatchLabels).String()
 	var hostService PodService
-	podBriefList, total, err := hostService.GetPods(namespace, labelSelector, info.Page, info.PageSize)
+	podBriefList, total, err := hostService.GetPods(namespace, labelSelector, "label", info.Page, info.PageSize)
 	if err != nil {
 		global.KF_LOG.Error("获取replicaSet关联的pod失败")
 		return nil, 0, err

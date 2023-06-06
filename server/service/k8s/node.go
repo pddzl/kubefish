@@ -163,34 +163,22 @@ func getNodePods(name string) (*coreV1.PodList, error) {
 }
 
 // GetNodePods 获取节点上的pod信息
-func (n *NodeService) GetNodePods(name string, info request.PageInfo) ([]modelK8s.RelatedPod, int64, error) {
-	// 获取PodList原生数据
-	podList, err := getNodePods(name)
+func (n *NodeService) GetNodePods(name string, info request.PageInfo) ([]modelK8s.PodBrief, int, error) {
+	// 制作label
+	fieldSelector, err := fields.ParseSelector("spec.nodeName=" + name +
+		",status.phase!=" + string(coreV1.PodSucceeded) +
+		",status.phase!=" + string(coreV1.PodFailed))
+
 	if err != nil {
 		return nil, 0, err
 	}
 
-	// 处理podRaw数据
-	var relatedPodList []modelK8s.RelatedPod
-	for _, pod := range podList.Items {
-		var relatedPod modelK8s.RelatedPod
-		relatedPod.ObjectMeta = modelK8s.NewObjectMeta(pod.ObjectMeta)
-		relatedPod.Status = string(pod.Status.Phase)
-		relatedPod.NodeName = pod.Spec.NodeName
-		// append
-		relatedPodList = append(relatedPodList, relatedPod)
-	}
-
-	// 分页
-	end := info.PageSize * info.Page
-	offset := info.PageSize * (info.Page - 1)
-	total := len(podList.Items)
-	if total <= offset {
-		return nil, int64(total), nil
-	}
-	if total < end {
-		return relatedPodList[offset:], int64(total), nil
+	var podService PodService
+	podList, total, err := podService.GetPods(coreV1.NamespaceAll, fieldSelector.String(), "field", info.Page, info.PageSize)
+	if err != nil {
+		global.KF_LOG.Error("获取node关联的pod失败")
+		return nil, 0, err
 	} else {
-		return relatedPodList[offset:end], int64(total), nil
+		return podList, total, nil
 	}
 }

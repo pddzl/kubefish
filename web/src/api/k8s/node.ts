@@ -63,13 +63,11 @@ export function getNodeDetail(params: { name: string }) {
 }
 
 export interface NodePods {
-  metadata: {
-    name: string
-    namespace: string
-    creationTimestamp: string
-  }
+  name: string
+  namespace: string
+  creationTimestamp: string
   status: string
-  nodeName: string
+  node: string
 }
 
 export interface NodePodsPageInfo {

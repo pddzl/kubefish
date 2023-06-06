@@ -66,7 +66,7 @@ func (na *NodeApi) GetNodePods(c *gin.Context) {
 	} else {
 		response.OkWithDetailed(response.PageResult{
 			List:     pods,
-			Total:    total,
+			Total:    int64(total),
 			Page:     node.Page,
 			PageSize: node.PageSize,
 		}, "获取成功", c)

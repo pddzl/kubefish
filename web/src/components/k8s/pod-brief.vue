@@ -1,23 +1,23 @@
 <template>
   <el-table :data="props.pods">
     <el-table-column label="名称" min-width="140">
-      <!-- <template #default="scope">
+      <template #default="scope">
         <router-link
-          :to="{ name: 'pod_detail', query: { pod: scope.row.metadata.name, namespace: scope.row.metadata.namespace } }"
+          :to="{ name: 'PodDetail', query: { pod: scope.row.name, namespace: scope.row.namespace } }"
         >
-          <el-link type="primary" :underline="false">{{ scope.row.metadata.name }}</el-link>
+          <el-link type="primary" :underline="false">{{ scope.row.name }}</el-link>
         </router-link>
-      </template> -->
+      </template>
     </el-table-column>
     <el-table-column prop="status" label="状态" min-width="60">
       <template #default="scope">
         <el-tag :type="PodStatusFilter(scope.row.status)" size="small">{{ scope.row.status }}</el-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="nodeName" label="节点" min-width="80" />
-    <el-table-column prop="metadata.namespace" label="命名空间" min-width="80" />
+    <el-table-column prop="node" label="节点" min-width="80" />
+    <el-table-column prop="namespace" label="命名空间" min-width="80" />
     <el-table-column label="创建时间" width="200">
-      <template #default="scope">{{ formatDateTime(scope.row.metadata.creationTimestamp) }}</template>
+      <template #default="scope">{{ formatDateTime(scope.row.creationTimestamp) }}</template>
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="220">
       <template #default="scope">

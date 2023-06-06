@@ -172,9 +172,9 @@
             </el-table>
           </div>
         </el-collapse-item>
-        <el-collapse-item v-if="nodeDetail.status?.conditions" title="Pods" name="pods">
+        <el-collapse-item v-if="Array.isArray(nodePods)" title="Pods" name="pods">
           <div class="info-table">
-            <pod-brief :pods="nodePods" style="margin-bottom: 20px" />
+            <PodBrief :pods="nodePods" style="margin-bottom: 20px" />
             <div class="pager-wrapper">
               <el-pagination
                 background
@@ -205,7 +205,7 @@ import { type NodePods, getNodeDetail, getNodePods } from "@/api/k8s/node"
 // import { statusPodFilter } from "@/mixin/filter.js"
 import { formatDateTime } from "@/utils/index"
 import MetaData from "@/components/k8s/metadata.vue"
-import PodBrief from "@/components/k8s/pod_brief.vue"
+import PodBrief from "@/components/k8s/pod-brief.vue"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { usePagination } from "@/hooks/usePagination"
 import { viewOrch } from "@/utils/k8s/orch"
