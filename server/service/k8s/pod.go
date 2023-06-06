@@ -17,16 +17,14 @@ import (
 type PodService struct{}
 
 // GetPods 获取集群pods
-func (ps *PodService) GetPods(namespace string, filterStr string, filterType string, page int, pageSize int) ([]modelK8s.PodBrief, int, error) {
+func (ps *PodService) GetPods(namespace string, label string, field string, page int, pageSize int) ([]modelK8s.PodBrief, int, error) {
 	// 获取pod list
 	var option metaV1.ListOptions
-	switch filterType {
-	case "label":
-		option.LabelSelector = filterStr
-	case "field":
-		option.FieldSelector = filterStr
-	default:
-		option.LabelSelector = filterStr
+	if label != "" {
+		option.LabelSelector = label
+	}
+	if field != "" {
+		option.FieldSelector = field
 	}
 	list, err := global.KF_K8S_Client.CoreV1().Pods(namespace).List(context.TODO(), option)
 	if err != nil {

@@ -174,7 +174,7 @@ func (n *NodeService) GetNodePods(name string, info request.PageInfo) ([]modelK8
 	}
 
 	var podService PodService
-	podList, total, err := podService.GetPods(coreV1.NamespaceAll, fieldSelector.String(), "field", info.Page, info.PageSize)
+	podList, total, err := podService.GetPods(coreV1.NamespaceAll, "", fieldSelector.String(), info.Page, info.PageSize)
 	if err != nil {
 		global.KF_LOG.Error("获取node关联的pod失败")
 		return nil, 0, err

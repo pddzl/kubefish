@@ -25,7 +25,7 @@ func (pa *PodApi) GetPods(c *gin.Context) {
 		return
 	}
 
-	if list, total, err := podService.GetPods(info.Namespace, info.FilterStr, info.FilterType, info.Page, info.PageSize); err != nil {
+	if list, total, err := podService.GetPods(info.Namespace, info.Label, info.Field, info.Page, info.PageSize); err != nil {
 		response.FailWithMessage("获取失败", c)
 		global.KF_LOG.Error("获取失败", zap.Error(err))
 	} else {

@@ -5,9 +5,9 @@ import "github.com/pddzl/kubefish/server/model/common/request"
 // PodListReq 获取pod列表
 type PodListReq struct {
 	request.PageInfo
-	Namespace  string `json:"namespace"`
-	FilterStr  string `json:"filterStr"`
-	FilterType string `json:"filterType"`
+	Namespace string `json:"namespace"`
+	Label     string `json:"label"`
+	Field     string `json:"field"`
 }
 
 type PodReq struct {
