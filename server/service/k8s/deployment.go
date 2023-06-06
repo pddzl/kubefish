@@ -97,3 +97,8 @@ func (ds *DeploymentService) GetDeploymentDetail(namespace string, name string) 
 
 	return &deploymentDetail, nil
 }
+
+// DeleteDeployment 删除deployment
+func (ds *DeploymentService) DeleteDeployment(namespace string, name string) error {
+	return global.KF_K8S_Client.AppsV1().Deployments(namespace).Delete(context.TODO(), name, metaV1.DeleteOptions{})
+}

@@ -62,4 +62,20 @@ func (da *DeploymentApi) GetDeploymentDetail(c *gin.Context) {
 func (da *DeploymentApi) GetDeploymentRs(c *gin.Context) {}
 
 // DeleteDeployment 删除deployment
-func (da *DeploymentApi) DeleteDeployment(c *gin.Context) {}
+func (da *DeploymentApi) DeleteDeployment(c *gin.Context) {
+	var commonReq k8sRequest.CommonReq
+	_ = c.ShouldBindJSON(&commonReq)
+	// 校验
+	validate := validator.New()
+	if err := validate.Struct(&commonReq); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	if err := deploymentService.DeleteDeployment(commonReq.Namespace, commonReq.Name); err != nil {
+		response.FailWithMessage("删除失败", c)
+		global.KF_LOG.Error("删除失败", zap.Error(err))
+	} else {
+		response.OkWithMessage("删除成功", c)
+	}
+}

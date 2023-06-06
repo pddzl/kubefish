@@ -3,7 +3,7 @@ import { commonListReq, commonReq } from "./entry"
 
 export interface DeploymentBrief {
   name: string
-  Namespace: string
+  namespace: string
   AvailableReplicas: number
   Replicas: number
   CreationTimestamp: string
@@ -33,4 +33,10 @@ export const getDeploymentDetailApi = (data: commonReq) => {
 }
 
 // 删除deployment
-export const deleteDeploymentApi = () => {}
+export const deleteDeploymentApi = (data: commonReq) => {
+  return request<ApiResponseData<null>>({
+    url: "/k8s/deployment/deleteDeployment",
+    method: "post",
+    data
+  })
+}

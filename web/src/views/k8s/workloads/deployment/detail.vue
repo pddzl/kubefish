@@ -250,13 +250,13 @@ watch(desiredNum, (val) => {
 // }
 
 // 删除
-const deleteFunc = async () => {
+const deleteFunc = () => {
   ElMessageBox.confirm("此操作将永久删除该Deployment, 是否继续?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
   }).then(async () => {
-    const res = await deleteDeploymentApi({ namespace: namespace, deployment: deployment })
+    const res = await deleteDeploymentApi({ namespace: namespace, name: name })
     if (res.code === 0) {
       ElMessage({
         type: "success",
