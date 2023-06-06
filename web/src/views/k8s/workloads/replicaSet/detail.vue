@@ -80,22 +80,22 @@
                   <router-link
                     :to="{
                       name: 'PodDetail',
-                      query: { pod: scope.row.metadata.name, namespace: scope.row.metadata.namespace }
+                      query: { pod: scope.row.name, namespace: scope.row.namespace }
                     }"
                   >
-                    <el-link type="primary" :underline="false">{{ scope.row.metadata.name }}</el-link>
+                    <el-link type="primary" :underline="false">{{ scope.row.name }}</el-link>
                   </router-link>
                 </template>
               </el-table-column>
-              <el-table-column label="命名空间" prop="metadata.namespace" />
-              <el-table-column label="节点" prop="nodeName" />
+              <el-table-column label="命名空间" prop="namespace" />
+              <el-table-column label="节点" prop="node" />
               <el-table-column label="状态">
                 <template #default="scope">
                   <el-tag :type="StatusPodFilter(scope.row.status)" size="small">{{ scope.row.status }}</el-tag>
                 </template>
               </el-table-column>
               <el-table-column label="创建时间">
-                <template #default="scope">{{ formatDateTime(scope.row.metadata.creationTimestamp) }}</template>
+                <template #default="scope">{{ formatDateTime(scope.row.creationTimestamp) }}</template>
               </el-table-column>
             </el-table>
             <div class="pager-wrapper">

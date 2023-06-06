@@ -17,9 +17,9 @@ import (
 type PodService struct{}
 
 // GetPods 获取集群pods
-func (ps *PodService) GetPods(namespace string, page int, pageSize int) ([]modelK8s.PodBrief, int, error) {
+func (ps *PodService) GetPods(namespace string, label string, page int, pageSize int) ([]modelK8s.PodBrief, int, error) {
 	// 获取pod list
-	list, err := global.KF_K8S_Client.CoreV1().Pods(namespace).List(context.TODO(), metaV1.ListOptions{})
+	list, err := global.KF_K8S_Client.CoreV1().Pods(namespace).List(context.TODO(), metaV1.ListOptions{LabelSelector: label})
 	if err != nil {
 		return nil, 0, err
 	}

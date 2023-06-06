@@ -87,7 +87,7 @@ func (rs *ReplicaSetService) GetReplicaSetDetail(namespace string, replicaSetNam
 }
 
 // GetReplicaSetPods 获取replicaSet关联的pods
-func (rs *ReplicaSetService) GetReplicaSetPods(namespace string, replicaSet string, info request.PageInfo) ([]modelK8s.RelatedPod, int, error) {
+func (rs *ReplicaSetService) GetReplicaSetPods(namespace string, replicaSet string, info request.PageInfo) ([]modelK8s.PodBrief, int, error) {
 	// 获取replicaSet原始数据
 	rSet, err := global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).Get(context.TODO(), replicaSet, metaV1.GetOptions{})
 	if err != nil {
@@ -97,36 +97,17 @@ func (rs *ReplicaSetService) GetReplicaSetPods(namespace string, replicaSet stri
 	// 获取replicaSet的selector
 	//selector := labels.SelectorFromSet(rSet.Spec.Selector.MatchLabels)
 	//options := metaV1.ListOptions{LabelSelector: selector.String()}
-	options := metaV1.ListOptions{LabelSelector: labels.Set(rSet.Spec.Selector.MatchLabels).String()}
 
-	// 获取pods
-	podList, err := global.KF_K8S_Client.CoreV1().Pods(namespace).List(context.TODO(), options)
+	//options := metaV1.ListOptions{LabelSelector: labels.Set(rSet.Spec.Selector.MatchLabels).String()}
+
+	labelSelector := labels.Set(rSet.Spec.Selector.MatchLabels).String()
+	var hostService PodService
+	podBriefList, total, err := hostService.GetPods(namespace, labelSelector, info.Page, info.PageSize)
 	if err != nil {
+		global.KF_LOG.Error("获取replicaSet关联的pod失败")
 		return nil, 0, err
-	}
-
-	// 处理related pod
-	var relatedPodList []modelK8s.RelatedPod
-	for _, pod := range podList.Items {
-		var relatedPod modelK8s.RelatedPod
-		relatedPod.ObjectMeta = modelK8s.NewObjectMeta(pod.ObjectMeta)
-		relatedPod.NodeName = pod.Spec.NodeName
-		relatedPod.Status = string(pod.Status.Phase)
-		// append
-		relatedPodList = append(relatedPodList, relatedPod)
-	}
-
-	// 分页
-	end := info.PageSize * info.Page
-	offset := info.PageSize * (info.Page - 1)
-	total := len(podList.Items)
-	if total <= offset {
-		return nil, total, nil
-	}
-	if total < end {
-		return relatedPodList[offset:], total, nil
 	} else {
-		return relatedPodList[offset:end], total, nil
+		return podBriefList, total, nil
 	}
 }
 
