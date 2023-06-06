@@ -60,27 +60,21 @@ func (da *DeploymentApi) GetDeploymentDetail(c *gin.Context) {
 
 // GetDeploymentRs 获取deployment关联的replicaSet
 func (da *DeploymentApi) GetDeploymentRs(c *gin.Context) {
-	var relatedReq k8sRequest.CommonRelatedReq
-	_ = c.ShouldBindJSON(&relatedReq)
+	var commonReq k8sRequest.CommonReq
+	_ = c.ShouldBindJSON(&commonReq)
 	// 校验字段
 	validate := validator.New()
-	if err := validate.Struct(&relatedReq); err != nil {
+	if err := validate.Struct(&commonReq); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
-	pods, total, err := deploymentService.GetDeploymentRs(relatedReq.Namespace, relatedReq.Name, relatedReq.PageInfo)
-	if err != nil {
+	if rs, err := deploymentService.GetDeploymentRs(commonReq.Namespace, commonReq.Name); err != nil {
 		response.FailWithMessage("获取失败", c)
 		global.KF_LOG.Error("获取失败", zap.Error(err))
-		return
+	} else {
+		response.OkWithDetailed(rs, "获取成功", c)
 	}
-	response.OkWithDetailed(response.PageResult{
-		List:     pods,
-		Total:    int64(total),
-		Page:     relatedReq.Page,
-		PageSize: relatedReq.PageSize,
-	}, "获取成功", c)
 }
 
 // DeleteDeployment 删除deployment

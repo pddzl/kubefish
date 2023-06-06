@@ -1,5 +1,5 @@
 import { request } from "@/utils/service"
-import { commonListReq, commonReq, commonRelatedReq } from "./entry"
+import { commonListReq, type commonReq, commonRelatedReq } from "./entry"
 import { type ReplicaSetBriefList } from "./replicaSet"
 
 export interface DeploymentBrief {
@@ -64,9 +64,17 @@ export const deleteDeploymentApi = (data: commonReq) => {
   })
 }
 
+export interface NewReplicaSet {
+  name: string
+  namespace: string
+  labels: Object
+  creationTimestamp: string
+  replicas: string
+}
+
 // 获取deployment关联的rs
-export const getDeploymentRsApi = (data: commonRelatedReq) => {
-  return request<ApiResponseData<ReplicaSetBriefList>>({
+export const getDeploymentRsApi = (data: commonReq) => {
+  return request<ApiResponseData<NewReplicaSet>>({
     url: '/k8s/deployment/getDeploymentRs',
     method: 'post',
     data

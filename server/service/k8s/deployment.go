@@ -106,7 +106,7 @@ func (ds *DeploymentService) DeleteDeployment(namespace string, name string) err
 }
 
 // GetDeploymentRs 获取deployment关联的rs
-func (ds *DeploymentService) GetDeploymentRs(namespace string, name string, pageInfo request.PageInfo) (*modelK8s.NewReplicaSet, error) {
+func (ds *DeploymentService) GetDeploymentRs(namespace string, name string) (*modelK8s.NewReplicaSet, error) {
 	deployment, err := global.KF_K8S_Client.AppsV1().Deployments(namespace).Get(context.TODO(), name, metaV1.GetOptions{})
 	if err != nil {
 		return nil, err

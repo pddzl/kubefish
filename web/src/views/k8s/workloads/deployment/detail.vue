@@ -162,7 +162,12 @@
 <script lang="ts" setup>
 import { ref, watch } from "vue"
 import { useRoute } from "vue-router"
-import { type DeploymentDetail, getDeploymentDetailApi, deleteDeploymentApi, getDeploymentRsApi } from "@/api/k8s/deployment"
+import {
+  type DeploymentDetail,
+  getDeploymentDetailApi,
+  deleteDeploymentApi,
+  getDeploymentRsApi
+} from "@/api/k8s/deployment"
 // import { scale } from "@/api/kubernetes/scale"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
@@ -217,7 +222,7 @@ const getDeploymentDetailFunc = async () => {
 getDeploymentDetailFunc()
 
 // 获取deployment关联的replicaset
-const newReplicaSet = ref({})
+const newReplicaSet = ref({ name: "", namespace: "", labels: {}, creationTimestamp: "", replicas: "" })
 
 const getNewReplicaSetData = async () => {
   await getDeploymentRsApi({ namespace: namespace, name: name }).then((res) => {
@@ -245,12 +250,12 @@ const ActualNum = ref(0)
 const openScaleDialog = async () => {
   desiredNum.value = deploymentDetail.value.status.replicas
   ActualNum.value = deploymentDetail.value.status.availableReplicas
-  warningTitle.value = `This action is equivalent to: kubectl scale -n ${namespace} deployment ${deployment} --replicas=${ActualNum.value}`
+  warningTitle.value = `This action is equivalent to: kubectl scale -n ${namespace} deployment ${name} --replicas=${ActualNum.value}`
   dialogScaleVisible.value = true
 }
 
 watch(desiredNum, (val) => {
-  warningTitle.value = `This action is equivalent to: kubectl scale -n ${namespace} deployment ${deployment} --replicas=${val}`
+  warningTitle.value = `This action is equivalent to: kubectl scale -n ${namespace} deployment ${name} --replicas=${val}`
 })
 
 // const closeScaleDialog = () => {
