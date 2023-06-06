@@ -2,7 +2,6 @@
   <div class="app-container">
     <div class="detail-operation">
       <el-button icon="view" type="primary" plain @click="viewOrchFunc(replicaSet, namespace)">查看</el-button>
-      <el-button icon="expand" type="warning" plain @click="openScaleDialog">伸缩 </el-button>
       <el-button icon="delete" type="danger" plain @click="deleteFunc">删除 </el-button>
     </div>
     <div class="kop-collapse">
@@ -119,28 +118,11 @@
     <el-dialog v-model="dialogViewVisible" title="查看资源" width="55%">
       <vue-code-mirror v-model:modelValue="formatData" :readOnly="true" />
     </el-dialog>
-    <!-- 伸缩对话框 -->
-    <el-dialog v-model="dialogScaleVisible" title="伸缩" width="55%" center>
-      <p style="font-weight: bold">
-        ReplicaSet {{ replicaSet }} will be updated to reflect the desired replicas count.
-      </p>
-      <div style="margin: 25px 0 25px 0px">
-        <span style="margin-right: 10px">Desired Replicas:</span>
-        <el-input-number v-model="desiredNum" :min="0" :max="50" style="margin-right: 20px" />
-        <span style="margin-right: 10px">Actual Replicas: </span>
-        <el-input-number v-model="ActualNum" disabled />
-      </div>
-      <warning-bar :title="warningTitle" />
-      <template #footer>
-        <el-button @click="closeScaleDialog">取消</el-button>
-        <el-button type="primary" @click="scaleFunc">确认</el-button>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue"
+import { ref } from "vue"
 import { useRoute } from "vue-router"
 import {
   type ReplicaSetDetail,
@@ -150,10 +132,8 @@ import {
 } from "@/api/k8s/replicaSet"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { StatusPodFilter, StatusRsFilter } from "@/utils/k8s/filter.js"
-// import { scale } from "@/api/kubernetes/scale"
 import { formatDateTime } from "@/utils/index"
 import MetaData from "@/components/k8s/metadata.vue"
-// import warningBar from "@/components/warningBar/warningBar.vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { usePagination } from "@/hooks/usePagination"
 import { viewOrch } from "@/utils/k8s/orch"
@@ -229,63 +209,6 @@ const viewOrchFunc = async (name: string, namespace: string) => {
   formatData.value = await viewOrch(name, "replicasets", namespace)
   dialogViewVisible.value = true
 }
-
-// 伸缩
-const dialogScaleVisible = ref(false)
-const warningTitle = ref("")
-const desiredNum = ref(0)
-const ActualNum = ref(0)
-
-// -> 打开对话框
-const openScaleDialog = () => {
-  desiredNum.value = replicaSetDetail.value.status.replicas
-  ActualNum.value = replicaSetDetail.value.status.availableReplicas
-  warningTitle.value = `This action is equivalent to: kubectl scale -n ${namespace} replicaset ${replicaSet} --replicas=${ActualNum.value}`
-  dialogScaleVisible.value = true
-}
-
-watch(desiredNum, (val) => {
-  warningTitle.value = `This action is equivalent to: kubectl scale -n ${namespace} replicaset ${replicaSet} --replicas=${val}`
-})
-
-// -> 关闭对话框
-const closeScaleDialog = () => {
-  dialogScaleVisible.value = false
-}
-
-// -> 操作
-const scaleFunc = async () => {
-  const res = await scale({ namespace: namespace, name: replicaSet, kind: "replicaSet", num: desiredNum.value })
-  if (res.code === 0) {
-    ElMessage({
-      type: "success",
-      message: "伸缩成功",
-      showClose: true
-    })
-    // 查询刷新数据
-    getData()
-    getReplicaSetPodsData()
-    getReplicaSetServicesData()
-  }
-  dialogScaleVisible.value = false
-}
-
-// 删除
-// const deleteFunc = async () => {
-//   ElMessageBox.confirm("此操作将永久删除该ReplicaSet, 是否继续?", "提示", {
-//     confirmButtonText: "确定",
-//     cancelButtonText: "取消",
-//     type: "warning"
-//   }).then(async () => {
-//     const res = await deleteReplicaSetApi({ namespace: namespace, replicaSet: replicaSet })
-//     if (res.code === 0) {
-//       ElMessage({
-//         type: "success",
-//         message: "删除成功!"
-//       })
-//     }
-//   })
-// }
 
 const deleteFunc = async () => {
   ElMessageBox.confirm("此操作将永久删除该ReplicaSet, 是否继续?", "提示", {

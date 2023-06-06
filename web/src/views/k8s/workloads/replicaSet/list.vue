@@ -61,19 +61,6 @@
                       >查 看</el-button
                     >
                   </div>
-                  <div
-                    style="
-                      width: 75px;
-                      padding: 5px;
-                      border-bottom: solid;
-                      border-width: 1px;
-                      border-color: rgba(128, 128, 128, 0.157);
-                    "
-                  >
-                    <el-button icon="expand" type="primary" link @click="sshPod(scope.row.name, scope.row.namespace)"
-                      >伸 缩</el-button
-                    >
-                  </div>
                   <div style="width: 75px; padding: 5px">
                     <el-button icon="delete" type="primary" link @click="deleteFunc(scope.row)">删 除</el-button>
                   </div>
@@ -98,23 +85,6 @@
     </el-card>
     <el-dialog v-model="dialogFormVisible" title="查看资源" width="55%" :destroy-on-close="true">
       <vue-code-mirror v-model:modelValue="formatData" :readOnly="true" />
-    </el-dialog>
-    <!-- 伸缩对话框 -->
-    <el-dialog v-model="dialogScaleVisible" title="伸缩" width="55%" center>
-      <p style="font-weight: bold">
-        ReplicaSet {{ replicasetName }} will be updated to reflect the desired replicas count.
-      </p>
-      <div style="margin: 25px 0 25px 0px">
-        <span style="margin-right: 10px">Desired Replicas:</span>
-        <el-input-number v-model="desiredNum" :min="0" :max="50" style="margin-right: 20px" />
-        <span style="margin-right: 10px">Actual Replicas: </span>
-        <el-input-number v-model="ActualNum" disabled />
-      </div>
-      <!-- <warning-bar :title="warningTitle" /> -->
-      <template #footer>
-        <el-button @click="closeScaleDialog">取消</el-button>
-        <el-button type="primary" @click="scaleFunc">确认</el-button>
-      </template>
     </el-dialog>
   </div>
 </template>
@@ -204,54 +174,6 @@ const viewOrchFunc = async (name: string, namespace: string) => {
   formatData.value = await viewOrch(name, "replicasets", namespace)
   dialogFormVisible.value = true
 }
-
-// 伸缩
-const dialogScaleVisible = ref(false)
-const warningTitle = ref("")
-const replicasetName = ref("")
-const desiredNum = ref(0)
-const ActualNum = ref(0)
-const activeRow = ref({})
-
-// -> 打开对话框
-const openScaleDialog = (row) => {
-  replicasetName.value = row.name
-  desiredNum.value = row.replicas
-  ActualNum.value = row.replicas
-  activeRow.value = row
-  dialogScaleVisible.value = true
-  warningTitle.value = `This action is equivalent to: kubectl scale -n ${row.namespace} replicaset ${row.name} --replicas=${row.replicas}`
-}
-
-watch(desiredNum, (val) => {
-  warningTitle.value = `This action is equivalent to: kubectl scale -n ${activeRow.value.namespace} replicaset ${activeRow.value.name} --replicas=${val}`
-})
-
-// -> 关闭对话框
-const closeScaleDialog = () => {
-  dialogScaleVisible.value = false
-}
-
-// -> 操作
-// const scaleFunc = async () => {
-//   const res = await scale({
-//     namespace: activeRow.value.namespace,
-//     name: activeRow.value.name,
-//     kind: "replicaSet",
-//     num: desiredNum.value
-//   })
-//   if (res.code === 0) {
-//     const index = tableData.value.indexOf(activeRow.value)
-//     tableData.value[index].availableReplicas = desiredNum.value
-//     tableData.value[index].replicas = desiredNum.value
-//     ElMessage({
-//       type: "success",
-//       message: "伸缩成功",
-//       showClose: true
-//     })
-//   }
-//   dialogScaleVisible.value = false
-// }
 
 // 删除
 const deleteFunc = async (row: replicaSetData) => {

@@ -130,22 +130,6 @@ func (rs *ReplicaSetService) GetReplicaSetPods(namespace string, replicaSet stri
 	}
 }
 
-// GetReplicaSetServices 获取replicaSet关联的services
-func (rs *ReplicaSetService) GetReplicaSetServices(namespace string, replicaSet string) (interface{}, error) {
-	// 获取replicaSet原始数据
-	rSet, err := global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).Get(context.TODO(), replicaSet, metaV1.GetOptions{})
-	if err != nil {
-		return nil, err
-	}
-
-	options := metaV1.ListOptions{LabelSelector: labels.Set(rSet.Spec.Selector.MatchLabels).String()}
-
-	// 获取ReplicaSet关联的Service列表
-	serviceList, err := global.KF_K8S_Client.CoreV1().Services(namespace).List(context.TODO(), options)
-
-	return serviceList.Items, err
-}
-
 // DeleteReplicaSet 删除replicaSet
 func (rs *ReplicaSetService) DeleteReplicaSet(namespace string, name string) error {
 	return global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).Delete(context.TODO(), name, metaV1.DeleteOptions{})
