@@ -17,16 +17,16 @@
       <div class="table-wrapper">
         <el-table :data="tableData">
           <el-table-column label="名称" min-width="220">
-            <template #default="scope">
+            <!-- <template #default="scope">
               <router-link
                 :to="{
-                  name: 'ReplicaSetDetail',
-                  query: { replicaSet: scope.row.name, namespace: scope.row.namespace }
+                  name: 'DeploymentDetail',
+                  query: { name: scope.row.name, namespace: scope.row.namespace }
                 }"
               >
                 <el-link type="primary" :underline="false">{{ scope.row.name }}</el-link>
               </router-link>
-            </template>
+            </template> -->
           </el-table-column>
           <el-table-column label="命名空间" prop="namespace" min-width="120" />
           <el-table-column label="Pods" prop="pods" min-width="80">
@@ -93,7 +93,7 @@
 import { ref, reactive } from "vue"
 import { formatDateTime } from "@/utils/index"
 import { getNamespaceNameApi } from "@/api/k8s/namespace"
-import { type replicaSetData, getReplicaSetsApi, deleteReplicaSetApi } from "@/api/k8s/replicaSet"
+import { type DeploymentBrief, getDeploymentsApi, deleteDeploymentApi } from "@/api/k8s/deployment"
 // import { scale } from '@/api/kubernetes/scale'
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 // import warningBar from '@/components/warningBar/warningBar.vue'
@@ -102,7 +102,7 @@ import { usePagination } from "@/hooks/usePagination"
 import { viewOrch } from "@/utils/k8s/orch"
 
 defineOptions({
-  name: "ReplicaSetList"
+  name: "DeploymentList"
 })
 
 // 分页
@@ -122,13 +122,13 @@ getNamespace()
 const searchInfo = reactive({
   namespace: ""
 })
-const tableData = ref<replicaSetData[]>([])
+const tableData = ref<DeploymentBrief[]>([])
 
 const loading = ref(false)
 const getTableData = async () => {
   loading.value = true
   try {
-    const table = await getReplicaSetsApi({
+    const table = await getDeploymentsApi({
       page: paginationData.currentPage,
       pageSize: paginationData.pageSize,
       ...searchInfo
@@ -171,18 +171,18 @@ const onReset = () => {
 const dialogFormVisible = ref(false)
 const formatData = ref<string>("")
 const viewOrchFunc = async (name: string, namespace: string) => {
-  formatData.value = await viewOrch(name, "replicasets", namespace)
+  formatData.value = await viewOrch(name, "deployments", namespace)
   dialogFormVisible.value = true
 }
 
 // 删除
-const deleteFunc = async (row: replicaSetData) => {
-  ElMessageBox.confirm("此操作将永久删除该ReplicaSet, 是否继续?", "提示", {
+const deleteFunc = async (row: DeploymentBrief) => {
+  ElMessageBox.confirm("此操作将永久删除该Deployment, 是否继续?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
   }).then(async () => {
-    const res = await deleteReplicaSetApi({ namespace: row.namespace, replicaSet: row.name })
+    const res = await deleteDeploymentApi({ namespace: row.namespace, name: row.name })
     if (res.code === 0) {
       ElMessage({
         type: "success",
