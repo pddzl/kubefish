@@ -1,5 +1,6 @@
 import { request } from "@/utils/service"
-import { commonListReq, commonReq } from "./entry"
+import { commonListReq, commonReq, commonRelatedReq } from "./entry"
+import { type ReplicaSetBriefList } from "./replicaSet"
 
 export interface DeploymentBrief {
   name: string
@@ -23,9 +24,31 @@ export const getDeploymentsApi = (data: commonListReq) => {
   })
 }
 
+export interface DeploymentDetail {
+  metadata: object
+  spec: {
+    replicas: number
+    selector: object
+    strategy: {
+      type: string
+      rollingUpdate: {
+        maxUnavailable: number
+        maxSurge: string
+      }
+    }
+  }
+  status: {
+    replicas: number
+    updatedReplicas: number
+    readyReplicas: number
+    availableReplicas: number
+    conditions: []
+  }
+}
+
 // 获取deployment详情
 export const getDeploymentDetailApi = (data: commonReq) => {
-  return request<ApiResponseData<any>>({
+  return request<ApiResponseData<DeploymentDetail>>({
     url: "/k8s/deployment/getDeploymentDetail",
     method: "post",
     data
@@ -37,6 +60,15 @@ export const deleteDeploymentApi = (data: commonReq) => {
   return request<ApiResponseData<null>>({
     url: "/k8s/deployment/deleteDeployment",
     method: "post",
+    data
+  })
+}
+
+// 获取deployment关联的rs
+export const getDeploymentRsApi = (data: commonRelatedReq) => {
+  return request<ApiResponseData<ReplicaSetBriefList>>({
+    url: '/k8s/deployment/getDeploymentRs',
+    method: 'post',
     data
   })
 }

@@ -2,11 +2,13 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 	"github.com/pddzl/kubefish/server/global"
 	"github.com/pddzl/kubefish/server/model/common/request"
 	modelK8s "github.com/pddzl/kubefish/server/model/k8s"
 	appsV1 "k8s.io/api/apps/v1"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 )
 
 type DeploymentService struct{}
@@ -101,4 +103,34 @@ func (ds *DeploymentService) GetDeploymentDetail(namespace string, name string) 
 // DeleteDeployment 删除deployment
 func (ds *DeploymentService) DeleteDeployment(namespace string, name string) error {
 	return global.KF_K8S_Client.AppsV1().Deployments(namespace).Delete(context.TODO(), name, metaV1.DeleteOptions{})
+}
+
+// GetDeploymentRs 获取deployment关联的rs
+func (ds *DeploymentService) GetDeploymentRs(namespace string, name string, pageInfo request.PageInfo) (*modelK8s.NewReplicaSet, error) {
+	deployment, err := global.KF_K8S_Client.AppsV1().Deployments(namespace).Get(context.TODO(), name, metaV1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	labelSelector := labels.Set(deployment.Spec.Selector.MatchLabels).String()
+
+	// 获取replicaSet
+	replicaSetList, err := global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).List(context.TODO(), metaV1.ListOptions{LabelSelector: labelSelector})
+	if err != nil {
+		return nil, err
+	}
+
+	if len(replicaSetList.Items) == 0 {
+		return nil, nil
+	}
+
+	var newReplicaSet modelK8s.NewReplicaSet
+	newReplicaSet.Name = replicaSetList.Items[0].Name
+	newReplicaSet.NameSpace = replicaSetList.Items[0].Namespace
+	newReplicaSet.Labels = replicaSetList.Items[0].Labels
+	newReplicaSet.CreationTimestamp = replicaSetList.Items[0].CreationTimestamp.Time
+	newReplicaSet.Replicas = fmt.Sprintf("%d / %d", replicaSetList.Items[0].Status.AvailableReplicas, replicaSetList.Items[0].Status.Replicas)
+
+	return &newReplicaSet, nil
+
 }

@@ -90,7 +90,7 @@
             </div>
           </div>
         </el-collapse-item>
-        <!-- <el-collapse-item title="ReplicaSet" name="replicaSet">
+        <el-collapse-item title="ReplicaSet" name="replicaSet">
           <div class="info-box">
             <div class="row">
               <div class="item">
@@ -98,7 +98,7 @@
                 <div class="content">
                   <router-link
                     :to="{
-                      name: 'replicaSet_detail',
+                      name: 'ReplicaSetDetail',
                       query: { replicaSet: newReplicaSet.name, namespace: newReplicaSet.namespace }
                     }"
                   >
@@ -132,7 +132,7 @@
               </div>
             </div>
           </div>
-        </el-collapse-item> -->
+        </el-collapse-item>
       </el-collapse>
     </div>
     <el-dialog v-model="dialogViewVisible" title="查看资源" width="55%">
@@ -162,7 +162,7 @@
 <script lang="ts" setup>
 import { ref, watch } from "vue"
 import { useRoute } from "vue-router"
-import { getDeploymentDetailApi, deleteDeploymentApi } from "@/api/k8s/deployment"
+import { type DeploymentDetail, getDeploymentDetailApi, deleteDeploymentApi, getDeploymentRsApi } from "@/api/k8s/deployment"
 // import { scale } from "@/api/kubernetes/scale"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
@@ -171,6 +171,10 @@ import { statusRsFilter } from "@/utils/k8s/filter.js"
 // import warningBar from "@/components/warningBar/warningBar.vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { viewOrch } from "@/utils/k8s/orch"
+
+defineOptions({
+  name: "DeploymentDetail"
+})
 
 // 折叠面板
 const activeNames = ref(["metadata", "spec", "status", "replicaSet"])
@@ -181,7 +185,27 @@ const namespace = route.query.namespace as string
 const name = route.query.name as string
 
 // 获取deployment详情
-const deploymentDetail = ref({})
+const deploymentDetail = ref<DeploymentDetail>({
+  metadata: {},
+  spec: {
+    replicas: 0,
+    selector: {},
+    strategy: {
+      type: "",
+      rollingUpdate: {
+        maxUnavailable: 0,
+        maxSurge: ""
+      }
+    }
+  },
+  status: {
+    replicas: 0,
+    updatedReplicas: 0,
+    readyReplicas: 0,
+    availableReplicas: 0,
+    conditions: []
+  }
+})
 
 const getDeploymentDetailFunc = async () => {
   await getDeploymentDetailApi({ namespace: namespace, name: name }).then((res) => {
@@ -193,16 +217,16 @@ const getDeploymentDetailFunc = async () => {
 getDeploymentDetailFunc()
 
 // 获取deployment关联的replicaset
-// const newReplicaSet = ref({})
+const newReplicaSet = ref({})
 
-// const getNewReplicaSetData = async () => {
-//   await getNewReplicaSet({ namespace: namespace, deployment: deployment }).then((response) => {
-//     if (response.code === 0) {
-//       newReplicaSet.value = response.data
-//     }
-//   })
-// }
-// getNewReplicaSetData()
+const getNewReplicaSetData = async () => {
+  await getDeploymentRsApi({ namespace: namespace, name: name }).then((res) => {
+    if (res.code === 0) {
+      newReplicaSet.value = res.data
+    }
+  })
+}
+getNewReplicaSetData()
 
 // 查看编排
 const dialogViewVisible = ref(false)
@@ -211,7 +235,6 @@ const viewOrchFunc = async () => {
   formatData.value = await viewOrch(name, "deployments", namespace)
   dialogViewVisible.value = true
 }
-
 
 // 伸缩
 const dialogScaleVisible = ref(false)

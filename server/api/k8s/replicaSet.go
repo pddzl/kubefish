@@ -14,15 +14,15 @@ type ReplicaSetApi struct{}
 
 // GetReplicaSets 获取replicaSet列表
 func (rs *ReplicaSetApi) GetReplicaSets(c *gin.Context) {
-	var rsList k8sRequest.RsListReq
-	_ = c.ShouldBindJSON(&rsList)
+	var commonList k8sRequest.CommonListReq
+	_ = c.ShouldBindJSON(&commonList)
 	// 校验字段
 	validate := validator.New()
-	if err := validate.Struct(&rsList.PageInfo); err != nil {
+	if err := validate.Struct(&commonList); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := replicaSetService.GetReplicaSets(rsList.Namespace, rsList.PageInfo)
+	list, total, err := replicaSetService.GetReplicaSets(commonList.Namespace, commonList.Label, commonList.Field, commonList.PageInfo)
 	if err != nil {
 		response.FailWithMessage("获取失败", c)
 		global.KF_LOG.Error("获取失败", zap.Error(err))
@@ -31,8 +31,8 @@ func (rs *ReplicaSetApi) GetReplicaSets(c *gin.Context) {
 	response.OkWithDetailed(response.PageResult{
 		List:     list,
 		Total:    int64(total),
-		Page:     rsList.Page,
-		PageSize: rsList.PageSize,
+		Page:     commonList.Page,
+		PageSize: commonList.PageSize,
 	}, "获取成功", c)
 }
 

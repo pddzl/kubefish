@@ -13,3 +13,9 @@ type CommonReq struct {
 	Namespace string `json:"namespace" validate:"required"`
 	Name      string `json:"name" validate:"required"`
 }
+
+type CommonRelatedReq struct {
+	Namespace string `json:"namespace" validate:"required"`
+	Name      string `json:"name" validate:"required"`
+	request.PageInfo
+}

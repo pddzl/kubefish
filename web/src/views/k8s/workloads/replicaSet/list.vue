@@ -93,7 +93,7 @@
 import { ref, reactive } from "vue"
 import { formatDateTime } from "@/utils/index"
 import { getNamespaceNameApi } from "@/api/k8s/namespace"
-import { type replicaSetData, getReplicaSetsApi, deleteReplicaSetApi } from "@/api/k8s/replicaSet"
+import { type replicaSetBrief, getReplicaSetsApi, deleteReplicaSetApi } from "@/api/k8s/replicaSet"
 // import { scale } from '@/api/kubernetes/scale'
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 // import warningBar from '@/components/warningBar/warningBar.vue'
@@ -122,7 +122,7 @@ getNamespace()
 const searchInfo = reactive({
   namespace: ""
 })
-const tableData = ref<replicaSetData[]>([])
+const tableData = ref<replicaSetBrief[]>([])
 
 const loading = ref(false)
 const getTableData = async () => {
@@ -176,7 +176,7 @@ const viewOrchFunc = async (name: string, namespace: string) => {
 }
 
 // 删除
-const deleteFunc = async (row: replicaSetData) => {
+const deleteFunc = async (row: replicaSetBrief) => {
   ElMessageBox.confirm("此操作将永久删除该ReplicaSet, 是否继续?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",

@@ -11,3 +11,5 @@ export interface commonReq {
   namespace: string
   name: string
 }
+
+export interface commonRelatedReq extends commonReq, PageInfo {}

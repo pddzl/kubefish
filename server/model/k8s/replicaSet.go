@@ -37,3 +37,11 @@ type ReplicaSetCondition struct {
 	Reason             string    `json:"reason,omitempty"`
 	Message            string    `json:"message,omitempty"`
 }
+
+type NewReplicaSet struct {
+	Name              string            `json:"name"`
+	NameSpace         string            `json:"namespace"`
+	Labels            map[string]string `json:"labels,omitempty"`
+	CreationTimestamp time.Time         `json:"creationTimestamp,omitempty"`
+	Replicas          string            `json:"replicas"`
+}

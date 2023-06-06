@@ -14,9 +14,17 @@ import (
 type ReplicaSetService struct{}
 
 // GetReplicaSets 获取replicaSet列表
-func (rs *ReplicaSetService) GetReplicaSets(namespace string, info request.PageInfo) ([]modelK8s.ReplicaSetBrief, int, error) {
+func (rs *ReplicaSetService) GetReplicaSets(namespace string, label string, field string, info request.PageInfo) ([]modelK8s.ReplicaSetBrief, int, error) {
 	// 获取replicaSet list
-	list, err := global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).List(context.TODO(), metaV1.ListOptions{})
+	var option metaV1.ListOptions
+	if label != "" {
+		option.LabelSelector = label
+	}
+	if field != "" {
+		option.FieldSelector = field
+	}
+
+	list, err := global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).List(context.TODO(), option)
 	if err != nil {
 		return nil, 0, err
 	}

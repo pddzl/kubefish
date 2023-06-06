@@ -1,7 +1,7 @@
 import { request } from "@/utils/service"
 import { reqNamespace } from "./entry"
 
-export interface replicaSetData {
+export interface replicaSetBrief {
   name: string
   namespace: string
   availableReplicas: number
@@ -9,14 +9,14 @@ export interface replicaSetData {
   creationTimestamp: string
 }
 
-interface replicaSetListData extends PageInfo {
-  list: replicaSetData[]
+export interface ReplicaSetBriefList extends PageInfo {
+  list: replicaSetBrief[]
   total: number
 }
 
 // 获取replicaSet list
 export const getReplicaSetsApi = (data: reqNamespace) => {
-  return request<ApiResponseData<replicaSetListData>>({
+  return request<ApiResponseData<ReplicaSetBriefList>>({
     url: '/k8s/replicaSet/getReplicaSets',
     method: 'post',
     data
