@@ -17,7 +17,7 @@
       <div class="table-wrapper">
         <el-table :data="tableData">
           <el-table-column label="名称" min-width="220">
-            <!-- <template #default="scope">
+            <template #default="scope">
               <router-link
                 :to="{
                   name: 'DeploymentDetail',
@@ -26,7 +26,7 @@
               >
                 <el-link type="primary" :underline="false">{{ scope.row.name }}</el-link>
               </router-link>
-            </template> -->
+            </template>
           </el-table-column>
           <el-table-column label="命名空间" prop="namespace" min-width="120" />
           <el-table-column label="Pods" prop="pods" min-width="80">
