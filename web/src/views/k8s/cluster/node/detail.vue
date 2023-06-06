@@ -200,9 +200,7 @@
 <script lang="ts" setup>
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-// import { type NodeDetail, getNodeDetail, getNodeRaw, getNodePods } from "@/api/k8s/node"
 import { type NodePods, getNodeDetail, getNodePods } from "@/api/k8s/node"
-// import { statusPodFilter } from "@/mixin/filter.js"
 import { formatDateTime } from "@/utils/index"
 import MetaData from "@/components/k8s/metadata.vue"
 import PodBrief from "@/components/k8s/pod-brief.vue"

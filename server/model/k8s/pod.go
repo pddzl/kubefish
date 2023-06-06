@@ -5,12 +5,6 @@ import (
 	"time"
 )
 
-type RelatedPod struct {
-	ObjectMeta ObjectMeta `json:"metadata"`
-	Status     string     `json:"status"`
-	NodeName   string     `json:"nodeName"`
-}
-
 // PodBrief pod列表
 type PodBrief struct {
 	Name              string    `json:"name,omitempty"`

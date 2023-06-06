@@ -57,7 +57,7 @@
               <el-table-column label="类别" prop="type" />
               <el-table-column label="状态" prop="status">
                 <template #default="scope">
-                  <el-tag :type="StatusRsFilter(scope.row.status)" size="small">
+                  <el-tag :type="statusRsFilter(scope.row.status)" size="small">
                     {{ scope.row.status }}
                   </el-tag>
                 </template>
@@ -73,31 +73,8 @@
           </div>
         </el-collapse-item>
         <el-collapse-item title="Pods" name="pods">
-          <div style="margin-right: 25px">
-            <el-table :data="replicaSetPods" style="margin-bottom: 20px">
-              <el-table-column label="名称" prop="metadata.name" min-width="120">
-                <template #default="scope">
-                  <router-link
-                    :to="{
-                      name: 'PodDetail',
-                      query: { pod: scope.row.name, namespace: scope.row.namespace }
-                    }"
-                  >
-                    <el-link type="primary" :underline="false">{{ scope.row.name }}</el-link>
-                  </router-link>
-                </template>
-              </el-table-column>
-              <el-table-column label="命名空间" prop="namespace" />
-              <el-table-column label="节点" prop="node" />
-              <el-table-column label="状态">
-                <template #default="scope">
-                  <el-tag :type="StatusPodFilter(scope.row.status)" size="small">{{ scope.row.status }}</el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column label="创建时间">
-                <template #default="scope">{{ formatDateTime(scope.row.creationTimestamp) }}</template>
-              </el-table-column>
-            </el-table>
+          <div class="info-table">
+            <PodBrief :pods="replicaSetPods" style="margin-bottom: 20px" />
             <div class="pager-wrapper">
               <el-pagination
                 background
@@ -131,12 +108,13 @@ import {
   deleteReplicaSetApi
 } from "@/api/k8s/replicaSet"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
-import { StatusPodFilter, StatusRsFilter } from "@/utils/k8s/filter.js"
+import { statusRsFilter } from "@/utils/k8s/filter.js"
 import { formatDateTime } from "@/utils/index"
 import MetaData from "@/components/k8s/metadata.vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { usePagination } from "@/hooks/usePagination"
 import { viewOrch } from "@/utils/k8s/orch"
+import PodBrief from "@/components/k8s/pod-brief.vue"
 
 // 分页
 const { paginationData, changeCurrentPage, changePageSize } = usePagination()
