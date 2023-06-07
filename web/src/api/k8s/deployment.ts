@@ -4,9 +4,9 @@ import { commonListReq, type commonReq } from "./entry"
 export interface DeploymentBrief {
   name: string
   namespace: string
-  AvailableReplicas: number
-  Replicas: number
-  CreationTimestamp: string
+  availableReplicas: number
+  replicas: number
+  creationTimestamp: string
 }
 
 interface DeploymentBriefList extends PageInfo {
