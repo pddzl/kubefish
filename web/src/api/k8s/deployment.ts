@@ -1,6 +1,5 @@
 import { request } from "@/utils/service"
-import { commonListReq, type commonReq, commonRelatedReq } from "./entry"
-import { type ReplicaSetBriefList } from "./replicaSet"
+import { commonListReq, type commonReq } from "./entry"
 
 export interface DeploymentBrief {
   name: string
@@ -75,8 +74,21 @@ export interface NewReplicaSet {
 // 获取deployment关联的rs
 export const getDeploymentRsApi = (data: commonReq) => {
   return request<ApiResponseData<NewReplicaSet>>({
-    url: '/k8s/deployment/getDeploymentRs',
-    method: 'post',
+    url: "/k8s/deployment/getDeploymentRs",
+    method: "post",
+    data
+  })
+}
+
+// 伸缩
+interface scaleReq extends commonReq {
+  num: number
+}
+
+export const scaleDeployment = (data: scaleReq) => {
+  return request<ApiResponseData<null>>({
+    url: "/k8s/deployment/scaleDeployment",
+    method: "post",
     data
   })
 }

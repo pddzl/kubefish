@@ -136,13 +136,11 @@
       </el-collapse>
     </div>
     <el-dialog v-model="dialogViewVisible" title="查看资源" width="55%">
-      <!-- eslint-disable-next-line vue/attribute-hyphenation -->
       <vue-code-mirror v-model:modelValue="formatData" :readOnly="true" />
     </el-dialog>
-
-    <!-- <el-dialog v-model="dialogScaleVisible" title="伸缩" width="55%" center>
+    <el-dialog v-model="dialogScaleVisible" title="伸缩" width="45%" center>
       <p style="font-weight: bold; font-size: 15px">
-        Deployment {{ deployment }} will be updated to reflect the desired replicas count.
+        Deployment {{ name }} will be updated to reflect the desired replicas count.
       </p>
       <div style="margin: 25px 0 25px 0px">
         <span style="margin-right: 10px">Desired Replicas:</span>
@@ -150,32 +148,32 @@
         <span style="margin-right: 10px">Actual Replicas: </span>
         <el-input-number v-model="ActualNum" disabled />
       </div>
-      <warning-bar :title="warningTitle" />
+      <WarningBar :title="warningTitle" />
       <template #footer>
         <el-button @click="closeScaleDialog">取消</el-button>
         <el-button type="primary" @click="scaleFunc">确认</el-button>
       </template>
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue"
-import { useRoute } from "vue-router"
 import {
-  type DeploymentDetail,
-  getDeploymentDetailApi,
   deleteDeploymentApi,
-  getDeploymentRsApi
+  getDeploymentDetailApi,
+  getDeploymentRsApi,
+  scaleDeployment,
+  type DeploymentDetail
 } from "@/api/k8s/deployment"
-// import { scale } from "@/api/kubernetes/scale"
+import WarningBar from "@/components/WarningBar/warningBar.vue"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
 import { formatDateTime } from "@/utils/index"
 import { statusRsFilter } from "@/utils/k8s/filter.js"
-// import warningBar from "@/components/warningBar/warningBar.vue"
-import { ElMessage, ElMessageBox } from "element-plus"
 import { viewOrch } from "@/utils/k8s/orch"
+import { ElMessage, ElMessageBox } from "element-plus"
+import { ref, watch } from "vue"
+import { useRoute } from "vue-router"
 
 defineOptions({
   name: "DeploymentDetail"
@@ -258,24 +256,28 @@ watch(desiredNum, (val) => {
   warningTitle.value = `This action is equivalent to: kubectl scale -n ${namespace} deployment ${name} --replicas=${val}`
 })
 
-// const closeScaleDialog = () => {
-//   dialogScaleVisible.value = false
-// }
+const closeScaleDialog = () => {
+  dialogScaleVisible.value = false
+}
 
-// const scaleFunc = async () => {
-//   const res = await scale({ namespace: namespace, name: deployment, kind: "deployment", num: desiredNum.value })
-//   if (res.code === 0) {
-//     ElMessage({
-//       type: "success",
-//       message: "伸缩成功",
-//       showClose: true
-//     })
-//     // 查询刷新数据
-//     getDeploymentDetailData()
-//     getNewReplicaSetData()
-//   }
-//   dialogScaleVisible.value = false
-// }
+const scaleFunc = async () => {
+  const res = await scaleDeployment({
+    namespace: namespace,
+    name: name,
+    num: desiredNum.value
+  })
+  if (res.code === 0) {
+    ElMessage({
+      type: "success",
+      message: "伸缩成功",
+      showClose: true
+    })
+    // 刷新数据
+    getDeploymentDetailFunc()
+    getNewReplicaSetData()
+  }
+  dialogScaleVisible.value = false
+}
 
 // 删除
 const deleteFunc = () => {

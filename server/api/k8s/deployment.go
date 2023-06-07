@@ -95,3 +95,22 @@ func (da *DeploymentApi) DeleteDeployment(c *gin.Context) {
 		response.OkWithMessage("删除成功", c)
 	}
 }
+
+// ScaleDeployment 伸缩
+func (da *DeploymentApi) ScaleDeployment(c *gin.Context) {
+	var scale k8sRequest.DmScale
+	_ = c.ShouldBindJSON(&scale)
+	// 校验
+	validate := validator.New()
+	if err := validate.Struct(&scale); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	if err := deploymentService.ScaleDeployment(scale.Namespace, scale.Name, scale.Num); err != nil {
+		response.FailWithMessage("伸缩失败", c)
+		global.KF_LOG.Error("伸缩失败", zap.Error(err))
+	} else {
+		response.OkWithMessage("伸缩成功", c)
+	}
+}

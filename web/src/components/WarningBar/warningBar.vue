@@ -28,6 +28,7 @@ const open = () => {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .warning-bar {
   background-color: #fff5ed;

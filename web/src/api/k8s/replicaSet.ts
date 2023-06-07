@@ -17,8 +17,8 @@ export interface ReplicaSetBriefList extends PageInfo {
 // 获取replicaSet list
 export const getReplicaSetsApi = (data: reqNamespace) => {
   return request<ApiResponseData<ReplicaSetBriefList>>({
-    url: '/k8s/replicaSet/getReplicaSets',
-    method: 'post',
+    url: "/k8s/replicaSet/getReplicaSets",
+    method: "post",
     data
   })
 }
@@ -31,23 +31,23 @@ interface rsReq {
 // 删除replicaSet
 export const deleteReplicaSetApi = (data: rsReq) => {
   return request<ApiResponseData<null>>({
-    url: '/k8s/replicaSet/deleteReplicaSet',
-    method: 'post',
+    url: "/k8s/replicaSet/deleteReplicaSet",
+    method: "post",
     data
   })
 }
 
 export interface ReplicaSetDetail {
-  metadata: Object,
+  metadata: Object
   spec: {
-    replicas: number,
+    replicas: number
     selector: {}
-  },
+  }
   status: {
-    replicas: number,
-    fullyLabeledReplicas: number,
-    readyReplicas: number,
-    availableReplicas: number,
+    replicas: number
+    fullyLabeledReplicas: number
+    readyReplicas: number
+    availableReplicas: number
     conditions: []
   }
 }
@@ -55,8 +55,8 @@ export interface ReplicaSetDetail {
 // 获取replicaSet详情
 export const getReplicaSetDetailApi = (data: rsReq) => {
   return request<ApiResponseData<ReplicaSetDetail>>({
-    url: '/k8s/replicaSet/getReplicaSetDetail',
-    method: 'post',
+    url: "/k8s/replicaSet/getReplicaSetDetail",
+    method: "post",
     data
   })
 }
@@ -66,8 +66,8 @@ interface rsPodReq extends rsReq, PageInfo {}
 // 获取replicaSet关联的pod
 export const getReplicaSetPodsApi = (data: rsPodReq) => {
   return request<ApiResponseData<any>>({
-    url: '/k8s/replicaSet/getReplicaSetPods',
-    method: 'post',
+    url: "/k8s/replicaSet/getReplicaSetPods",
+    method: "post",
     data
   })
 }
@@ -75,8 +75,8 @@ export const getReplicaSetPodsApi = (data: rsPodReq) => {
 // 获取replicaSet关联的service
 export const getReplicaSetServicesApi = (data: rsReq) => {
   return request<ApiResponseData<any>>({
-    url: '/k8s/replicaSet/getReplicaSetServices',
-    method: 'post',
+    url: "/k8s/replicaSet/getReplicaSetServices",
+    method: "post",
     data
   })
 }

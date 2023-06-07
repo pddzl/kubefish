@@ -134,3 +134,20 @@ func (ds *DeploymentService) GetDeploymentRs(namespace string, name string) (*mo
 	return &newReplicaSet, nil
 
 }
+
+// ScaleDeployment 伸缩
+func (ds *DeploymentService) ScaleDeployment(namespace string, name string, num uint) error {
+	deployment, err := global.KF_K8S_Client.AppsV1().Deployments(namespace).GetScale(context.TODO(), name, metaV1.GetOptions{})
+	if err != nil {
+		return fmt.Errorf("deployment getScale: %s", err.Error())
+	}
+
+	deployment.Spec.Replicas = int32(num)
+
+	_, err = global.KF_K8S_Client.AppsV1().Deployments(namespace).UpdateScale(context.TODO(), name, deployment, metaV1.UpdateOptions{})
+	if err != nil {
+		return fmt.Errorf("deployment updateScale: %s", err.Error())
+	}
+
+	return nil
+}
