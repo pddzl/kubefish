@@ -64,6 +64,7 @@ func Routers() *gin.Engine {
 		k8sRouter.InitPodRouter(K8sGroup)
 		k8sRouter.InitReplicaSetRouter(K8sGroup)
 		k8sRouter.InitDeploymentRouter(K8sGroup)
+		k8sRouter.InitDaemonSetRouter(K8sGroup)
 	}
 
 	global.KF_LOG.Info("router register success")
