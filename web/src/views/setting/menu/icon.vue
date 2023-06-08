@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from "vue"
+import { reactive, ref } from "vue"
 
 const props = defineProps({
   meta: {
@@ -43,7 +43,10 @@ const options = reactive([
   { key: "dashboard", label: "dashboard" },
   { key: "lock", label: "lock" },
   { key: "menu", label: "menu" },
-  { key: "bug", label: "bug" }
+  { key: "bug", label: "bug" },
+  { key: "load", label: "load" },
+  { key: "cluster", label: "cluster" },
+  { key: "network", label: "network" }
 ])
 
 const metaData = ref(props.meta)

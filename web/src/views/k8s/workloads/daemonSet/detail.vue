@@ -34,7 +34,7 @@
               </div>
               <div v-if="daemonSetDetail.spec.updateStrategy.type === 'RollingUpdate'" class="item">
                 <p>maxSurge</p>
-                <span class="content">{{ daemonSetDetail.spec.updateStrategy.rollingUpdate.maxUnavailable }}</span>
+                <span class="content">{{ daemonSetDetail.spec.updateStrategy.rollingUpdate.maxSurge }}</span>
               </div>
             </div>
           </div>
@@ -114,7 +114,19 @@ const namespace = route.query.namespace as string
 const name = route.query.name as string
 
 // 获取daemonSet详情
-const daemonSetDetail = ref({})
+const daemonSetDetail = ref({
+  metadata: {},
+  spec: { selector: {}, updateStrategy: { type: "", rollingUpdate: { maxUnavailable: 0, maxSurge: 0 } } },
+  status: {
+    currentNumberScheduled: 0,
+    numberMisscheduled: 0,
+    desiredNumberScheduled: 0,
+    numberReady: 0,
+    updatedNumberScheduled: 0,
+    numberAvailable: 0,
+    conditions: []
+  }
+})
 
 const getDaemonSetDetailData = async () => {
   await getDaemonSetDetailApi({ namespace: namespace, name: name }).then((res) => {

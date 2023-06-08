@@ -25,23 +25,18 @@ export const getDaemonSetsApi = (data: commonListReq) => {
 // 获取daemonSet详情
 
 export interface DaemonSetDetail {
-  metadata: object
+  metadata: {}
   spec: {
-    replicas: number
     selector: object
-    strategy: {
-      type: string
-      rollingUpdate: {
-        maxUnavailable: number
-        maxSurge: string
-      }
-    }
+    updateStrategy: { type: string; rollingUpdate: { maxUnavailable: number; maxSurge: number } }
   }
   status: {
-    replicas: number
-    updatedReplicas: number
-    readyReplicas: number
-    availableReplicas: number
+    currentNumberScheduled: number
+    numberMisscheduled: number
+    desiredNumberScheduled: number
+    numberReady: number
+    updatedNumberScheduled: number
+    numberAvailable: number
     conditions: []
   }
 }
