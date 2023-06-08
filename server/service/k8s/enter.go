@@ -8,4 +8,5 @@ type ServiceGroup struct {
 	ReplicaSetService
 	DeploymentService
 	DaemonSetService
+	ServiceService
 }

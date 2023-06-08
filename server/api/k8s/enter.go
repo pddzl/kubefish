@@ -10,6 +10,7 @@ type ApiGroup struct {
 	ReplicaSetApi
 	DeploymentApi
 	DaemonSetApi
+	ServiceApi
 }
 
 var (
@@ -20,4 +21,5 @@ var (
 	replicaSetService = service.ServiceGroupApp.K8sServiceGroup.ReplicaSetService
 	deploymentService = service.ServiceGroupApp.K8sServiceGroup.DeploymentService
 	daemonSetService  = service.ServiceGroupApp.K8sServiceGroup.DaemonSetService
+	serviceService    = service.ServiceGroupApp.K8sServiceGroup.ServiceService
 )
