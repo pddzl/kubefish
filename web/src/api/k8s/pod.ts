@@ -1,5 +1,18 @@
 import { request } from "@/utils/service"
 
+export interface PodBrief {
+  name: string
+  namespace: string
+  status: string
+  node: string
+  creationTimestamp: string
+}
+
+export interface PodBriefList {
+  list: PodBrief[]
+  total: number
+}
+
 export interface PodData {
   name: string
   namespace: string

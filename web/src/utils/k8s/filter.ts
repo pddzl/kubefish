@@ -1,25 +1,25 @@
 // pod
 
 const statusPodMap: Record<string, podRes> = {
-  'Running': 'success'
+  Running: "success"
 }
 
-type podRes = 'success' | 'info'
+type podRes = "success" | "info"
 
 export const statusPodFilter = (status: string): podRes => {
-  return statusPodMap[status] || 'info'
+  return statusPodMap[status] || "info"
 }
 
-// deploymentDetail -> replicaSet
+// deploymentDetail | replicaSet
 
-type rsRes = 'success' | 'danger' | 'info'
+type rsRes = "success" | "danger" | "info"
 
 const statusRsMap: Record<string, rsRes> = {
-  'True': 'success',
-  'False': 'danger',
-  'Unknown': 'info',
+  True: "success",
+  False: "danger",
+  Unknown: "info"
 }
 
 export const statusRsFilter = (status: string): rsRes => {
-  return statusRsMap[status] || 'info'
+  return statusRsMap[status] || "info"
 }

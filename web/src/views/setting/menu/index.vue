@@ -229,7 +229,7 @@ const formRef = ref<FormInstance>()
 const formRules: FormRules = reactive({
   pid: [{ required: true, trigger: "change", message: "请选择父节点" }],
   path: [{ required: true, trigger: "blur", message: "请填写路由路径" }],
-  component: [{ required: true, trigger: "blur", message: "请填写前端组件" }]
+  component: [{ required: true, trigger: "blur", message: "请填写组件路径" }]
 })
 
 const initForm = () => {

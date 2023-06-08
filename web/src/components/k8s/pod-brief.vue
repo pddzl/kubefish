@@ -18,16 +18,32 @@
       <template #default="scope">{{ formatDateTime(scope.row.creationTimestamp) }}</template>
     </el-table-column>
   </el-table>
+  <div class="pager-wrapper">
+    <el-pagination
+      background
+      :layout="paginationData.layout"
+      :page-sizes="paginationData.pageSizes"
+      :total="paginationData.total"
+      :page-size="paginationData.pageSize"
+      :currentPage="paginationData.currentPage"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { toRefs } from "vue"
-import { statusPodFilter } from "@/utils/k8s/filter"
+import { usePagination } from "@/hooks/usePagination"
 import { formatDateTime } from "@/utils/index"
+import { statusPodFilter } from "@/utils/k8s/filter"
+import { toRefs } from "vue"
 
 defineOptions({
   name: "PodBrief"
 })
+
+// 分页
+const { paginationData, changeCurrentPage, changePageSize } = usePagination()
 
 const props = defineProps({
   pods: {
