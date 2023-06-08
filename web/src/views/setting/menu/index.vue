@@ -62,7 +62,7 @@
         <el-form-item label="路由路径" prop="path" style="width: 30%">
           <el-input v-model="formData.path" />
         </el-form-item>
-        <el-form-item label="前端组件" prop="component" style="width: 30%">
+        <el-form-item label="组件路径" prop="component" style="width: 30%">
           <el-input v-model="formData.component" />
         </el-form-item>
         <el-form-item label="重定向" prop="redirect" style="width: 30%">
@@ -104,10 +104,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from "vue"
-import { ElMessage, ElMessageBox, type FormInstance, type FormRules, type CascaderOption } from "element-plus"
-import { type MenusData, getMenus, addMenuApi, editMenuApi, deleteMenuApi } from "@/api/system/menu"
+import { addMenuApi, deleteMenuApi, editMenuApi, getMenus, type MenusData } from "@/api/system/menu"
 import WarningBar from "@/components/WarningBar/warningBar.vue"
+import { ElMessage, ElMessageBox, type CascaderOption, type FormInstance, type FormRules } from "element-plus"
+import { reactive, ref } from "vue"
 import icon from "./icon.vue"
 
 defineOptions({
