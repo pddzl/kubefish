@@ -1,6 +1,5 @@
 import { request } from "@/utils/service"
-
-// type status = "True" | "Unknown"
+import { PodBriefList } from "./pod"
 
 export interface NodeData {
   name: string
@@ -54,7 +53,7 @@ export function getNodesApi(data: PageInfo) {
 // }
 
 // 获取某个节点详情
-export function getNodeDetail(params: { name: string }) {
+export function getNodeDetailApi(params: { name: string }) {
   return request<ApiResponseData<any>>({
     url: "/k8s/node/getNodeDetail",
     method: "get",
@@ -62,27 +61,12 @@ export function getNodeDetail(params: { name: string }) {
   })
 }
 
-export interface NodePods {
-  name: string
-  namespace: string
-  creationTimestamp: string
-  status: string
-  node: string
-}
-
-export interface NodePodsPageInfo {
-  list: NodePods[]
-  total: number
-  page: number
-  pageSize: number
-}
-
-interface nodePodsData extends PageInfo {
+interface nodePodReq extends PageInfo {
   node_name: string
 }
 
-export function getNodePods(data: nodePodsData) {
-  return request<ApiResponseData<NodePodsPageInfo>>({
+export function getNodePodsApi(data: nodePodReq) {
+  return request<ApiResponseData<PodBriefList>>({
     url: "/k8s/node/getNodePods",
     method: "post",
     data

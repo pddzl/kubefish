@@ -13,7 +13,7 @@ func (dr *DaemonSetRouter) InitDaemonSetRouter(Router *gin.RouterGroup) (R gin.I
 	{
 		daemonSetRouter.POST("getDaemonSets", daemonSetApi.GetDaemonSets)           // 获取所有daemonSet
 		daemonSetRouter.POST("getDaemonSetDetail", daemonSetApi.GetDaemonSetDetail) // 获取daemonSet详情
-		daemonSetRouter.POST("getDaemonSetPod", daemonSetApi.GetDaemonSetPods)      // 获取daemonSet关联pod
+		daemonSetRouter.POST("getDaemonSetPods", daemonSetApi.GetDaemonSetPods)     // 获取daemonSet关联pod
 		daemonSetRouter.POST("deleteDaemonSet", daemonSetApi.DeleteDaemonSet)       // 删除daemonSet
 	}
 	return daemonSetRouter

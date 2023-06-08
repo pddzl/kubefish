@@ -1,5 +1,5 @@
 import { request } from "@/utils/service"
-import { commonListReq, type commonReq } from "./entry"
+import { type commonListReq, type commonReq } from "./entry"
 
 export interface DeploymentBrief {
   name: string

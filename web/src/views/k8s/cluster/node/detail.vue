@@ -172,21 +172,9 @@
             </el-table>
           </div>
         </el-collapse-item>
-        <el-collapse-item v-if="Array.isArray(nodePods)" title="Pods" name="pods">
+        <el-collapse-item title="Pods" name="pods">
           <div class="info-table">
-            <PodBrief :pods="nodePods" style="margin-bottom: 20px" />
-            <div class="pager-wrapper">
-              <el-pagination
-                background
-                :layout="paginationData.layout"
-                :page-sizes="paginationData.pageSizes"
-                :total="paginationData.total"
-                :page-size="paginationData.pageSize"
-                :currentPage="paginationData.currentPage"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-              />
-            </div>
+            <PodBriefC :total="total" :pods="relatedPods" @getRelatedPodsFunc="getRelatedPodsFunc" />
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -198,62 +186,57 @@
 </template>
 
 <script lang="ts" setup>
+import { getNodeDetailApi, getNodePodsApi } from "@/api/k8s/node"
+import { type PodBrief } from "@/api/k8s/pod"
+import VueCodeMirror from "@/components/codeMirror/index.vue"
+import MetaData from "@/components/k8s/metadata.vue"
+import PodBriefC from "@/components/k8s/pod-brief.vue"
+import { formatDateTime } from "@/utils/index"
+import { viewOrch } from "@/utils/k8s/orch"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { type NodePods, getNodeDetail, getNodePods } from "@/api/k8s/node"
-import { formatDateTime } from "@/utils/index"
-import MetaData from "@/components/k8s/metadata.vue"
-import PodBrief from "@/components/k8s/pod-brief.vue"
-import VueCodeMirror from "@/components/codeMirror/index.vue"
-import { usePagination } from "@/hooks/usePagination"
-import { viewOrch } from "@/utils/k8s/orch"
 
 defineOptions({
   name: "NodeDetail"
 })
 
-const { paginationData, changeCurrentPage, changePageSize } = usePagination()
-
 const activeNames = ref(["metadata", "spec", "nodeInfo", "allocated", "status", "pods"])
 const nodeDetail = ref<any>({})
-const nodePods = ref<NodePods[]>([])
 
 const route = useRoute()
 const nodeName = route.query.name as string
 
 // 加载node详情
-const getData = async () => {
-  await getNodeDetail({ name: nodeName }).then((res) => {
+const getDetail = async () => {
+  await getNodeDetailApi({ name: nodeName }).then((res) => {
     if (res.code === 0) {
       nodeDetail.value = res.data
     }
   })
 }
-getData()
+getDetail()
 
-const getNodePodsData = async () => {
-  const res = await getNodePods({
-    node_name: nodeName,
-    page: paginationData.currentPage,
-    pageSize: paginationData.pageSize
+// 加载node关联pods
+const relatedPods = ref<PodBrief[]>([])
+const total = ref(0)
+
+interface pageObj {
+  currentPage: number
+  pageSize: number
+}
+
+const getRelatedPodsFunc = async (obj: pageObj) => {
+  const res = await getNodePodsApi({
+    page: obj.currentPage,
+    pageSize: obj.pageSize,
+    node_name: nodeName
   })
   if (res.code === 0) {
-    nodePods.value = res.data.list
-    paginationData.total = res.data.total
+    relatedPods.value = res.data.list
+    total.value = res.data.total
   }
 }
-getNodePodsData()
-
-// 分页
-const handleSizeChange = (value: number) => {
-  changePageSize(value)
-  getNodePodsData()
-}
-
-const handleCurrentChange = (value: number) => {
-  changeCurrentPage(value)
-  getNodePodsData()
-}
+getRelatedPodsFunc({ currentPage: 1, pageSize: 10 })
 
 // 查看编排
 const dialogFormVisible = ref(false)

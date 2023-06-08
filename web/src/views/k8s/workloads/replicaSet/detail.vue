@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="detail-operation">
-      <el-button icon="view" type="primary" plain @click="viewOrchFunc(replicaSet, namespace)">查看</el-button>
+      <el-button icon="view" type="primary" plain @click="viewOrchFunc">查看</el-button>
       <el-button icon="delete" type="danger" plain @click="deleteFunc">删除 </el-button>
     </div>
     <div class="kop-collapse">
@@ -74,19 +74,7 @@
         </el-collapse-item>
         <el-collapse-item title="Pods" name="pods">
           <div class="info-table">
-            <PodBrief :pods="replicaSetPods" style="margin-bottom: 20px" />
-            <div class="pager-wrapper">
-              <el-pagination
-                background
-                :layout="paginationData.layout"
-                :page-sizes="paginationData.pageSizes"
-                :total="paginationData.total"
-                :page-size="paginationData.pageSize"
-                :currentPage="paginationData.currentPage"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-              />
-            </div>
+            <PodBriefC :total="total" :pods="relatedPods" @getRelatedPodsFunc="getRelatedPodsFunc" />
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -99,25 +87,21 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue"
-import { useRoute } from "vue-router"
 import {
-  type ReplicaSetDetail,
+  deleteReplicaSetApi,
   getReplicaSetDetailApi,
   getReplicaSetPodsApi,
-  deleteReplicaSetApi
+  type ReplicaSetDetail
 } from "@/api/k8s/replicaSet"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
-import { statusRsFilter } from "@/utils/k8s/filter.js"
-import { formatDateTime } from "@/utils/index"
 import MetaData from "@/components/k8s/metadata.vue"
-import { ElMessage, ElMessageBox } from "element-plus"
-import { usePagination } from "@/hooks/usePagination"
+import PodBriefC from "@/components/k8s/pod-brief.vue"
+import { formatDateTime } from "@/utils/index"
+import { statusRsFilter } from "@/utils/k8s/filter.js"
 import { viewOrch } from "@/utils/k8s/orch"
-import PodBrief from "@/components/k8s/pod-brief.vue"
-
-// 分页
-const { paginationData, changeCurrentPage, changePageSize } = usePagination()
+import { ElMessage, ElMessageBox } from "element-plus"
+import { ref } from "vue"
+import { useRoute } from "vue-router"
 
 // 折叠面板
 const activeNames = ref(["metadata", "spec", "status", "pods", "services"])
@@ -125,7 +109,7 @@ const activeNames = ref(["metadata", "spec", "status", "pods", "services"])
 // 路由
 const route = useRoute()
 const namespace = route.query.namespace as string
-const replicaSet = route.query.replicaSet as string
+const name = route.query.name as string
 
 // 加载replicaSet详情
 const replicaSetDetail = ref<ReplicaSetDetail>({
@@ -143,58 +127,55 @@ const replicaSetDetail = ref<ReplicaSetDetail>({
   }
 })
 
-const getTableData = async () => {
-  await getReplicaSetDetailApi({ namespace: namespace, replicaSet: replicaSet }).then((res) => {
+const getDetail = async () => {
+  await getReplicaSetDetailApi({ namespace: namespace, name: name }).then((res) => {
     if (res.code === 0) {
       replicaSetDetail.value = res.data
     }
   })
 }
-getTableData()
+getDetail()
 
 // 加载replicaSet关联pods
-const replicaSetPods = ref([])
 
-const getReplicaSetPodFunc = async () => {
+const relatedPods = ref([])
+const total = ref(0)
+
+interface pageObj {
+  currentPage: number
+  pageSize: number
+}
+
+const getRelatedPodsFunc = async (obj: pageObj) => {
   const res = await getReplicaSetPodsApi({
-    page: paginationData.currentPage,
-    pageSize: paginationData.pageSize,
+    page: obj.currentPage,
+    pageSize: obj.pageSize,
     namespace: namespace,
-    replicaSet: replicaSet
+    name: name
   })
   if (res.code === 0) {
-    replicaSetPods.value = res.data.list
-    paginationData.total = res.data.total
+    relatedPods.value = res.data.list
+    total.value = res.data.total
   }
 }
-getReplicaSetPodFunc()
-
-// 分页
-const handleSizeChange = (value: number) => {
-  changePageSize(value)
-  getTableData()
-}
-
-const handleCurrentChange = (value: number) => {
-  changeCurrentPage(value)
-  getTableData()
-}
+getRelatedPodsFunc({ currentPage: 1, pageSize: 10 })
 
 // 查看编排
 const dialogViewVisible = ref(false)
 const formatData = ref<string>("")
-const viewOrchFunc = async (name: string, namespace: string) => {
+const viewOrchFunc = async () => {
   formatData.value = await viewOrch(name, "replicasets", namespace)
   dialogViewVisible.value = true
 }
 
+// 删除
 const deleteFunc = async () => {
   ElMessageBox.confirm("此操作将永久删除该ReplicaSet, 是否继续?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
   }).then(async () => {
-    const res = await deleteReplicaSetApi({ namespace: namespace, replicaSet: replicaSet })
+    const res = await deleteReplicaSetApi({ namespace: namespace, name: name })
     if (res.code === 0) {
       ElMessage({
         type: "success",

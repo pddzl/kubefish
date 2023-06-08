@@ -60,8 +60,8 @@ func (rs *ReplicaSetService) GetReplicaSets(namespace string, label string, fiel
 }
 
 // GetReplicaSetDetail 获取replicaSet详情
-func (rs *ReplicaSetService) GetReplicaSetDetail(namespace string, replicaSetName string) (*modelK8s.ReplicaSetDetail, error) {
-	replicaSet, err := global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).Get(context.TODO(), replicaSetName, metaV1.GetOptions{})
+func (rs *ReplicaSetService) GetReplicaSetDetail(namespace string, name string) (*modelK8s.ReplicaSetDetail, error) {
+	replicaSet, err := global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).Get(context.TODO(), name, metaV1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}
@@ -95,9 +95,9 @@ func (rs *ReplicaSetService) GetReplicaSetDetail(namespace string, replicaSetNam
 }
 
 // GetReplicaSetPods 获取replicaSet关联的pods
-func (rs *ReplicaSetService) GetReplicaSetPods(namespace string, replicaSet string, info request.PageInfo) ([]modelK8s.PodBrief, int, error) {
+func (rs *ReplicaSetService) GetReplicaSetPods(namespace string, name string, info request.PageInfo) ([]modelK8s.PodBrief, int, error) {
 	// 获取replicaSet原始数据
-	rSet, err := global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).Get(context.TODO(), replicaSet, metaV1.GetOptions{})
+	rSet, err := global.KF_K8S_Client.AppsV1().ReplicaSets(namespace).Get(context.TODO(), name, metaV1.GetOptions{})
 	if err != nil {
 		return nil, 0, err
 	}

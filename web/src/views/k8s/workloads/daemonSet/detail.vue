@@ -82,19 +82,7 @@
         </el-collapse-item>
         <el-collapse-item title="Pods" name="pods">
           <div class="info-table">
-            <PodBrief :pods="relatedPods" style="margin-bottom: 20px" />
-            <div class="pager-wrapper">
-              <el-pagination
-                background
-                :layout="paginationData.layout"
-                :page-sizes="paginationData.pageSizes"
-                :total="paginationData.total"
-                :page-size="paginationData.pageSize"
-                :currentPage="paginationData.currentPage"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-              />
-            </div>
+            <PodBrief :total="total" :pods="relatedPods" @getRelatedPodsFunc="getRelatedPodsFunc" />
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -110,16 +98,12 @@ import { deleteDaemonSetApi, getDaemonSetDetailApi, getDaemonSetPodsApi } from "
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
 import PodBrief from "@/components/k8s/pod-brief.vue"
-import { usePagination } from "@/hooks/usePagination"
 import { formatDateTime } from "@/utils/index"
 import { statusRsFilter } from "@/utils/k8s/filter.js"
 import { viewOrch } from "@/utils/k8s/orch"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-
-// 分页
-const { paginationData, changeCurrentPage, changePageSize } = usePagination()
 
 // 折叠面板
 const activeNames = ref(["metadata", "resource", "status", "pods"])
@@ -166,31 +150,26 @@ const deleteFunc = async () => {
   })
 }
 
-// 分页
-const handleSizeChange = (value: number) => {
-  changePageSize(value)
-  getDaemonSetPodsFunc
-}
-
-const handleCurrentChange = (value: number) => {
-  changeCurrentPage(value)
-  getDaemonSetPodsFunc()
-}
-
 // 加载daemonSet关联pods
 const relatedPods = ref([])
+const total = ref(0)
 
-const getDaemonSetPodsFunc = async () => {
+interface pageObj {
+  currentPage: number
+  pageSize: number
+}
+
+const getRelatedPodsFunc = async (obj: pageObj) => {
   const res = await getDaemonSetPodsApi({
-    page: paginationData.currentPage,
-    pageSize: paginationData.pageSize,
+    page: obj.currentPage,
+    pageSize: obj.pageSize,
     namespace: namespace,
     name: name
   })
   if (res.code === 0) {
     relatedPods.value = res.data.list
-    paginationData.total = res.data.total
+    total.value = res.data.total
   }
 }
-getDaemonSetPodsFunc()
+getRelatedPodsFunc({ currentPage: 1, pageSize: 10 })
 </script>

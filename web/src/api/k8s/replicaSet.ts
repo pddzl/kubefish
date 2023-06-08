@@ -1,5 +1,5 @@
 import { request } from "@/utils/service"
-import { reqNamespace } from "./entry"
+import { type commonListReq, type commonRelatedReq, type commonReq } from "./entry"
 
 export interface replicaSetBrief {
   name: string
@@ -15,7 +15,7 @@ export interface ReplicaSetBriefList extends PageInfo {
 }
 
 // 获取replicaSet list
-export const getReplicaSetsApi = (data: reqNamespace) => {
+export const getReplicaSetsApi = (data: commonListReq) => {
   return request<ApiResponseData<ReplicaSetBriefList>>({
     url: "/k8s/replicaSet/getReplicaSets",
     method: "post",
@@ -23,13 +23,8 @@ export const getReplicaSetsApi = (data: reqNamespace) => {
   })
 }
 
-interface rsReq {
-  namespace: string
-  replicaSet: string
-}
-
 // 删除replicaSet
-export const deleteReplicaSetApi = (data: rsReq) => {
+export const deleteReplicaSetApi = (data: commonReq) => {
   return request<ApiResponseData<null>>({
     url: "/k8s/replicaSet/deleteReplicaSet",
     method: "post",
@@ -53,7 +48,7 @@ export interface ReplicaSetDetail {
 }
 
 // 获取replicaSet详情
-export const getReplicaSetDetailApi = (data: rsReq) => {
+export const getReplicaSetDetailApi = (data: commonReq) => {
   return request<ApiResponseData<ReplicaSetDetail>>({
     url: "/k8s/replicaSet/getReplicaSetDetail",
     method: "post",
@@ -61,10 +56,8 @@ export const getReplicaSetDetailApi = (data: rsReq) => {
   })
 }
 
-interface rsPodReq extends rsReq, PageInfo {}
-
 // 获取replicaSet关联的pod
-export const getReplicaSetPodsApi = (data: rsPodReq) => {
+export const getReplicaSetPodsApi = (data: commonRelatedReq) => {
   return request<ApiResponseData<any>>({
     url: "/k8s/replicaSet/getReplicaSetPods",
     method: "post",
@@ -73,7 +66,7 @@ export const getReplicaSetPodsApi = (data: rsPodReq) => {
 }
 
 // 获取replicaSet关联的service
-export const getReplicaSetServicesApi = (data: rsReq) => {
+export const getReplicaSetServicesApi = (data: commonReq) => {
   return request<ApiResponseData<any>>({
     url: "/k8s/replicaSet/getReplicaSetServices",
     method: "post",

@@ -21,7 +21,7 @@
               <router-link
                 :to="{
                   name: 'ReplicaSetDetail',
-                  query: { replicaSet: scope.row.name, namespace: scope.row.namespace }
+                  query: { name: scope.row.name, namespace: scope.row.namespace }
                 }"
               >
                 <el-link type="primary" :underline="false">{{ scope.row.name }}</el-link>
@@ -37,8 +37,6 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作">
             <template #default="scope">
-              <!-- <el-button icon="expand" type="text" size="small" @click="openScaleDialog(scope.row)">伸缩</el-button> -->
-              <!-- <el-button icon="delete" type="text" size="small" @click="deleteFunc(scope.row)">删除</el-button> -->
               <el-popover placement="bottom" trigger="click" :popper-style="pWidth">
                 <template #reference>
                   <el-button icon="more" type="primary" link size="small" />
@@ -90,16 +88,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from "vue"
-import { formatDateTime } from "@/utils/index"
 import { getNamespaceNameApi } from "@/api/k8s/namespace"
-import { type replicaSetBrief, getReplicaSetsApi, deleteReplicaSetApi } from "@/api/k8s/replicaSet"
+import { deleteReplicaSetApi, getReplicaSetsApi, type replicaSetBrief } from "@/api/k8s/replicaSet"
+import { formatDateTime } from "@/utils/index"
+import { reactive, ref } from "vue"
 // import { scale } from '@/api/kubernetes/scale'
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 // import warningBar from '@/components/warningBar/warningBar.vue'
-import { ElMessage, ElMessageBox } from "element-plus"
 import { usePagination } from "@/hooks/usePagination"
 import { viewOrch } from "@/utils/k8s/orch"
+import { ElMessage, ElMessageBox } from "element-plus"
 
 defineOptions({
   name: "ReplicaSetList"
