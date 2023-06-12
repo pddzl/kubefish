@@ -2,15 +2,17 @@ package k8s
 
 import (
 	"context"
+	"fmt"
+	coreV1 "k8s.io/api/core/v1"
+	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"strings"
+
 	"github.com/pddzl/kubefish/server/global"
 	"github.com/pddzl/kubefish/server/model/common/request"
 	modelK8s "github.com/pddzl/kubefish/server/model/k8s"
-	coreV1 "k8s.io/api/core/v1"
-	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-type ServiceService struct {
-}
+type ServiceService struct{}
 
 // GetServices 获取所有service
 func (ss *ServiceService) GetServices(namespace string, label string, field string, pageInfo request.PageInfo) ([]modelK8s.ServiceBrief, int, error) {
@@ -50,6 +52,17 @@ func (ss *ServiceService) GetServices(namespace string, label string, field stri
 		servicesBrief.NameSpace = slr.Namespace
 		servicesBrief.ClusterIP = slr.Spec.ClusterIP
 		servicesBrief.Type = string(slr.Spec.Type)
+		// external ports
+		var portSlice []string
+		for _, port := range slr.Spec.Ports {
+			if port.NodePort == 0 {
+				continue
+			}
+			portStr := fmt.Sprintf("%d/%s", port.NodePort, port.Protocol)
+			portSlice = append(portSlice, portStr)
+		}
+		servicesBrief.External = strings.Join(portSlice, ",")
+		// timestamp
 		servicesBrief.CreationTimestamp = slr.CreationTimestamp.Time
 		// append
 		serviceBriefList = append(serviceBriefList, servicesBrief)

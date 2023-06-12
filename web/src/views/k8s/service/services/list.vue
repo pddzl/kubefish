@@ -31,6 +31,7 @@
           <el-table-column label="命名空间" prop="namespace" min-width="120" />
           <el-table-column label="类别" prop="type" />
           <el-table-column label="集群IP" prop="clusterIP" />
+          <el-table-column label="外部访问" prop="external" />
           <el-table-column label="创建时间" width="200">
             <template #default="scope">{{ formatDateTime(scope.row.creationTimestamp) }}</template>
           </el-table-column>

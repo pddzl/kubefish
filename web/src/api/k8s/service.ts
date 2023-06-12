@@ -6,6 +6,7 @@ export interface ServiceBrief {
   namespace: string
   clusterIP: string
   type: string
+  external: string
   creationTimestamp: string
 }
 
