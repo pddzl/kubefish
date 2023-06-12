@@ -11,6 +11,7 @@ type PodBrief struct {
 	Namespace         string    `json:"namespace,omitempty"`
 	Status            string    `json:"status,omitempty"`
 	Node              string    `json:"node,omitempty"`
+	PodIP             string    `json:"podIP,omitempty"`
 	CreationTimestamp time.Time `json:"creationTimestamp,omitempty"`
 }
 

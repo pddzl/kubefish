@@ -5,24 +5,12 @@ export interface PodBrief {
   namespace: string
   status: string
   node: string
+  podIP: string
   creationTimestamp: string
 }
 
 export interface PodBriefList {
   list: PodBrief[]
-  total: number
-}
-
-export interface PodData {
-  name: string
-  namespace: string
-  status: string
-  node: string
-  creationTimestamp: string
-}
-
-interface PodListData extends PageInfo {
-  list: PodData[]
   total: number
 }
 
@@ -32,7 +20,7 @@ interface reqData extends PageInfo {
 
 // 获取所有pod（分页）
 export function getPodsApi(data: reqData) {
-  return request<ApiResponseData<PodListData>>({
+  return request<ApiResponseData<PodBriefList>>({
     url: "/k8s/pod/getPods",
     method: "post",
     data

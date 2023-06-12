@@ -52,6 +52,7 @@ func (ps *PodService) GetPods(namespace string, label string, field string, page
 		podBrief.Name = pod.Name
 		podBrief.Namespace = pod.Namespace
 		podBrief.Node = pod.Spec.NodeName
+		podBrief.PodIP = pod.Status.PodIP
 		podBrief.Status = string(pod.Status.Phase)
 		podBrief.CreationTimestamp = pod.CreationTimestamp.Time
 		// append

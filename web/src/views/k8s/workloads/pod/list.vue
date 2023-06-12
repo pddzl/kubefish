@@ -26,13 +26,14 @@
               </router-link>
             </template>
           </el-table-column>
-          <el-table-column label="命名空间" prop="namespace" min-width="120" />
+          <el-table-column label="命名空间" prop="namespace" min-width="100" />
           <el-table-column label="状态" min-width="100">
             <template #default="scope">
               <el-tag :type="PodStatusFilter(scope.row.status)" size="small">{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="节点" prop="node" min-width="100" />
+          <el-table-column label="节点" prop="node" />
+          <el-table-column label="Pod IP" prop="podIP" min-width="120" />
           <el-table-column label="创建时间" width="180">
             <template #default="scope">{{ formatDateTime(scope.row.creationTimestamp) }}</template>
           </el-table-column>
@@ -120,15 +121,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from "vue"
-import { formatDateTime } from "@/utils/index"
-import { PodStatusFilter } from "@/hooks/filter"
 import { getNamespaceNameApi } from "@/api/k8s/namespace"
-import { type PodData, getPodsApi, deletePodApi } from "@/api/k8s/pod"
+import { deletePodApi, getPodsApi, type PodBrief } from "@/api/k8s/pod"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
-import { ElMessageBox, ElMessage } from "element-plus"
+import { PodStatusFilter } from "@/hooks/filter"
 import { usePagination } from "@/hooks/usePagination"
+import { formatDateTime } from "@/utils/index"
 import { viewOrch } from "@/utils/k8s/orch"
+import { ElMessage, ElMessageBox } from "element-plus"
+import { reactive, ref } from "vue"
 import PodLog from "./components/log.vue"
 import { sshPod } from "./util"
 
@@ -157,7 +158,7 @@ const getNamespace = async () => {
 getNamespace()
 
 // 加载pod数据
-const tableData = ref<PodData[]>([])
+const tableData = ref<PodBrief[]>([])
 
 const getTableData = async () => {
   loading.value = true
@@ -220,7 +221,7 @@ const viewLog = async (namespaceS: string, podS: string) => {
 }
 
 // 删除pod
-const deleteFunc = async (row: PodData) => {
+const deleteFunc = async (row: PodBrief) => {
   ElMessageBox.confirm("此操作将永久删除该Pod, 是否继续?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
