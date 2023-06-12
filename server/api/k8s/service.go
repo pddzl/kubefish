@@ -37,7 +37,25 @@ func (sa *ServiceApi) GetServices(c *gin.Context) {
 	}
 }
 
-func (sa *ServiceApi) GetServiceDetail(c *gin.Context) {}
+// GetServiceDetail 获取service详情
+func (sa *ServiceApi) GetServiceDetail(c *gin.Context) {
+	var commonReq k8sRequest.CommonReq
+	_ = c.ShouldBindJSON(&commonReq)
+	// 校验
+	validate := validator.New()
+	if err := validate.Struct(&commonReq); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	detail, err := serviceService.GetServiceDetail(commonReq.Namespace, commonReq.Name)
+	if err != nil {
+		response.FailWithMessage("获取失败", c)
+		global.KF_LOG.Error("获取失败", zap.Error(err))
+		return
+	}
+	response.OkWithDetailed(detail, "获取成功", c)
+}
 
 func (sa *ServiceApi) GetServicePods(c *gin.Context) {}
 

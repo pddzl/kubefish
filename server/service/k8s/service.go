@@ -71,7 +71,18 @@ func (ss *ServiceService) GetServices(namespace string, label string, field stri
 	return serviceBriefList, total, nil
 }
 
-func (ss *ServiceService) GetServiceDetail() {}
+// GetServiceDetail 获取service详情
+func (ss *ServiceService) GetServiceDetail(namespace string, name string) (*modelK8s.ServiceDetail, error) {
+	detail, err := global.KF_K8S_Client.CoreV1().Services(namespace).Get(context.TODO(), name, metaV1.GetOptions{})
+
+	var serviceDetail modelK8s.ServiceDetail
+	// metadata
+	serviceDetail.ObjectMeta = modelK8s.NewObjectMeta(detail.ObjectMeta)
+	// spec
+	serviceDetail.Spec.Selector = detail.Spec.Selector
+	serviceDetail.Spec.Ports = detail.Spec.Ports
+	return &serviceDetail, err
+}
 
 func (ss *ServiceService) GetServicePods() {}
 

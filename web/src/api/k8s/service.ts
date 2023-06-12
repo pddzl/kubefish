@@ -1,5 +1,5 @@
 import { request } from "@/utils/service"
-import { type commonListReq, type commonReq } from "./entry"
+import { type commonListReq, type commonRelatedReq, type commonReq } from "./entry"
 
 export interface ServiceBrief {
   name: string
@@ -19,6 +19,24 @@ interface ServiceBriefList extends PageInfo {
 export const getServicesApi = (data: commonListReq) => {
   return request<ApiResponseData<ServiceBriefList>>({
     url: "/k8s/service/getServices",
+    method: "post",
+    data
+  })
+}
+
+// 获取service 详情
+export const getServiceDetailApi = (data: commonReq) => {
+  return request<ApiResponseData<any>>({
+    url: "/k8s/service/getServiceDetail",
+    method: "post",
+    data
+  })
+}
+
+// 获取service关联的pod
+export const getServicePodsApi = (data: commonRelatedReq) => {
+  return request<ApiResponseData<any>>({
+    url: "/k8s/service/getServicePods",
     method: "post",
     data
   })

@@ -21,7 +21,7 @@
               <router-link
                 :to="{
                   name: 'ReplicaSetDetail',
-                  query: { name: scope.row.name, namespace: scope.row.namespace }
+                  query: { namespace: scope.row.namespace, name: scope.row.name }
                 }"
               >
                 <el-link type="primary" :underline="false">{{ scope.row.name }}</el-link>
