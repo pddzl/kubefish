@@ -12,6 +12,7 @@ import (
 type ServiceService struct {
 }
 
+// GetServices 获取所有service
 func (ss *ServiceService) GetServices(namespace string, label string, field string, pageInfo request.PageInfo) ([]modelK8s.ServiceBrief, int, error) {
 	// 获取service list
 	var option metaV1.ListOptions
@@ -61,4 +62,7 @@ func (ss *ServiceService) GetServiceDetail() {}
 
 func (ss *ServiceService) GetServicePods() {}
 
-func (ss *ServiceService) DeleteService() {}
+// DeleteService 删除服务
+func (ss *ServiceService) DeleteService(namespace string, name string) error {
+	return global.KF_K8S_Client.CoreV1().Services(namespace).Delete(context.TODO(), name, metaV1.DeleteOptions{})
+}

@@ -2,13 +2,13 @@ package initialize
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pddzl/kubefish/server/router"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/pddzl/kubefish/server/global"
 	"github.com/pddzl/kubefish/server/middleware"
 	"github.com/pddzl/kubefish/server/middleware/log"
+	"github.com/pddzl/kubefish/server/router"
 )
 
 func Routers() *gin.Engine {
