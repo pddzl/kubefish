@@ -7,21 +7,24 @@ import (
 
 // ServiceBrief list
 type ServiceBrief struct {
-	Name              string    `json:"name,omitempty"`
-	NameSpace         string    `json:"namespace,omitempty"`
-	ClusterIP         string    `json:"clusterIP,omitempty"`
-	Type              string    `json:"type,omitempty"`
-	External          string    `json:"external,omitempty"`
-	CreationTimestamp time.Time `json:"creationTimestamp,omitempty"`
+	Name              string    `json:"name"`
+	NameSpace         string    `json:"namespace"`
+	ClusterIP         string    `json:"clusterIP"`
+	Type              string    `json:"type"`
+	External          string    `json:"external"`
+	CreationTimestamp time.Time `json:"creationTimestamp"`
 }
 
 // ServiceDetail brief
 type ServiceDetail struct {
 	ObjectMeta ObjectMeta  `json:"metadata"`
-	Spec       serviceSpec `json:"spec,omitempty"`
+	Spec       serviceSpec `json:"spec"`
 }
 
 type serviceSpec struct {
-	Ports    []coreV1.ServicePort `json:"ports"`
-	Selector map[string]string    `json:"selector"`
+	Ports           []coreV1.ServicePort `json:"ports"`
+	Type            string               `json:"type"`
+	ClusterIP       string               `json:"clusterIP"`
+	SessionAffinity string               `json:"sessionAffinity"`
+	Selector        map[string]string    `json:"selector"`
 }

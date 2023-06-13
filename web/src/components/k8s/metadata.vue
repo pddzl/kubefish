@@ -20,7 +20,7 @@
     </div>
     <div v-if="metadata.labels" class="row">
       <div class="item">
-        <p>标签:</p>
+        <p>标签</p>
         <div class="content">
           <span v-for="(label, index) in metadata.labels" :key="index" class="shadow">
             {{ index }}
@@ -31,15 +31,15 @@
       </div>
     </div>
     <div v-if="JSON.stringify(annotationsFormat) !== '{}'">
-      <p style="font-size: 13px">注释:</p>
+      <p style="font-size: 13px">注释</p>
       <vue-json-pretty :data="annotationsFormat" :color="'lightcoral'" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { formatDateTime } from "@/utils/index"
 import VueJsonPretty from "@/components/vueJsonPretty/index.vue"
+import { formatDateTime } from "@/utils/index"
 
 defineOptions({
   name: "MetaData"

@@ -81,6 +81,9 @@ func (ss *ServiceService) GetServiceDetail(namespace string, name string) (*mode
 	// spec
 	serviceDetail.Spec.Selector = detail.Spec.Selector
 	serviceDetail.Spec.Ports = detail.Spec.Ports
+	serviceDetail.Spec.Type = string(detail.Spec.Type)
+	serviceDetail.Spec.ClusterIP = detail.Spec.ClusterIP
+	serviceDetail.Spec.SessionAffinity = string(detail.Spec.SessionAffinity)
 	return &serviceDetail, err
 }
 

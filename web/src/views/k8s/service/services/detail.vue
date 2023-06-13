@@ -12,6 +12,20 @@
         <el-collapse-item v-if="serviceDetail.spec" title="资源信息" name="spec">
           <div class="info-box">
             <div class="row">
+              <div v-if="serviceDetail.spec.type" class="item">
+                <p>类别</p>
+                <span class="content">{{ serviceDetail.spec.type }}</span>
+              </div>
+              <div v-if="serviceDetail.spec.clusterIP" class="item">
+                <p>集群IP</p>
+                <span class="content">{{ serviceDetail.spec.clusterIP }}</span>
+              </div>
+              <div v-if="serviceDetail.spec.sessionAffinity" class="item">
+                <p>sessionAffinity</p>
+                <span class="content">{{ serviceDetail.spec.sessionAffinity }}</span>
+              </div>
+            </div>
+            <div class="row">
               <div class="item">
                 <p>Selector</p>
                 <div class="content">
@@ -24,8 +38,13 @@
               </div>
             </div>
           </div>
-          <div class="info-table" style="margin-top: 20px">
-            <p>端口</p>
+        </el-collapse-item>
+        <el-collapse-item
+          v-if="Array.isArray(serviceDetail.spec?.ports) && serviceDetail.spec.ports.length > 0"
+          title="端口"
+          name="ports"
+        >
+          <div class="info-table">
             <el-table :data="serviceDetail.spec.ports">
               <!-- <el-table-column label="名称" prop="name" /> -->
               <el-table-column label="协议" prop="protocol" />
