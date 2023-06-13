@@ -54,52 +54,11 @@
             </el-table>
           </div>
         </el-collapse-item>
-        <!-- <el-collapse-item v-if="serviceDetail.status" title="状态" name="status">
-          <div class="info-box">
-            <div class="row">
-              <div class="item">
-                <p>replicas</p>
-                <span class="content">{{ serviceDetail.status.replicas }}</span>
-              </div>
-              <div class="item">
-                <p>fullyLabeledReplicas</p>
-                <span class="content">{{ serviceDetail.status.fullyLabeledReplicas }}</span>
-              </div>
-              <div class="item">
-                <p>readyReplicas</p>
-                <span class="content">{{ serviceDetail.status.readyReplicas }}</span>
-              </div>
-              <div class="item">
-                <p>availableReplicas</p>
-                <span class="content">{{ serviceDetail.status.availableReplicas }}</span>
-              </div>
-            </div>
-          </div>
-          <div v-if="serviceDetail.status.conditions" style="margin-top: 20px; margin-right: 25px">
-            <el-table :data="serviceDetail.status.conditions">
-              <el-table-column label="类别" prop="type" />
-              <el-table-column label="状态" prop="status">
-                <template #default="scope">
-                  <el-tag :type="statusRsFilter(scope.row.status)" size="small">
-                    {{ scope.row.status }}
-                  </el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column label="上次迁移时间">
-                <template #default="scope">
-                  {{ formatDateTime(scope.row.lastTransitionTime) }}
-                </template>
-              </el-table-column>
-              <el-table-column label="原因" prop="reason" />
-              <el-table-column label="信息" prop="message" :show-overflow-tooltip="true" />
-            </el-table>
-          </div>
-        </el-collapse-item> -->
-        <!-- <el-collapse-item title="Pods" name="pods">
+        <el-collapse-item title="Pods" name="pods">
           <div class="info-table">
             <PodBriefC :total="total" :pods="relatedPods" @getRelatedPodsFunc="getRelatedPodsFunc" />
           </div>
-        </el-collapse-item> -->
+        </el-collapse-item>
       </el-collapse>
     </div>
     <!-- 查看编排对话框 -->
@@ -110,9 +69,11 @@
 </template>
 
 <script lang="ts" setup>
+import { PodBrief } from "@/api/k8s/pod"
 import { deleteServiceApi, getServiceDetailApi, getServicePodsApi } from "@/api/k8s/service"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
+import PodBriefC from "@/components/k8s/pod-brief.vue"
 import { viewOrch } from "@/utils/k8s/orch"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { ref } from "vue"
@@ -123,7 +84,7 @@ defineOptions({
 })
 
 // 折叠面板
-const activeNames = ref(["metadata", "spec", "ports"])
+const activeNames = ref(["metadata", "spec", "ports", "pods"])
 
 // 路由
 const route = useRoute()
@@ -143,7 +104,7 @@ const getDetail = async () => {
 getDetail()
 
 // 加载service关联pods
-const relatedPods = ref([])
+const relatedPods = ref<PodBrief[]>([])
 const total = ref(0)
 
 interface pageObj {
@@ -163,7 +124,7 @@ const getRelatedPodsFunc = async (obj: pageObj) => {
     total.value = res.data.total
   }
 }
-// getRelatedPodsFunc({ currentPage: 1, pageSize: 10 })
+getRelatedPodsFunc({ currentPage: 1, pageSize: 10 })
 
 // 查看编排
 const dialogViewVisible = ref(false)

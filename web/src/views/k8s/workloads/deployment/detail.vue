@@ -158,13 +158,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  deleteDeploymentApi,
-  getDeploymentDetailApi,
-  getDeploymentRsApi,
-  scaleDeployment,
-  type DeploymentDetail
-} from "@/api/k8s/deployment"
+import { deleteDeploymentApi, getDeploymentDetailApi, getDeploymentRsApi, scaleDeployment } from "@/api/k8s/deployment"
 import WarningBar from "@/components/WarningBar/warningBar.vue"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
@@ -188,7 +182,7 @@ const namespace = route.query.namespace as string
 const name = route.query.name as string
 
 // 获取deployment详情
-const deploymentDetail = ref<DeploymentDetail>({
+const deploymentDetail = ref({
   metadata: {},
   spec: {
     replicas: 0,

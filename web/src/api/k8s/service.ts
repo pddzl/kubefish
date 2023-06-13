@@ -1,5 +1,6 @@
 import { request } from "@/utils/service"
 import { type commonListReq, type commonRelatedReq, type commonReq } from "./entry"
+import { type PodBriefList } from "./pod"
 
 export interface ServiceBrief {
   name: string
@@ -35,7 +36,7 @@ export const getServiceDetailApi = (data: commonReq) => {
 
 // 获取service关联的pod
 export const getServicePodsApi = (data: commonRelatedReq) => {
-  return request<ApiResponseData<any>>({
+  return request<ApiResponseData<PodBriefList>>({
     url: "/k8s/service/getServicePods",
     method: "post",
     data

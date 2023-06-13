@@ -5,6 +5,7 @@ import (
 	"fmt"
 	coreV1 "k8s.io/api/core/v1"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"strings"
 
 	"github.com/pddzl/kubefish/server/global"
@@ -74,6 +75,9 @@ func (ss *ServiceService) GetServices(namespace string, label string, field stri
 // GetServiceDetail 获取service详情
 func (ss *ServiceService) GetServiceDetail(namespace string, name string) (*modelK8s.ServiceDetail, error) {
 	detail, err := global.KF_K8S_Client.CoreV1().Services(namespace).Get(context.TODO(), name, metaV1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
 
 	var serviceDetail modelK8s.ServiceDetail
 	// metadata
@@ -87,7 +91,24 @@ func (ss *ServiceService) GetServiceDetail(namespace string, name string) (*mode
 	return &serviceDetail, err
 }
 
-func (ss *ServiceService) GetServicePods() {}
+// GetServicePods 获取service关联的pods
+func (ss *ServiceService) GetServicePods(namespace string, name string, info request.PageInfo) ([]modelK8s.PodBrief, int, error) {
+	// 获取replicaSet原始数据
+	detail, err := global.KF_K8S_Client.CoreV1().Services(namespace).Get(context.TODO(), name, metaV1.GetOptions{})
+	if err != nil {
+		return nil, 0, err
+	}
+
+	labelSelector := labels.Set(detail.Spec.Selector).String()
+	var hostService PodService
+	podBriefList, total, err := hostService.GetPods(namespace, labelSelector, "", info.Page, info.PageSize)
+	if err != nil {
+		global.KF_LOG.Error("获取service关联的pod失败")
+		return nil, 0, err
+	} else {
+		return podBriefList, total, nil
+	}
+}
 
 // DeleteService 删除服务
 func (ss *ServiceService) DeleteService(namespace string, name string) error {

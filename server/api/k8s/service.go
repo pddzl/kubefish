@@ -57,7 +57,29 @@ func (sa *ServiceApi) GetServiceDetail(c *gin.Context) {
 	response.OkWithDetailed(detail, "获取成功", c)
 }
 
-func (sa *ServiceApi) GetServicePods(c *gin.Context) {}
+func (sa *ServiceApi) GetServicePods(c *gin.Context) {
+	var relatedReq k8sRequest.CommonRelatedReq
+	_ = c.ShouldBindJSON(&relatedReq)
+	// 校验字段
+	validate := validator.New()
+	if err := validate.Struct(&relatedReq); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	pods, total, err := serviceService.GetServicePods(relatedReq.Namespace, relatedReq.Name, relatedReq.PageInfo)
+	if err != nil {
+		response.FailWithMessage("获取失败", c)
+		global.KF_LOG.Error("获取失败", zap.Error(err))
+		return
+	}
+	response.OkWithDetailed(response.PageResult{
+		List:     pods,
+		Total:    int64(total),
+		Page:     relatedReq.Page,
+		PageSize: relatedReq.PageSize,
+	}, "获取成功", c)
+}
 
 // DeleteService 删除服务
 func (sa *ServiceApi) DeleteService(c *gin.Context) {
