@@ -9,4 +9,5 @@ type ServiceGroup struct {
 	DeploymentService
 	DaemonSetService
 	ServiceService
+	IngressService
 }

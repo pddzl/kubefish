@@ -18,7 +18,6 @@ var jwtService = service.ServiceGroupApp.SystemServiceGroup.JwtService
 
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// websocket跳过验证
 		var token string
 		if c.IsWebsocket() {
 			token = c.Request.Header.Get("Sec-Websocket-Protocol")

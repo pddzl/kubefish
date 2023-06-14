@@ -85,21 +85,20 @@
       </el-collapse>
     </div>
     <el-dialog v-model="dialogFormVisible" title="查看资源" width="55%">
-      <!-- eslint-disable-next-line vue/attribute-hyphenation -->
       <vue-code-mirror v-model:modelValue="formatData" :readOnly="true" />
     </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { deleteNamespaceApi, getNamespaceDetailApi } from "@/api/k8s/namespace"
+import VueCodeMirror from "@/components/codeMirror/index.vue"
+import MetaData from "@/components/k8s/metadata.vue"
+import { NamespaceStatusFilter } from "@/hooks/filter"
+import { viewOrch } from "@/utils/k8s/orch"
+import { ElMessage, ElMessageBox } from "element-plus"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { NamespaceStatusFilter } from "@/hooks/filter"
-import { getNamespaceDetailApi, deleteNamespaceApi } from "@/api/k8s/namespace"
-import MetaData from "@/components/k8s/metadata.vue"
-import VueCodeMirror from "@/components/codeMirror/index.vue"
-import { ElMessage, ElMessageBox } from "element-plus"
-import { viewOrch } from "@/utils/k8s/orch"
 
 defineOptions({
   name: "NamespaceDetail"
