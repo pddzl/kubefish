@@ -67,7 +67,41 @@ func (is *IngressService) GetIngressList(namespace string, pageInfo request.Page
 }
 
 // GetIngressDetail 获取ingress 详情
-func (is *IngressService) GetIngressDetail() {}
+func (is *IngressService) GetIngressDetail(namespace string, name string) (*modelK8s.IngressDetail, error) {
+	detail, err := global.KF_K8S_Client.NetworkingV1().Ingresses(namespace).Get(context.TODO(), name, metaV1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	// 处理ingress数据
+	var ingressDetail modelK8s.IngressDetail
+	// metadata
+	ingressDetail.ObjectMeta = modelK8s.NewObjectMeta(detail.ObjectMeta)
+	// spec
+	ingressDetail.Spec.IngressClassName = detail.Spec.IngressClassName
+	for _, rule := range detail.Spec.Rules {
+		var ingressRule modelK8s.IngressRule
+		ingressRule.Host = rule.Host
+		for _, path := range rule.IngressRuleValue.HTTP.Paths {
+			ingressRule.Path = path.Path
+			ingressRule.PathType = string(*path.PathType)
+			ingressRule.ServiceName = path.Backend.Service.Name
+			ingressRule.ServicePortName = path.Backend.Service.Port.Name
+			ingressRule.ServicePortNumber = path.Backend.Service.Port.Number
+		}
+		ingressDetail.Spec.Rules = append(ingressDetail.Spec.Rules, ingressRule)
+	}
+	// status
+	for _, ig := range detail.Status.LoadBalancer.Ingress {
+		if ig.Hostname != "" {
+			ingressDetail.Status.EndPoints = append(ingressDetail.Status.EndPoints, ig.Hostname)
+		} else if ig.IP != "" {
+			ingressDetail.Status.EndPoints = append(ingressDetail.Status.EndPoints, ig.IP)
+		}
+	}
+
+	return &ingressDetail, nil
+}
 
 // DeleteIngress 删除Ingress
 func (is *IngressService) DeleteIngress() {}

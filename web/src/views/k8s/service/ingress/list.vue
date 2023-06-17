@@ -18,14 +18,14 @@
         <el-table :data="tableData">
           <el-table-column label="名称" min-width="220">
             <template #default="scope">
-              <!-- <router-link
+              <router-link
                 :to="{
                   name: 'IngressDetail',
                   query: { name: scope.row.name, namespace: scope.row.namespace }
                 }"
               >
                 <el-link type="primary" :underline="false">{{ scope.row.name }}</el-link>
-              </router-link> -->
+              </router-link>
             </template>
           </el-table-column>
           <el-table-column label="命名空间" prop="namespace" min-width="120" />
