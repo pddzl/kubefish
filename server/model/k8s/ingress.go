@@ -1,6 +1,9 @@
 package k8s
 
-import "time"
+import (
+	networkingV1 "k8s.io/api/networking/v1"
+	"time"
+)
 
 // IngressBrief list
 type IngressBrief struct {
@@ -19,17 +22,8 @@ type IngressDetail struct {
 }
 
 type ingressSpec struct {
-	IngressClassName *string       `json:"ingressClassName,omitempty"`
-	Rules            []IngressRule `json:"rules,omitempty"`
-}
-
-type IngressRule struct {
-	Host              string `json:"host"`
-	Path              string `json:"path"`
-	PathType          string `json:"pathType"`
-	ServiceName       string `json:"serviceName"`
-	ServicePortName   string `json:"servicePortName"`
-	ServicePortNumber int32  `json:"servicePortNumber"`
+	IngressClassName *string                    `json:"ingressClassName,omitempty"`
+	Rules            []networkingV1.IngressRule `json:"rules,omitempty"`
 }
 
 type ingressStatus struct {

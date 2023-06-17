@@ -16,7 +16,7 @@
     <el-card v-loading="loading" shadow="never">
       <div class="table-wrapper">
         <el-table :data="tableData">
-          <el-table-column label="名称" min-width="220">
+          <el-table-column label="名称" min-width="100">
             <template #default="scope">
               <router-link
                 :to="{
@@ -28,9 +28,9 @@
               </router-link>
             </template>
           </el-table-column>
-          <el-table-column label="命名空间" prop="namespace" min-width="120" />
+          <el-table-column label="命名空间" prop="namespace" min-width="100" />
           <el-table-column label="IP" prop="ip" />
-          <el-table-column label="主机" prop="hosts">
+          <el-table-column label="主机" prop="hosts" min-width="120">
             <template #default="scope">
               {{ scope.row.hosts.join(",") }}
             </template>
@@ -38,7 +38,7 @@
           <el-table-column label="创建时间" width="200">
             <template #default="scope">{{ formatDateTime(scope.row.creationTimestamp) }}</template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作">
+          <el-table-column fixed="right" label="操作" width="100">
             <template #default="scope">
               <el-popover placement="bottom" trigger="click" :popper-style="pWidth">
                 <template #reference>

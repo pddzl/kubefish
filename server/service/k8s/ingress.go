@@ -79,18 +79,7 @@ func (is *IngressService) GetIngressDetail(namespace string, name string) (*mode
 	ingressDetail.ObjectMeta = modelK8s.NewObjectMeta(detail.ObjectMeta)
 	// spec
 	ingressDetail.Spec.IngressClassName = detail.Spec.IngressClassName
-	for _, rule := range detail.Spec.Rules {
-		var ingressRule modelK8s.IngressRule
-		ingressRule.Host = rule.Host
-		for _, path := range rule.IngressRuleValue.HTTP.Paths {
-			ingressRule.Path = path.Path
-			ingressRule.PathType = string(*path.PathType)
-			ingressRule.ServiceName = path.Backend.Service.Name
-			ingressRule.ServicePortName = path.Backend.Service.Port.Name
-			ingressRule.ServicePortNumber = path.Backend.Service.Port.Number
-		}
-		ingressDetail.Spec.Rules = append(ingressDetail.Spec.Rules, ingressRule)
-	}
+	ingressDetail.Spec.Rules = detail.Spec.Rules
 	// status
 	for _, ig := range detail.Status.LoadBalancer.Ingress {
 		if ig.Hostname != "" {

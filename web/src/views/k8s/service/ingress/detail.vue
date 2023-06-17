@@ -31,24 +31,28 @@
         </el-collapse-item>
         <el-collapse-item v-if="ingressDetail.spec" title="规则" name="rules" class="rules">
           <div v-for="h in ingressDetail.spec.rules" :key="h">
+            <span style="margin-right: 10px">主机: {{ h.host }}</span>
+            <span>协议: <span v-if="h.http">HTTP</span></span>
             <el-table :data="h.http.paths">
-              <el-table-column label="主机" prop="h.host" />
               <el-table-column label="路径" prop="path" />
               <el-table-column label="路径类型" prop="pathType" />
-              <el-table-column label="后端" align="center">
-                <el-table-column label="服务名称">
-                  <template #default="scope">
-                    <router-link
-                      :to="{
-                        name: 'Servicedetail',
-                        query: { service: scope.row.backend.service.name, namespace: namespace }
-                      }"
-                    >
-                      <el-link type="primary" :underline="false">{{ scope.row.backend.service.name }}</el-link>
-                    </router-link>
-                  </template>
-                </el-table-column>
-                <el-table-column label="服务端口" prop="backend.service.port.number" />
+              <el-table-column label="服务" prop="backend.service.name">
+                <template #default="scope">
+                  <router-link
+                    :to="{
+                      name: 'ServiceDetail',
+                      query: { name: scope.row.backend.service.name, namespace: namespace }
+                    }"
+                  >
+                    <el-link type="primary" :underline="false">{{ scope.row.backend.service.name }}</el-link>
+                  </router-link>
+                </template>
+              </el-table-column>
+              <el-table-column label="服务">
+                <template #default="scope">
+                  <span v-if="scope.row.backend.service.port.number">{{ scope.row.backend.service.port.number }}</span>
+                  <span v-else-if="scope.row.backend.service.port.name">{{ scope.row.backend.service.port.name }}</span>
+                </template>
               </el-table-column>
             </el-table>
           </div>
