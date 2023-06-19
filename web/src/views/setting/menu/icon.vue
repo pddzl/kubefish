@@ -46,7 +46,8 @@ const options = reactive([
   { key: "bug", label: "bug" },
   { key: "load", label: "load" },
   { key: "cluster", label: "cluster" },
-  { key: "network", label: "network" }
+  { key: "network", label: "network" },
+  { key: "config", label: "config" }
 ])
 
 const metaData = ref(props.meta)
