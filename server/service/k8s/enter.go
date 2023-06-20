@@ -1,5 +1,7 @@
 package k8s
 
+import "github.com/pddzl/kubefish/server/service/k8s/config"
+
 type ServiceGroup struct {
 	NodeService
 	ResourceService
@@ -10,4 +12,5 @@ type ServiceGroup struct {
 	DaemonSetService
 	ServiceService
 	IngressService
+	ConfigService config.ServiceGroup
 }

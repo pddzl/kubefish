@@ -1,6 +1,9 @@
 package k8s
 
-import "github.com/pddzl/kubefish/server/service"
+import (
+	"github.com/pddzl/kubefish/server/api/k8s/config"
+	"github.com/pddzl/kubefish/server/service"
+)
 
 type ApiGroup struct {
 	NodeApi
@@ -12,6 +15,7 @@ type ApiGroup struct {
 	DaemonSetApi
 	ServiceApi
 	IngressApi
+	ConfigApi config.ApiGroup
 }
 
 var (
