@@ -12,7 +12,7 @@ func (cr *ConfigMapRouter) InitConfigMapRouter(Router *gin.RouterGroup) (R gin.I
 	configMapApi := api.ApiGroupApp.K8sApiGroup.ConfigApi.ConfigMapApi
 	{
 		configMapRouter.POST("getConfigMapList", configMapApi.GetConfigMapList)
-		configMapRouter.GET("getConfigMapDetail", configMapApi.GetConfigMapDetail)
+		configMapRouter.POST("getConfigMapDetail", configMapApi.GetConfigMapDetail)
 		configMapRouter.POST("deleteConfigMap", configMapApi.DeleteConfigMap)
 	}
 	return configMapRouter

@@ -23,30 +23,18 @@ export const getConfigMapListApi = (data: commonListReq) => {
 
 // 获取configMap详情
 
-// export interface ConfigMapDetail {
-//   metadata: {}
-//   spec: {
-//     selector: object
-//     updateStrategy: { type: string; rollingUpdate: { maxUnavailable: number; maxSurge: number } }
-//   }
-//   status: {
-//     currentNumberScheduled: number
-//     numberMisscheduled: number
-//     desiredNumberScheduled: number
-//     numberReady: number
-//     updatedNumberScheduled: number
-//     numberAvailable: number
-//     conditions: []
-//   }
-// }
+interface ConfigMapDetail {
+  metadata: {}
+  data: {}
+}
 
-// export const getConfigMapDetailApi = (data: commonReq) => {
-//   return request<ApiResponseData<ConfigMapDetail>>({
-//     url: "/k8s/configMap/getConfigMapDetail",
-//     method: "post",
-//     data
-//   })
-// }
+export const getConfigMapDetailApi = (data: commonReq) => {
+  return request<ApiResponseData<ConfigMapDetail>>({
+    url: "/k8s/configMap/getConfigMapDetail",
+    method: "post",
+    data
+  })
+}
 
 // 删除configMap
 export const deleteConfigMapApi = (data: commonReq) => {

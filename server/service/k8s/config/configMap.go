@@ -49,7 +49,16 @@ func (ca *ConfigMapService) GetConfigMapList(namespace string, pageInfo request.
 }
 
 // GetConfigMapDetail 获取单个configMap详情
-func (ca *ConfigMapService) GetConfigMapDetail() {}
+func (ca *ConfigMapService) GetConfigMapDetail(namespace string, name string) (*coreV1.ConfigMap, error) {
+	detail, err := global.KF_K8S_Client.CoreV1().ConfigMaps(namespace).Get(context.TODO(), name, metaV1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	return detail, nil
+}
 
 // DeleteConfigMap 删除configMap
-func (ca *ConfigMapService) DeleteConfigMap() {}
+func (ca *ConfigMapService) DeleteConfigMap(namespace string, name string) error {
+	return global.KF_K8S_Client.CoreV1().ConfigMaps(namespace).Delete(context.TODO(), name, metaV1.DeleteOptions{})
+}

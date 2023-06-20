@@ -37,7 +37,40 @@ func (ca *ConfigMapApi) GetConfigMapList(c *gin.Context) {
 }
 
 // GetConfigMapDetail 获取单个configMap详情
-func (ca *ConfigMapApi) GetConfigMapDetail(c *gin.Context) {}
+func (ca *ConfigMapApi) GetConfigMapDetail(c *gin.Context) {
+	var commonReq k8sRequest.CommonReq
+	_ = c.ShouldBindJSON(&commonReq)
+	// 校验
+	validate := validator.New()
+	if err := validate.Struct(&commonReq); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	detail, err := configMapService.GetConfigMapDetail(commonReq.Namespace, commonReq.Name)
+	if err != nil {
+		response.FailWithMessage("获取失败", c)
+		global.KF_LOG.Error("获取失败", zap.Error(err))
+		return
+	}
+	response.OkWithDetailed(detail, "获取成功", c)
+}
 
 // DeleteConfigMap 删除configMap
-func (ca *ConfigMapApi) DeleteConfigMap(c *gin.Context) {}
+func (ca *ConfigMapApi) DeleteConfigMap(c *gin.Context) {
+	var commonReq k8sRequest.CommonReq
+	_ = c.ShouldBindJSON(&commonReq)
+	// 校验
+	validate := validator.New()
+	if err := validate.Struct(&commonReq); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	if err := configMapService.DeleteConfigMap(commonReq.Namespace, commonReq.Name); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		global.KF_LOG.Error("删除失败", zap.Error(err))
+	} else {
+		response.OkWithMessage("删除成功", c)
+	}
+}
