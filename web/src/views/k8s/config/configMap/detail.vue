@@ -10,28 +10,10 @@
           <MetaData :metadata="detail.metadata" />
         </el-collapse-item>
         <el-collapse-item title="数据" name="data">
-          <div style="padding: 20px; border-radius: 4px; background-color: #f9fbfd; margin-right: 20px">
-            <div v-for="(value, key) in detail.data" :key="key">
-              <span
-                style="
-                  font-size: 14px;
-                  font-weight: 600;
-                  font-style: normal;
-                  color: #242e42;
-                  text-shadow: 0 4px 8px rgba(36, 46, 66, 0.1);
-                "
-                >{{ key }}</span
-              >
-              <pre
-                style="
-                  margin-top: 8px;
-                  padding: 12px;
-                  border-radius: 4px;
-                  background-color: #fff;
-                  border: 1px solid #e3e9ef;
-                "
-                >{{ value }}</pre
-              >
+          <div class="data-container">
+            <div v-for="(value, key) in detail.data" :key="key" class="data-wrapper">
+              <span class="key-container">{{ key }}</span>
+              <pre class="value-container">{{ value }}</pre>
             </div>
           </div>
         </el-collapse-item>
@@ -101,3 +83,34 @@ const deleteFunc = async () => {
   })
 }
 </script>
+
+<style lang="scss" scoped>
+.data-container {
+  padding: 15px;
+  border-radius: 4px;
+  background-color: #f9fbfd;
+  margin-right: 20px;
+}
+
+.key-container {
+  font-size: 14px;
+  font-weight: 600;
+  font-style: normal;
+  color: #242e42;
+  text-shadow: 0 4px 8px rgba(36, 46, 66, 0.1);
+}
+
+.value-container {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid #e3e9ef;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+.data-wrapper:not(:last-child) {
+  margin-bottom: 15px;
+}
+</style>
