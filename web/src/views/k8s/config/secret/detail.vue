@@ -13,9 +13,16 @@
         </el-collapse-item>
         <el-collapse-item v-if="detail.data" title="数据" name="data">
           <div class="data-container">
-            <div v-for="(value, key) in detail.data" :key="key">
+            <el-icon :size="20" @click="decodeValue">
+              <span v-if="decode"><View /></span>
+              <span v-else><Hide /></span>
+            </el-icon>
+            <div v-for="(value, key) in detail.data" :key="key" class="data-wrapper">
               <span class="key-container">{{ key }}</span>
-              <pre class="value-container">{{ dataDecode(value) }}</pre>
+              <div class="value-container">
+                <pre v-if="decode">{{ dataDecode(value) }}</pre>
+                <span v-else>{{ value }}</span>
+              </div>
             </div>
           </div>
         </el-collapse-item>
@@ -85,6 +92,11 @@ const deleteFunc = async () => {
   })
 }
 
+const decode = ref(false)
+const decodeValue = () => {
+  decode.value = !decode.value
+}
+
 // 解码
 const dataDecode = (str: string) => {
   return atob(str)
@@ -115,5 +127,14 @@ const dataDecode = (str: string) => {
   border: 1px solid #e3e9ef;
   word-break: break-all;
   white-space: pre-wrap;
+}
+
+.value-container > pre {
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+.data-wrapper:not(:last-child) {
+  margin-bottom: 15px;
 }
 </style>
