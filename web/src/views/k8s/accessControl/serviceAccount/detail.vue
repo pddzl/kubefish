@@ -9,13 +9,12 @@
         <el-collapse-item v-if="detail.metadata" title="元数据" name="metadata">
           <MetaData :metadata="detail.metadata" />
         </el-collapse-item>
-        <el-collapse-item title="数据" name="data">
-          <div class="data-container">
-            <div v-for="(value, key) in detail.data" :key="key" class="data-wrapper">
-              <span class="key-container">{{ key }}</span>
-              <pre class="value-container">{{ value }}</pre>
-            </div>
-          </div>
+        <el-collapse-item v-if="detail.secrets && detail.secrets.length > 0" title="Secrets" name="secrets">
+          <p v-for="(secret, index) in detail.secrets" :key="index">
+            <router-link :to="{ name: 'SecretDetail', query: { name: secret.name, namespace: namespace } }">
+              <el-link type="primary" :underline="false">{{ secret.name }}</el-link>
+            </router-link>
+          </p>
         </el-collapse-item>
       </el-collapse>
     </div>
@@ -28,29 +27,33 @@
 <script lang="ts" setup>
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { getConfigMapDetailApi, deleteConfigMapApi } from "@/api/k8s/config/configMap"
+import {
+  getServiceAccountDetailApi,
+  deleteServiceAccountApi,
+  type Secret
+} from "@/api/k8s/accessControl/serviceAccount"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { viewOrch } from "@/utils/k8s/orch"
 
 defineOptions({
-  name: "ConfigMapDetail"
+  name: "ServiceAccountDetail"
 })
 
 // 折叠面板
-const activeNames = ref(["metadata", "data"])
+const activeNames = ref(["metadata", "secrets"])
 
 // 路由
 const route = useRoute()
 const namespace = route.query.namespace as string
 const name = route.query.name as string
 
-// 获取configMap详情
-const detail = ref({ metadata: {}, data: {} })
+// 获取serviceAccount详情
+const detail = ref({ metadata: {}, secrets: [] as Secret[] })
 
 const getDetailData = async () => {
-  await getConfigMapDetailApi({ namespace: namespace, name: name }).then((res) => {
+  await getServiceAccountDetailApi({ namespace: namespace, name: name }).then((res) => {
     if (res.code === 0) {
       detail.value = res.data
     }
@@ -62,18 +65,18 @@ getDetailData()
 const dialogFormVisible = ref(false)
 const formatData = ref<string>("")
 const viewOrchFunc = async () => {
-  formatData.value = await viewOrch(name, "configmaps", namespace)
+  formatData.value = await viewOrch(name, "serviceaccounts", namespace)
   dialogFormVisible.value = true
 }
 
 // 删除
 const deleteFunc = async () => {
-  ElMessageBox.confirm("此操作将永久删除该ConfigMap, 是否继续?", "提示", {
+  ElMessageBox.confirm("此操作将永久删除该ServiceAccount, 是否继续?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
   }).then(async () => {
-    const res = await deleteConfigMapApi({ namespace: namespace, name: name })
+    const res = await deleteServiceAccountApi({ namespace: namespace, name: name })
     if (res.code === 0) {
       ElMessage({
         type: "success",

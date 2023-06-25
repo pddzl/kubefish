@@ -15,7 +15,7 @@
           <el-table-column prop="pid" label="父节点" align="center" />
           <el-table-column prop="meta.title" label="展示名称" align="center" />
           <el-table-column prop="name" label="路由名称" align="center" />
-          <el-table-column prop="path" label="路由路径" width="130" align="center" />
+          <el-table-column prop="path" label="路由路径" min-width="120" align="center" />
           <el-table-column prop="meta.hidden" label="是否隐藏" align="center">
             <template #default="scope">
               <el-tag v-if="!scope.row.meta.hidden" type="success" effect="plain">显示</el-tag>
