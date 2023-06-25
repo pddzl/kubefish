@@ -1,6 +1,9 @@
 package k8s
 
-import "github.com/pddzl/kubefish/server/router/k8s/config"
+import (
+	"github.com/pddzl/kubefish/server/router/k8s/accessControl"
+	"github.com/pddzl/kubefish/server/router/k8s/config"
+)
 
 type RouterGroup struct {
 	NodeRouter
@@ -12,5 +15,6 @@ type RouterGroup struct {
 	DaemonSetRouter
 	ServiceRouter
 	IngressRouter
-	ConfigRouter config.RouterGroup
+	ConfigRouter        config.RouterGroup
+	AccessControlRouter accessControl.RouterGroup
 }

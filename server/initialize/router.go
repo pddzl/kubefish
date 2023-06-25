@@ -70,6 +70,8 @@ func Routers() *gin.Engine {
 		// config
 		k8sRouter.ConfigRouter.InitConfigMapRouter(K8sGroup)
 		k8sRouter.ConfigRouter.InitSecretRouter(K8sGroup)
+		// accessControl
+		k8sRouter.AccessControlRouter.InitServiceAccountRouter(K8sGroup)
 	}
 
 	global.KF_LOG.Info("router register success")

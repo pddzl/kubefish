@@ -1,6 +1,7 @@
 package k8s
 
 import (
+	"github.com/pddzl/kubefish/server/api/k8s/accessControl"
 	"github.com/pddzl/kubefish/server/api/k8s/config"
 	"github.com/pddzl/kubefish/server/service"
 )
@@ -15,7 +16,8 @@ type ApiGroup struct {
 	DaemonSetApi
 	ServiceApi
 	IngressApi
-	ConfigApi config.ApiGroup
+	ConfigApi        config.ApiGroup
+	AccessControlApi accessControl.ApiGroup
 }
 
 var (

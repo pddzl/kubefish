@@ -1,6 +1,9 @@
 package k8s
 
-import "github.com/pddzl/kubefish/server/service/k8s/config"
+import (
+	"github.com/pddzl/kubefish/server/service/k8s/accessControl"
+	"github.com/pddzl/kubefish/server/service/k8s/config"
+)
 
 type ServiceGroup struct {
 	NodeService
@@ -12,5 +15,6 @@ type ServiceGroup struct {
 	DaemonSetService
 	ServiceService
 	IngressService
-	ConfigService config.ServiceGroup
+	ConfigService        config.ServiceGroup
+	AccessControlService accessControl.ServiceGroup
 }
