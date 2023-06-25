@@ -9,7 +9,7 @@
  @use "element-plus/theme-chalk/src/mixins/_var.scss" as *;
  @use "element-plus/theme-chalk/src/mixins/mixins.scss" as *;
  @use "./variables.scss" as *;
- 
+
  // 生成指定颜色的明亮/黑暗颜色
  @mixin set-color-mix-level($type, $number, $mode: "light", $mix-color: $color-white) {
    $colors: map.deep-merge(
@@ -21,12 +21,12 @@
      $colors
    ) !global;
  }
- 
+
  $types: primary, success, warning, danger, error, info;
- 
+
  $color: $theme-color;
  $success: #01efb7bb;
- 
+
  $colors: () !default;
  $colors: map.deep-merge(
    (
@@ -40,7 +40,7 @@
    ),
    $colors
  );
- 
+
  // text
  $text-color-base: #fff;
  $text-color: () !default;
@@ -54,7 +54,7 @@
    ),
    $text-color
  );
- 
+
  // 生成 --el-color-${type}-light-i
  @each $type in (primary) {
    @for $i from 1 through 9 {
@@ -63,7 +63,7 @@
    // --el-color-${type}-dark-2
    @include set-color-mix-level($type, 2, "dark", #000);
  }
- 
+
  // border
  $border: () !default;
  $border: map.merge(
@@ -74,7 +74,7 @@
    ),
    $border
  );
- 
+
  // fill
  $fill-color: () !default;
  $fill-color: map.merge(
@@ -85,17 +85,17 @@
    ),
    $fill-color
  );
- 
+
  // background
  $bg-color: () !default;
  $bg-color: map.merge(
    (
      "": #021633,
-     "overlay": #021633
+     "overlay": #031e47
    ),
    $bg-color
  );
- 
+
  // mask
  $mask-color: () !default;
  $mask-color: map.merge(
@@ -104,7 +104,7 @@
    ),
    $mask-color
  );
- 
+
  // button
  $button: () !default;
  $button: map.merge(
@@ -113,7 +113,7 @@
    ),
    $button
  );
- 
+
  html.dark-blue {
    @include set-css-color-type($colors, "primary");
    @include set-component-css-var("text-color", $text-color);
@@ -125,4 +125,3 @@
      @include set-component-css-var("button", $button);
    }
  }
- 
