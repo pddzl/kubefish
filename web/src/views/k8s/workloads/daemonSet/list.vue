@@ -86,8 +86,8 @@
 </template>
 
 <script lang="ts" setup>
-import { deleteDaemonSetApi, getDaemonSetsApi, type DaemonSetBrief } from "@/api/k8s/daemonSet"
-import { getNamespaceNameApi } from "@/api/k8s/namespace"
+import { deleteDaemonSetApi, getDaemonSetsApi, type DaemonSetBrief } from "@/api/k8s/workloads/daemonSet"
+import { getNamespaceNameApi } from "@/api/k8s/cluster/namespace"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { usePagination } from "@/hooks/usePagination"
 import { formatDateTime } from "@/utils/index"

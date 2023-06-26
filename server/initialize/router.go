@@ -58,15 +58,18 @@ func Routers() *gin.Engine {
 	K8sGroup := Router.Group("/k8s")
 	K8sGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
-		k8sRouter.InitNodeRouter(K8sGroup)
-		k8sRouter.InitResourceRouter(K8sGroup)
-		k8sRouter.InitNamespaceRouter(K8sGroup)
-		k8sRouter.InitPodRouter(K8sGroup)
-		k8sRouter.InitReplicaSetRouter(K8sGroup)
-		k8sRouter.InitDeploymentRouter(K8sGroup)
-		k8sRouter.InitDaemonSetRouter(K8sGroup)
-		k8sRouter.InitServiceRouter(K8sGroup)
-		k8sRouter.InitIngressRouter(K8sGroup)
+		// cluster
+		k8sRouter.ClusterRouter.InitNodeRouter(K8sGroup)
+		k8sRouter.ClusterRouter.InitResourceRouter(K8sGroup)
+		k8sRouter.ClusterRouter.InitNamespaceRouter(K8sGroup)
+		// workloads
+		k8sRouter.WorkloadsRouter.InitPodRouter(K8sGroup)
+		k8sRouter.WorkloadsRouter.InitReplicaSetRouter(K8sGroup)
+		k8sRouter.WorkloadsRouter.InitDeploymentRouter(K8sGroup)
+		k8sRouter.WorkloadsRouter.InitDaemonSetRouter(K8sGroup)
+		// service
+		k8sRouter.ServiceRouter.InitServicesRouter(K8sGroup)
+		k8sRouter.ServiceRouter.InitIngressRouter(K8sGroup)
 		// config
 		k8sRouter.ConfigRouter.InitConfigMapRouter(K8sGroup)
 		k8sRouter.ConfigRouter.InitSecretRouter(K8sGroup)

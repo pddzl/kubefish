@@ -91,7 +91,7 @@
 </template>
 
 <script lang="ts" setup>
-import { deleteNamespaceApi, getNamespaceDetailApi } from "@/api/k8s/namespace"
+import { deleteNamespaceApi, getNamespaceDetailApi } from "@/api/k8s/cluster/namespace"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
 import { NamespaceStatusFilter } from "@/hooks/filter"

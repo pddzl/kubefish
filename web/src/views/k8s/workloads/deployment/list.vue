@@ -115,8 +115,13 @@
 </template>
 
 <script lang="ts" setup>
-import { deleteDeploymentApi, getDeploymentsApi, scaleDeployment, type DeploymentBrief } from "@/api/k8s/deployment"
-import { getNamespaceNameApi } from "@/api/k8s/namespace"
+import {
+  deleteDeploymentApi,
+  getDeploymentsApi,
+  scaleDeployment,
+  type DeploymentBrief
+} from "@/api/k8s/workloads/deployment"
+import { getNamespaceNameApi } from "@/api/k8s/cluster/namespace"
 import WarningBar from "@/components/WarningBar/warningBar.vue"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { usePagination } from "@/hooks/usePagination"
@@ -217,7 +222,7 @@ const openScaleDialog = async (row: DeploymentBrief) => {
 }
 
 watch(desiredNum, (val) => {
-  warningTitle.value = `This action is equivalent to: kubectl scale -n ${namespace} deployment ${name} --replicas=${val}`
+  warningTitle.value = `This action is equivalent to: kubectl scale -n ${namespace.value} deployment ${name.value} --replicas=${val}`
 })
 
 const closeScaleDialog = () => {

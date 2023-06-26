@@ -158,7 +158,12 @@
 </template>
 
 <script lang="ts" setup>
-import { deleteDeploymentApi, getDeploymentDetailApi, getDeploymentRsApi, scaleDeployment } from "@/api/k8s/deployment"
+import {
+  deleteDeploymentApi,
+  getDeploymentDetailApi,
+  getDeploymentRsApi,
+  scaleDeployment
+} from "@/api/k8s/workloads/deployment"
 import WarningBar from "@/components/WarningBar/warningBar.vue"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"

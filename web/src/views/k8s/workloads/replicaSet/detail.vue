@@ -92,7 +92,7 @@ import {
   getReplicaSetDetailApi,
   getReplicaSetPodsApi,
   type ReplicaSetDetail
-} from "@/api/k8s/replicaSet"
+} from "@/api/k8s/workloads/replicaSet"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
 import PodBriefC from "@/components/k8s/pod-brief.vue"

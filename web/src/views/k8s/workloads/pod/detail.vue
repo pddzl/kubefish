@@ -148,7 +148,7 @@
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 import { PodStatusFilter } from "@/hooks/filter.js"
-import { getPodDetailApi, deletePodApi } from "@/api/k8s/pod"
+import { getPodDetailApi, deletePodApi } from "@/api/k8s/workloads/pod"
 import { formatDateTime } from "@/utils/index"
 import Container from "./components/container.vue"
 import VueCodeMirror from "@/components/codeMirror/index.vue"

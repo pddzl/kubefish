@@ -1,35 +1,35 @@
 <template>
   <el-dialog v-model="dialogLogVisible" title="查看日志" width="90%">
     <div>
-    <el-form ref="searchForm" :inline="true" :model="searchInfo">
-      <el-form-item label="容器">
-        <el-select v-model="searchInfo.container" clearable placeholder="请选择">
-          <el-option v-for="item in containers" :key="item" :label="item" :value="item" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="行数">
-        <el-select v-model="searchInfo.lines" clearable placeholder="请选择">
-          <el-option v-for="item in lines" :key="item" :label="item" :value="item" />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
-        <el-button icon="refresh" @click="onReset">重置</el-button>
-        <el-button type="primary" plain icon="download" @click="donwloadLog">下载日志</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
-  <div class="log">
-    <p v-for="(log, key) in podLogList" :key="key" style="color: #b7c4d1">
-      {{ log }}
-    </p>
-  </div>
+      <el-form ref="searchForm" :inline="true" :model="searchInfo">
+        <el-form-item label="容器">
+          <el-select v-model="searchInfo.container" clearable placeholder="请选择">
+            <el-option v-for="item in containers" :key="item" :label="item" :value="item" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="行数">
+          <el-select v-model="searchInfo.lines" clearable placeholder="请选择">
+            <el-option v-for="item in lines" :key="item" :label="item" :value="item" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
+          <el-button icon="refresh" @click="onReset">重置</el-button>
+          <el-button type="primary" plain icon="download" @click="donwloadLog">下载日志</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    <div class="log">
+      <p v-for="(log, key) in podLogList" :key="key" style="color: #b7c4d1">
+        {{ log }}
+      </p>
+    </div>
   </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, watch, toRefs } from "vue"
-import { getPodLogApi, getPodDetailApi } from "@/api/k8s/pod"
+import { getPodLogApi, getPodDetailApi } from "@/api/k8s/workloads/pod"
 
 defineOptions({
   name: "PodLog"
@@ -46,7 +46,7 @@ const props = defineProps({
   }
 })
 
-const {namespace, pod} = toRefs(props)
+const { namespace, pod } = toRefs(props)
 
 // 查看日志
 const dialogLogVisible = ref(false)
@@ -109,9 +109,8 @@ const donwloadLog = () => {
 }
 
 defineExpose({
-  dialogLogVisible,
+  dialogLogVisible
 })
-
 </script>
 
 <style lang="scss" scoped>

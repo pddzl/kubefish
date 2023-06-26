@@ -69,7 +69,7 @@
 <script lang="ts" setup>
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { getIngressDetailApi, deleteIngressApi } from "@/api/k8s/ingress"
+import { getIngressDetailApi, deleteIngressApi } from "@/api/k8s/service/ingress"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
 import { ElMessage, ElMessageBox } from "element-plus"

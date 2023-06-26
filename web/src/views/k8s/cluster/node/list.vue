@@ -74,7 +74,7 @@
 import { ref } from "vue"
 import { nodeStatusTypeFilter, nodeStatusFilter } from "@/hooks/filter"
 import { usePagination } from "@/hooks/usePagination"
-import { type NodeData, getNodesApi } from "@/api/k8s/node"
+import { type NodeData, getNodesApi } from "@/api/k8s/cluster/node"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { viewOrch } from "@/utils/k8s/orch"
 

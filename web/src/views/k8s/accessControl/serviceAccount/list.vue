@@ -90,7 +90,7 @@ import {
   getServiceAccountListApi,
   type ServiceAccountBrief
 } from "@/api/k8s/accessControl/serviceAccount"
-import { getNamespaceNameApi } from "@/api/k8s/namespace"
+import { getNamespaceNameApi } from "@/api/k8s/cluster/namespace"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { usePagination } from "@/hooks/usePagination"
 import { formatDateTime } from "@/utils/index"

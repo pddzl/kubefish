@@ -62,7 +62,7 @@
 <script lang="ts" setup>
 import { ref } from "vue"
 import { NamespaceStatusFilter } from "@/hooks/filter"
-import { getNamespacesApi } from "@/api/k8s/namespace"
+import { getNamespacesApi } from "@/api/k8s/cluster/namespace"
 import { usePagination } from "@/hooks/usePagination"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { ElMessage, ElMessageBox } from "element-plus"

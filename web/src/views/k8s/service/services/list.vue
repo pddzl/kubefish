@@ -88,8 +88,8 @@
 </template>
 
 <script lang="ts" setup>
-import { getNamespaceNameApi } from "@/api/k8s/namespace"
-import { deleteServiceApi, getServicesApi, type ServiceBrief } from "@/api/k8s/service"
+import { getNamespaceNameApi } from "@/api/k8s/cluster/namespace"
+import { deleteServiceApi, getServicesApi, type ServiceBrief } from "@/api/k8s/service/services"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { usePagination } from "@/hooks/usePagination"
 import { formatDateTime } from "@/utils/index"

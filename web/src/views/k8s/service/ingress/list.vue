@@ -91,8 +91,8 @@
 </template>
 
 <script lang="ts" setup>
-import { deleteIngressApi, getIngressListApi, type IngressBrief } from "@/api/k8s/ingress"
-import { getNamespaceNameApi } from "@/api/k8s/namespace"
+import { deleteIngressApi, getIngressListApi, type IngressBrief } from "@/api/k8s/service/ingress"
+import { getNamespaceNameApi } from "@/api/k8s/cluster/namespace"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { usePagination } from "@/hooks/usePagination"
 import { formatDateTime } from "@/utils/index"

@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts" setup>
-import { deleteDaemonSetApi, getDaemonSetDetailApi, getDaemonSetPodsApi } from "@/api/k8s/daemonSet"
+import { deleteDaemonSetApi, getDaemonSetDetailApi, getDaemonSetPodsApi } from "@/api/k8s/workloads/daemonSet"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
 import PodBrief from "@/components/k8s/pod-brief.vue"

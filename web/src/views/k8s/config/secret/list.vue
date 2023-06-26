@@ -87,7 +87,7 @@
 
 <script lang="ts" setup>
 import { deleteSecretApi, getSecretListApi, type SecretBrief } from "@/api/k8s/config/secret"
-import { getNamespaceNameApi } from "@/api/k8s/namespace"
+import { getNamespaceNameApi } from "@/api/k8s/cluster/namespace"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { usePagination } from "@/hooks/usePagination"
 import { formatDateTime } from "@/utils/index"

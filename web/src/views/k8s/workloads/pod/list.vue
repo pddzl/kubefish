@@ -121,8 +121,8 @@
 </template>
 
 <script lang="ts" setup>
-import { getNamespaceNameApi } from "@/api/k8s/namespace"
-import { deletePodApi, getPodsApi, type PodBrief } from "@/api/k8s/pod"
+import { getNamespaceNameApi } from "@/api/k8s/cluster/namespace"
+import { deletePodApi, getPodsApi, type PodBrief } from "@/api/k8s/workloads/pod"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { PodStatusFilter } from "@/hooks/filter"
 import { usePagination } from "@/hooks/usePagination"

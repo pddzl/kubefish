@@ -33,7 +33,7 @@ import { FitAddon } from "xterm-addon-fit"
 import { AttachAddon } from "xterm-addon-attach"
 import { ref, reactive, onBeforeUnmount } from "vue"
 import { useRoute } from "vue-router"
-import { getPodDetailApi } from "@/api/k8s/pod"
+import { getPodDetailApi } from "@/api/k8s/workloads/pod"
 import { useUserStoreHook } from "@/store/modules/user"
 
 // 路由
@@ -180,3 +180,4 @@ onBeforeUnmount(() => {
   }
 }
 </style>
+@/api/k8s/cluster/pod @/api/k8s/workloads/pod

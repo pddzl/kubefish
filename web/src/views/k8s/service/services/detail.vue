@@ -69,8 +69,8 @@
 </template>
 
 <script lang="ts" setup>
-import { PodBrief } from "@/api/k8s/pod"
-import { deleteServiceApi, getServiceDetailApi, getServicePodsApi } from "@/api/k8s/service"
+import { PodBrief } from "@/api/k8s/workloads/pod"
+import { deleteServiceApi, getServiceDetailApi, getServicePodsApi } from "@/api/k8s/service/services"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
 import PodBriefC from "@/components/k8s/pod-brief.vue"

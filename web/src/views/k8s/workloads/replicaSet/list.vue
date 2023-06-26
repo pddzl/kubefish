@@ -88,8 +88,8 @@
 </template>
 
 <script lang="ts" setup>
-import { getNamespaceNameApi } from "@/api/k8s/namespace"
-import { deleteReplicaSetApi, getReplicaSetsApi, type replicaSetBrief } from "@/api/k8s/replicaSet"
+import { getNamespaceNameApi } from "@/api/k8s/cluster/namespace"
+import { deleteReplicaSetApi, getReplicaSetsApi, type replicaSetBrief } from "@/api/k8s/workloads/replicaSet"
 import { formatDateTime } from "@/utils/index"
 import { reactive, ref } from "vue"
 // import { scale } from '@/api/kubernetes/scale'
