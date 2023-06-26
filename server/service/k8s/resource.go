@@ -20,7 +20,7 @@ func (rs *ResourceService) GetResourceRaw(name string, resource string, namespac
 		req, err = global.KF_K8S_Client.RESTClient().Get().AbsPath("/apis/apps/v1").Resource(resource).Name(name).Namespace(namespace).DoRaw(context.TODO())
 	case "ingresses":
 		req, err = global.KF_K8S_Client.RESTClient().Get().AbsPath("/apis/networking.k8s.io/v1").Resource(resource).Name(name).Namespace(namespace).DoRaw(context.TODO())
-	case "roles":
+	case "roles", "rolebindings":
 		req, err = global.KF_K8S_Client.RESTClient().Get().AbsPath("/apis/rbac.authorization.k8s.io/v1").Resource("roles").Namespace(namespace).Name(name).DoRaw(context.TODO())
 	}
 

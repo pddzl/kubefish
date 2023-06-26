@@ -1,24 +1,24 @@
 <template>
   <div class="info-box">
     <div class="row">
-      <div v-if="metadata.name" class="item">
+      <div class="item">
         <p>名称</p>
         <span class="content">{{ metadata.name }}</span>
       </div>
-      <div v-if="metadata.namespace" class="item">
+      <div class="item">
         <p>命名空间</p>
         <span class="content">{{ metadata.namespace }}</span>
       </div>
-      <div v-if="metadata.uid" class="item">
+      <div class="item">
         <p>UID</p>
         <span class="content">{{ metadata.uid }}</span>
       </div>
-      <div v-if="metadata.creationTimestamp">
+      <div>
         <p>创建时间</p>
         <span class="content">{{ formatDateTime(metadata.creationTimestamp) }}</span>
       </div>
     </div>
-    <div v-if="metadata.labels" class="row">
+    <div class="row">
       <div class="item">
         <p>标签</p>
         <div class="content">
@@ -38,6 +38,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, onBeforeUpdate, toRefs } from "vue"
 import VueJsonPretty from "@/components/vueJsonPretty/index.vue"
 import { formatDateTime } from "@/utils/index"
 
@@ -52,19 +53,22 @@ const props = defineProps({
   }
 })
 
-let annotationsFormat = {}
+const { metadata } = toRefs(props)
+
+console.log("metadata", metadata.value, props.metadata)
+
+const annotationsFormat = ref({})
 
 // 去掉双引号、反斜杠、换行符
-const format = () => {
-  if (props.metadata.annotations) {
+onBeforeUpdate(() => {
+  if (metadata.value.annotations) {
     try {
-      annotationsFormat = JSON.parse(
-        JSON.stringify(props.metadata.annotations).replace(/\\"/g, '"').replace(/"\{/g, "{").replace(/\\n"/g, "")
+      annotationsFormat.value = JSON.parse(
+        JSON.stringify(metadata.value.annotations).replace(/\\"/g, '"').replace(/"\{/g, "{").replace(/\\n"/g, "")
       )
     } catch (err) {
-      annotationsFormat = props.metadata.annotations
+      annotationsFormat.value = metadata.value.annotations
     }
   }
-}
-format()
+})
 </script>
