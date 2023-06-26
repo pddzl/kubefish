@@ -4,4 +4,6 @@ type ServiceGroup struct {
 	ServiceAccountService
 	RoleService
 	RoleBindingService
+	ClusterRoleService
+	ClusterRoleBindingService
 }

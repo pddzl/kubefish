@@ -8,3 +8,7 @@ export interface commonReq {
 }
 
 export interface commonRelatedReq extends commonReq, PageInfo {}
+
+export interface nameReq {
+  name: string
+}

@@ -5,7 +5,7 @@
         <p>名称</p>
         <span class="content">{{ metadata.name }}</span>
       </div>
-      <div class="item">
+      <div class="item" v-if="metadata.namespace">
         <p>命名空间</p>
         <span class="content">{{ metadata.namespace }}</span>
       </div>
@@ -54,8 +54,6 @@ const props = defineProps({
 })
 
 const { metadata } = toRefs(props)
-
-console.log("metadata", metadata.value, props.metadata)
 
 const annotationsFormat = ref({})
 
