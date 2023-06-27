@@ -7,3 +7,11 @@ export function getResourceRawApi(data: { name: string; resource: string; namesp
     data
   })
 }
+
+export function createDynamicResourceApi(data: string) {
+  return request<ApiResponseData<null>>({
+    url: "/k8s/resource/createDynamicResource",
+    method: "post",
+    data
+  })
+}
