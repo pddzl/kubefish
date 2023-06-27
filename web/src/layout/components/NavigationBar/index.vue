@@ -3,6 +3,7 @@
     <Hamburger :is-active="sidebar.opened" class="hamburger" @toggle-click="toggleSidebar" />
     <Breadcrumb class="breadcrumb" />
     <div class="right-menu">
+      <CreateResource class="right-menu-item" />
       <Screenfull v-if="showScreenfull" class="right-menu-item" />
       <ThemeSwitch v-if="showThemeSwitch" class="right-menu-item" />
       <el-dropdown class="right-menu-item">
@@ -34,6 +35,7 @@ import Breadcrumb from "../Breadcrumb/index.vue"
 import Hamburger from "../Hamburger/index.vue"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import Screenfull from "@/components/Screenfull/index.vue"
+import CreateResource from "@/components/k8s/createResource.vue"
 import { joinInBlacklistApi } from "@/api/system/jwt"
 import { useSettingsStore } from "@/store/modules/settings"
 
