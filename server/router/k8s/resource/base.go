@@ -12,6 +12,7 @@ func (rr *ResourceRouter) InitResourceRouter(Router *gin.RouterGroup) (R gin.IRo
 	resourceApi := api.ApiGroupApp.K8sApiGroup.ResourceApi.ResourceApi
 	{
 		resourceRouter.POST("getResourceRaw", resourceApi.GetResourceRaw)
+		resourceRouter.POST("createDynamicResource", resourceApi.CreateDynamicResource)
 	}
 	return resourceRouter
 }
