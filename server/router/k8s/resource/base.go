@@ -1,4 +1,4 @@
-package cluster
+package resource
 
 import (
 	"github.com/gin-gonic/gin"
@@ -9,7 +9,7 @@ type ResourceRouter struct{}
 
 func (rr *ResourceRouter) InitResourceRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 	resourceRouter := Router.Group("resource")
-	resourceApi := api.ApiGroupApp.K8sApiGroup.ClusterApi.ResourceApi
+	resourceApi := api.ApiGroupApp.K8sApiGroup.ResourceApi.ResourceApi
 	{
 		resourceRouter.POST("getResourceRaw", resourceApi.GetResourceRaw)
 	}

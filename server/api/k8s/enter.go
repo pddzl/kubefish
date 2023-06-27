@@ -4,6 +4,7 @@ import (
 	"github.com/pddzl/kubefish/server/api/k8s/accessControl"
 	"github.com/pddzl/kubefish/server/api/k8s/cluster"
 	"github.com/pddzl/kubefish/server/api/k8s/config"
+	"github.com/pddzl/kubefish/server/api/k8s/resource"
 	"github.com/pddzl/kubefish/server/api/k8s/service"
 	"github.com/pddzl/kubefish/server/api/k8s/workloads"
 )
@@ -14,4 +15,5 @@ type ApiGroup struct {
 	WorkloadsApi     workloads.ApiGroup
 	ServiceApi       service.ApiGroup
 	ClusterApi       cluster.ApiGroup
+	ResourceApi      resource.ApiGroup
 }

@@ -1,4 +1,4 @@
-import { getResourceRawApi } from "@/api/k8s/resource"
+import { getResourceRawApi } from "@/api/k8s/resource/base"
 
 // 查看资源编排
 export const viewOrch = async (name: string, resource: string, namespace = "") => {

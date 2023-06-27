@@ -4,6 +4,7 @@ import (
 	"github.com/pddzl/kubefish/server/router/k8s/accessControl"
 	"github.com/pddzl/kubefish/server/router/k8s/cluster"
 	"github.com/pddzl/kubefish/server/router/k8s/config"
+	"github.com/pddzl/kubefish/server/router/k8s/resource"
 	"github.com/pddzl/kubefish/server/router/k8s/service"
 	"github.com/pddzl/kubefish/server/router/k8s/workloads"
 )
@@ -14,4 +15,5 @@ type RouterGroup struct {
 	WorkloadsRouter     workloads.RouterGroup
 	ServiceRouter       service.RouterGroup
 	ClusterRouter       cluster.RouterGroup
+	ResourceRouter      resource.RouterGroup
 }

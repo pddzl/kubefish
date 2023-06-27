@@ -1,4 +1,4 @@
-package cluster
+package resource
 
 import (
 	"github.com/gin-gonic/gin"

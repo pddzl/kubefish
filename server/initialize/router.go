@@ -60,7 +60,6 @@ func Routers() *gin.Engine {
 	{
 		// cluster
 		k8sRouter.ClusterRouter.InitNodeRouter(K8sGroup)
-		k8sRouter.ClusterRouter.InitResourceRouter(K8sGroup)
 		k8sRouter.ClusterRouter.InitNamespaceRouter(K8sGroup)
 		// workloads
 		k8sRouter.WorkloadsRouter.InitPodRouter(K8sGroup)
@@ -79,6 +78,8 @@ func Routers() *gin.Engine {
 		k8sRouter.AccessControlRouter.InitRoleBindingRouter(K8sGroup)
 		k8sRouter.AccessControlRouter.InitClusterRoleRouter(K8sGroup)
 		k8sRouter.AccessControlRouter.InitClusterRoleBindingRouter(K8sGroup)
+		// resource
+		k8sRouter.ResourceRouter.InitResourceRouter(K8sGroup)
 	}
 
 	global.KF_LOG.Info("router register success")
