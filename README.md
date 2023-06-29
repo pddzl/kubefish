@@ -2,7 +2,7 @@
 <h4 align="center">K8s Dashboard</h4>
 
 ## 致谢
- + 项目脚手架[td27-admin]<https://github.com/pddzl/td27-admin>
+ + 项目脚手架 [td27-admin](https://github.com/pddzl/td27-admin)
 
 ## 📄 License
 
