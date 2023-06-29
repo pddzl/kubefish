@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { createDynamicResourceApi } from "@/api/k8s/resource/base.ts"
+import { createDynamicResourceApi } from "@/api/k8s/resource/base"
 import { onBeforeUnmount, onMounted, ref } from "vue"
 import { ElMessage } from "element-plus"
 // import yaml from 'js-yaml'
