@@ -6,6 +6,9 @@ KubeFish 是一个现代化的 K8s 面板
 
 ## 功能展示
 
+### 创建资源
+<img src="./img/resource/create.png"/>
+
 ### 集群
 
 #### 节点
@@ -27,6 +30,25 @@ KubeFish 是一个现代化的 K8s 面板
 
 #### DaemonSet
 <img src="./img/workloads/daemonSet.gif"/>
+
+### 配置
+
+#### ConfigMap
+<img src="./img/config/configMap.gif"/>
+
+#### Secrets
+<img src="./img/config/secrets.gif"/>
+
+### 访问控制
+
+#### ServiceAccount
+<img src="./img/accessControl/serviceAccount.gif"/>
+
+#### Role && RoleBinding
+<img src="./img/accessControl/role.gif"/>
+
+#### ClusterRole && ClusterRoleBinding
+<img src="./img/accessControl/clusterRole.gif"/>
 
 ## 致谢
  + 项目脚手架 [td27-admin](https://github.com/pddzl/td27-admin)
