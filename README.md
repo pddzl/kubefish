@@ -8,13 +8,8 @@ KubeFish 是一个现代化的 K8s 面板
 
 ### 集群
 
-<img src="./img/cluster/base.png"/>
-
 #### 节点
-
-<img src="./img/cluster/nodeList.png"/>
-
-<img src="./img/cluster/nodeOrch.png"/>
+<img src="./img/cluster/node.gif"/>
 
 #### 命名空间
 
