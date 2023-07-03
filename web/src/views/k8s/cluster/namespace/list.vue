@@ -22,7 +22,7 @@
           </el-table-column>
           <el-table-column label="状态">
             <template #default="scope">
-              <el-tag :type="NamespaceStatusFilter(scope.row.status)" size="small">{{ scope.row.status }}</el-tag>
+              <el-tag :type="statusNsFilter(scope.row.status)" size="small">{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="创建时间">
@@ -61,8 +61,8 @@
 
 <script lang="ts" setup>
 import { ref } from "vue"
-import { NamespaceStatusFilter } from "@/hooks/filter"
-import { getNamespacesApi } from "@/api/k8s/cluster/namespace"
+import { statusNsFilter } from "@/utils/k8s/filter"
+import { getNamespacesApi, deleteNamespaceApi, type NamespaceBreif } from "@/api/k8s/cluster/namespace"
 import { usePagination } from "@/hooks/usePagination"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import { ElMessage, ElMessageBox } from "element-plus"
@@ -115,13 +115,13 @@ const viewOrchFunc = async (name: string) => {
 }
 
 // 删除
-const deleteFunc = async (row) => {
+const deleteFunc = async (row: NamespaceBreif) => {
   ElMessageBox.confirm("此操作将永久删除该Namespace, 是否继续?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
   }).then(async () => {
-    const res = await deleteNamespace({ name: row.name })
+    const res = await deleteNamespaceApi({ name: row.name })
     if (res.code === 0) {
       ElMessage({
         type: "success",

@@ -1,7 +1,14 @@
 import { request } from "@/utils/service"
 
+export interface NamespaceBreif {
+  name: string
+  labels: Object
+  creationTimestamp: string
+  status: string
+}
+
 interface namespacePageInfo extends PageInfo {
-  list: any[]
+  list: NamespaceBreif[]
   total: number
 }
 

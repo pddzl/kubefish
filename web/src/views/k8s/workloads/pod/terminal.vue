@@ -44,7 +44,7 @@ const namespace = route.query.namespace as string
 // 响应式数据
 const containers = ref<string[]>([])
 const searchInfo = reactive({ namespace: namespace, pod: pod, container: "" })
-const terminalRef = ref(null)
+const terminalRef = ref<HTMLElement | null>(null)
 // 获取container
 const getPodContainer = async () => {
   const podDetail = await getPodDetailApi({ namespace: namespace, pod: pod })
@@ -86,7 +86,8 @@ const socketOnMessage = () => {
 const socketOnError = () => {
   socket.onerror = (event) => {
     console.log("[error] Connection error")
-    terminal.write("error: " + event.message)
+    const messageEvent = event as MessageEvent
+    terminal.write("error: " + messageEvent)
     terminal.dispose()
   }
 }
@@ -131,7 +132,7 @@ const initTerminal = () => {
   const fitAddon = new FitAddon()
   terminal.loadAddon(attachAddon)
   terminal.loadAddon(fitAddon)
-  terminal.open(terminalRef.value)
+  terminal.open(terminalRef.value!)
   setTimeout(() => {
     fitAddon.fit()
   }, 5)

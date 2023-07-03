@@ -29,7 +29,7 @@
           <el-table-column label="命名空间" prop="namespace" min-width="100" />
           <el-table-column label="状态" min-width="100">
             <template #default="scope">
-              <el-tag :type="PodStatusFilter(scope.row.status)" size="small">{{ scope.row.status }}</el-tag>
+              <el-tag :type="statusPodFilter(scope.row.status)" size="small">{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="节点" prop="node" />
@@ -124,7 +124,7 @@
 import { getNamespaceNameApi } from "@/api/k8s/cluster/namespace"
 import { deletePodApi, getPodsApi, type PodBrief } from "@/api/k8s/workloads/pod"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
-import { PodStatusFilter } from "@/hooks/filter"
+import { statusPodFilter } from "@/utils/k8s/filter"
 import { usePagination } from "@/hooks/usePagination"
 import { formatDateTime } from "@/utils/index"
 import { viewOrch } from "@/utils/k8s/orch"

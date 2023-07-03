@@ -60,6 +60,8 @@ import "codemirror/addon/search/searchcursor.js"
 import "codemirror/addon/search/search.js"
 // 搜索资源引入:结束
 
+import { EditorFromTextArea } from "codemirror"
+
 // 启用placeholder
 // import 'codemirror/addon/display/placeholder.js'
 
@@ -68,11 +70,11 @@ import "codemirror/addon/selection/active-line.js" // 光标行背景高亮，�
 const CodeMirror = window.CodeMirror || _CodeMirror
 
 const readOnly = ref(false)
-const codeEditor = ref(false)
-let editor
+const codeEditor = ref(null)
+let editor: EditorFromTextArea | null
 
 const createDynamicResourceFunc = async () => {
-  const content = editor.getValue()
+  const content = editor?.getValue()
   const res = await createDynamicResourceApi({ content: content })
   if (res.code === 0) {
     ElMessage({
@@ -83,29 +85,50 @@ const createDynamicResourceFunc = async () => {
 }
 
 const resetContent = () => {
-  editor.setValue("")
+  editor?.setValue("")
 }
 
 onMounted(() => {
-  editor = CodeMirror.fromTextArea(codeEditor.value, {
-    // value: modelValue.value,
-    mode: "yaml",
-    mime: "text/x-yaml",
-    indentWithTabs: false, // 在缩进时，是否需要把 n*tab宽度个空格替换成n个tab字符，默认为false
-    smartIndent: true, // 自动缩进，设置是否根据上下文自动缩进（和上一行相同的缩进量）。默认为true
-    lineNumbers: true, // 是否在编辑器左侧显示行号
-    matchBrackets: true, // 括号匹配
-    readOnly: readOnly.value,
-    autoRefresh: true,
-    lint: true, // window.jsonlint not defined, CodeMirror JSON linting cannot run
-    // 启用代码折叠相关功能:开始
-    foldGutter: true,
-    lineWrapping: true,
-    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "CodeMirror-lint-markers"],
-    // 启用代码折叠相关功能:结束
-    styleActiveLine: true // 光标行高亮
-  })
-  editor.setSize("auto", "400px")
+  const textareaElement = codeEditor.value
+  if (textareaElement) {
+    editor = CodeMirror.fromTextArea(textareaElement, {
+      // value: modelValue.value,
+      mode: "yaml",
+      // mime: "text/x-yaml",
+      indentWithTabs: false, // 在缩进时，是否需要把 n*tab宽度个空格替换成n个tab字符，默认为false
+      smartIndent: true, // 自动缩进，设置是否根据上下文自动缩进（和上一行相同的缩进量）。默认为true
+      lineNumbers: true, // 是否在编辑器左侧显示行号
+      matchBrackets: true, // 括号匹配
+      readOnly: readOnly.value,
+      autoRefresh: true,
+      lint: true, // window.jsonlint not defined, CodeMirror JSON linting cannot run
+      // 启用代码折叠相关功能:开始
+      foldGutter: true,
+      lineWrapping: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "CodeMirror-lint-markers"],
+      // 启用代码折叠相关功能:结束
+      styleActiveLine: true // 光标行高亮
+    })
+    editor.setSize("auto", "400px")
+  }
+  // editor = CodeMirror.fromTextArea(codeEditor.value, {
+  //   // value: modelValue.value,
+  //   mode: "yaml",
+  //   mime: "text/x-yaml",
+  //   indentWithTabs: false, // 在缩进时，是否需要把 n*tab宽度个空格替换成n个tab字符，默认为false
+  //   smartIndent: true, // 自动缩进，设置是否根据上下文自动缩进（和上一行相同的缩进量）。默认为true
+  //   lineNumbers: true, // 是否在编辑器左侧显示行号
+  //   matchBrackets: true, // 括号匹配
+  //   readOnly: readOnly.value,
+  //   autoRefresh: true,
+  //   lint: true, // window.jsonlint not defined, CodeMirror JSON linting cannot run
+  //   // 启用代码折叠相关功能:开始
+  //   foldGutter: true,
+  //   lineWrapping: true,
+  //   gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "CodeMirror-lint-markers"],
+  //   // 启用代码折叠相关功能:结束
+  //   styleActiveLine: true // 光标行高亮
+  // })
 })
 onBeforeUnmount(() => {
   if (editor !== null) {

@@ -30,7 +30,7 @@
           </el-table-column>
           <el-table-column label="状态" min-width="120" prop="status">
             <template #default="scope">
-              <el-tag :type="nodeStatusTypeFilter(scope.row.status)" size="small">{{
+              <el-tag :type="statusNodeTypeFilter(scope.row.status)" size="small">{{
                 nodeStatusFilter(scope.row.status)
               }}</el-tag>
             </template>
@@ -72,7 +72,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue"
-import { nodeStatusTypeFilter, nodeStatusFilter } from "@/hooks/filter"
+import { statusNodeTypeFilter, nodeStatusFilter } from "@/utils/k8s/filter"
 import { usePagination } from "@/hooks/usePagination"
 import { type NodeData, getNodesApi } from "@/api/k8s/cluster/node"
 import VueCodeMirror from "@/components/codeMirror/index.vue"

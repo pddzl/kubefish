@@ -180,7 +180,7 @@ const deleteFunc = async (row: replicaSetBrief) => {
     cancelButtonText: "取消",
     type: "warning"
   }).then(async () => {
-    const res = await deleteReplicaSetApi({ namespace: row.namespace, replicaSet: row.name })
+    const res = await deleteReplicaSetApi({ namespace: row.namespace, name: row.name })
     if (res.code === 0) {
       ElMessage({
         type: "success",

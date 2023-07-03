@@ -15,7 +15,7 @@
               <div class="item">
                 <p>状态</p>
                 <span class="content">
-                  <el-tag :type="NamespaceStatusFilter(namespaceDetail.status)" size="small"
+                  <el-tag :type="statusNsFilter(namespaceDetail.status)" size="small"
                     >{{ namespaceDetail.status }}
                   </el-tag>
                 </span>
@@ -94,7 +94,7 @@
 import { deleteNamespaceApi, getNamespaceDetailApi } from "@/api/k8s/cluster/namespace"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
-import { NamespaceStatusFilter } from "@/hooks/filter"
+import { statusNsFilter } from "@/utils/k8s/filter"
 import { viewOrch } from "@/utils/k8s/orch"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { ref } from "vue"

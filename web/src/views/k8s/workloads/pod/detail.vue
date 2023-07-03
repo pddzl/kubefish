@@ -49,7 +49,7 @@
               </div>
               <div v-if="podDetail.status.phase" class="item">
                 <p>状态</p>
-                <el-tag :type="PodStatusFilter(podDetail.status.phase)" size="small">
+                <el-tag :type="statusPodFilter(podDetail.status.phase)" size="small">
                   {{ podDetail.status.phase }}
                 </el-tag>
               </div>
@@ -147,7 +147,7 @@
 <script lang="ts" setup>
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import { PodStatusFilter } from "@/hooks/filter.js"
+import { statusPodFilter } from "@/utils/k8s/filter.js"
 import { getPodDetailApi, deletePodApi } from "@/api/k8s/workloads/pod"
 import { formatDateTime } from "@/utils/index"
 import Container from "./components/container.vue"

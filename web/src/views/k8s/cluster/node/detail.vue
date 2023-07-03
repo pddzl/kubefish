@@ -187,7 +187,7 @@
 
 <script lang="ts" setup>
 import { getNodeDetailApi, getNodePodsApi } from "@/api/k8s/cluster/node"
-import { type PodBrief } from "@/api/k8s/pod"
+import { type PodBrief } from "@/api/k8s/workloads/pod"
 import VueCodeMirror from "@/components/codeMirror/index.vue"
 import MetaData from "@/components/k8s/metadata.vue"
 import PodBriefC from "@/components/k8s/pod-brief.vue"
