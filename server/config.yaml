@@ -36,9 +36,9 @@ mysql:
   host: 'mysql'
   port: 3306
   config: 'charset=utf8&parseTime=true'
-  db-name: 'kop'
+  db-name: 'kf'
   username: 'root'
-  password: 'bank2023'
+  password: 'kfAdmin'
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: false
@@ -75,4 +75,4 @@ cors:
 
 # k8s
 k8s:
-  kube-config: /Users/paul/config
+  kube-config: /k8s/config

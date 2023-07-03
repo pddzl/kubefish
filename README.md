@@ -50,6 +50,23 @@ KubeFish 是一个现代化的 K8s 面板
 #### ClusterRole && ClusterRoleBinding
 <img src="./img/accessControl/clusterRole.gif"/>
 
+## 安装
+
+### 集群外安装
+
+Docker Compose 版本需要 V2
+
+```bash
+git clone https://github.com/pddzl/kubefish
+cd kubefish
+# 添加k8s config文件 (/etc/kubernetes/admin.conf 重命名为config)
+# cp /tmp/config docker-compose/k8s
+docker-compose -f docker-compose/docker-compose.yml build
+docker-compose -f docker-compose/docker-compose.yml up -d
+```
+
+浏览器打开 `http://node节点:35999`
+
 ## 致谢
  + 项目脚手架 [td27-admin](https://github.com/pddzl/td27-admin)
 

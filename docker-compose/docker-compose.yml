@@ -1,0 +1,50 @@
+version: "3"
+services:
+  redis:
+    container_name: kf_redis
+    image: redis:6.2.6
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/data:/data
+  mysql:
+    container_name: kf_mysql
+    image: mysql:8.0.28
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./mysql/data/:/var/lib/mysql
+      - ./mysql/init/:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: kfAdmin
+      MYSQL_DATABASE: kf
+  server:
+    sysctls:
+      net.ipv4.ping_group_range: 0   2147483647
+    container_name: kf_server
+    build: 
+      context: ../server/
+      dockerfile: ./Dockerfile
+    image: kf_server:1.0
+    depends_on:
+      - redis
+      - mysql
+    links:
+      - redis
+      - mysql
+    volumes:
+      - ./k8s/config:/k8s/config
+    restart: on-failure
+  web:
+    container_name: kf_web
+    build: 
+      context: ../web/
+      dockerfile: ./Dockerfile
+    image: kf_web:1.0
+    environment:
+      - BACKEND=server
+    command: /bin/sh -c "envsubst '$$BACKEND' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && sleep 2 && exec nginx -g 'daemon off;'"
+    ports:
+      - 35999:8500
+    depends_on:
+      - server
+    restart: on-failure
