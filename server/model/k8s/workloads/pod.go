@@ -1,9 +1,11 @@
 package workloads
 
 import (
-	"github.com/pddzl/kubefish/server/model/k8s"
 	coreV1 "k8s.io/api/core/v1"
+	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"time"
+
+	"github.com/pddzl/kubefish/server/model/k8s"
 )
 
 // PodBrief pod列表
@@ -16,11 +18,17 @@ type PodBrief struct {
 	CreationTimestamp time.Time `json:"creationTimestamp,omitempty"`
 }
 
+// metadata
+type metaData struct {
+	k8s.ObjectMeta
+	OwnerReferences []metaV1.OwnerReference `json:"ownerReferences,omitempty"`
+}
+
 // PodDetail pod详情
 type PodDetail struct {
-	MetaData k8s.ObjectMeta `json:"metadata"`
-	Spec     spec           `json:"spec,omitempty"`
-	Status   status         `json:"status,omitempty"`
+	MetaData metaData `json:"metadata"`
+	Spec     spec     `json:"spec,omitempty"`
+	Status   status   `json:"status,omitempty"`
 }
 
 type spec struct {

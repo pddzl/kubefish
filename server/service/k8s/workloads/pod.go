@@ -12,7 +12,6 @@ import (
 	"k8s.io/client-go/tools/remotecommand"
 
 	"github.com/pddzl/kubefish/server/global"
-	modelK8s "github.com/pddzl/kubefish/server/model/k8s"
 	modelK8sWorkloads "github.com/pddzl/kubefish/server/model/k8s/workloads"
 )
 
@@ -73,7 +72,12 @@ func (ps *PodService) GetPodDetail(namespace string, pod string) (*modelK8sWorkl
 	var podDetail modelK8sWorkloads.PodDetail
 
 	// metadata
-	podDetail.MetaData = modelK8s.NewObjectMeta(podDetailRaw.ObjectMeta)
+	podDetail.MetaData.Name = podDetailRaw.Name
+	podDetail.MetaData.Namespace = podDetailRaw.Namespace
+	podDetail.MetaData.Labels = podDetailRaw.Labels
+	podDetail.MetaData.CreationTimestamp = podDetailRaw.CreationTimestamp
+	podDetail.MetaData.UID = podDetailRaw.UID
+	podDetail.MetaData.OwnerReferences = podDetailRaw.OwnerReferences
 
 	// spec
 	podDetail.Spec.NodeName = podDetailRaw.Spec.NodeName

@@ -93,29 +93,29 @@
           </div>
         </el-collapse-item>
         <el-collapse-item v-if="podDetail.metadata?.ownerReferences" title="控制器" name="controller">
-          <!-- <div v-for="reference in podDetail.metadata.ownerReferences" :key="reference" class="info-box">
+          <div v-for="reference in podDetail.metadata.ownerReferences" :key="reference" class="info-box">
             <div class="row">
               <div class="item">
                 <p>名称</p>
                 <div class="content">
                   <router-link
                     v-if="reference.kind === 'ReplicaSet'"
-                    :to="{ name: 'replicaSet_detail', query: { replicaSet: reference.name, namespace: namespace } }"
+                    :to="{ name: 'ReplicaSetDetail', query: { name: reference.name, namespace: namespace } }"
                   >
                     <el-link type="primary" :underline="false">{{ reference.name }}</el-link>
                   </router-link>
                   <router-link
                     v-else-if="reference.kind === 'DaemonSet'"
-                    :to="{ name: 'daemonSet_detail', query: { daemonSet: reference.name, namespace: namespace } }"
+                    :to="{ name: 'DaemonSetDetail', query: { name: reference.name, namespace: namespace } }"
                   >
                     <el-link type="primary" :underline="false">{{ reference.name }}</el-link>
                   </router-link>
-                  <router-link
+                  <!-- <router-link
                     v-else-if="reference.kind === 'Job'"
                     :to="{ name: 'job_detail', query: { job: reference.name, namespace: namespace } }"
                   >
                     <el-link type="primary" :underline="false">{{ reference.name }}</el-link>
-                  </router-link>
+                  </router-link> -->
                 </div>
               </div>
               <div class="item">
@@ -123,7 +123,7 @@
                 <span class="content">{{ reference.kind }}</span>
               </div>
             </div>
-          </div> -->
+          </div>
         </el-collapse-item>
         <el-collapse-item v-if="podDetail.spec?.containers.length > 0" title="容器" name="container">
           <container :data="podDetail.spec.containers" />
