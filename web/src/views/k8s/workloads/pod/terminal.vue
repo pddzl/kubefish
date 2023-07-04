@@ -181,4 +181,3 @@ onBeforeUnmount(() => {
   }
 }
 </style>
-@/api/k8s/cluster/pod @/api/k8s/workloads/pod

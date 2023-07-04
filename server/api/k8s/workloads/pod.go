@@ -108,6 +108,7 @@ func (pa *PodApi) GetPodWebSSH(c *gin.Context) {
 		Subprotocols: []string{c.Request.Header.Get("Sec-Websocket-Protocol")}, //设置Sec-Websocket-Protocol
 	}
 	ws, err := upGrader.Upgrade(c.Writer, c.Request, nil)
+
 	if err != nil {
 		global.KF_LOG.Error(fmt.Sprintf("初始化websocket失败 %s", c.Errors))
 	}
