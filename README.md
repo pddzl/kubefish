@@ -7,7 +7,7 @@ KubeFish 是一个现代化的 K8s 面板
 ## 功能展示
 
 ### 创建资源
-<img src="./img/resource/create.png"/>
+<img src="./img/resource/create.gif"/>
 
 ### 集群
 
