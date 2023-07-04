@@ -11,7 +11,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/yaml"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/dynamic"
-	ctrl "sigs.k8s.io/controller-runtime"
 	"strings"
 
 	"github.com/pddzl/kubefish/server/global"
@@ -62,8 +61,9 @@ func (rs *ResourceService) CreateDynamicResource(content string) error {
 		gv = schema.GroupVersion{Version: version}
 	}
 
-	cfg := ctrl.GetConfigOrDie()
-	discoveryClient, err := discovery.NewDiscoveryClientForConfig(cfg)
+	//cfg := ctrl.GetConfigOrDie()
+	// 创建discovery客户端
+	discoveryClient, err := discovery.NewDiscoveryClientForConfig(global.KF_K8S_CONFIG)
 	if err != nil {
 		return err
 	}
@@ -84,7 +84,8 @@ func (rs *ResourceService) CreateDynamicResource(content string) error {
 		return fmt.Errorf("unknown resource kind: %s", kind)
 	}
 
-	dynamicClient, err := dynamic.NewForConfig(cfg)
+	// 创建动态客户端
+	dynamicClient, err := dynamic.NewForConfig(global.KF_K8S_CONFIG)
 	if err != nil {
 		return err
 	}
